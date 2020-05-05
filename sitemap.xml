@@ -2,23 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://gostycw.github.io/2019/10/25/Hello/</loc>
+    
+    <lastmod>2020-05-05T07:26:10.955Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gostycw.github.io/404.html</loc>
+    
+    <lastmod>2020-05-05T07:15:10.647Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gostycw.github.io/friends/index.html</loc>
+    
+    <lastmod>2020-05-05T06:55:57.932Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://gostycw.github.io/about/index.html</loc>
+    
+    <lastmod>2020-05-05T06:55:30.662Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://gostycw.github.io/tags/index.html</loc>
     
-    <lastmod>2020-05-05T04:45:44.929Z</lastmod>
+    <lastmod>2020-05-05T06:54:02.566Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://gostycw.github.io/categories/index.html</loc>
     
-    <lastmod>2020-05-05T04:34:19.132Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://gostycw.github.io/2020/05/04/hello-world/</loc>
-    
-    <lastmod>2020-05-04T12:58:54.800Z</lastmod>
+    <lastmod>2020-05-05T06:53:49.367Z</lastmod>
     
   </url>
   
