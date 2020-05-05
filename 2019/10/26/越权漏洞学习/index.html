@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello, hack,CTF,Security">
+    <meta name="keywords" content="越权漏洞学习, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello | Doublenine&#39;s Blog</title>
+    <title>越权漏洞学习 | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello</h1>
+                    <h1 class="description center-align post-title">越权漏洞学习</h1>
                 </div>
             </div>
         </div>
@@ -428,9 +428,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                                <span class="chip bg-color">WEB安全</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                                <span class="chip bg-color">漏洞挖掘</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -442,7 +450,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-10-25
+                    2019-10-26
                 </div>
                 
 
@@ -451,14 +459,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    51
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -473,12 +481,81 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p><font color = green>你好，我是九九，ID：Doublenine。来自GDUT<br></font></p>
+                <p>[TOC]</p>
+<h1 id="越权漏洞"><a href="#越权漏洞" class="headerlink" title="越权漏洞"></a>越权漏洞</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>越权，顾名思义就是超出权限范围进行操作。</li>
+</ul>
 <a id="more"></a>
 
-<p>想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。</p>
+<ul>
+<li>多数WEB应用都具备权限划分和控制，但是如果权限控制功能设计存在缺陷，那么攻击者就可以通过这些缺陷来访问未经授权的功能或数据，这就是我们通常说的越权漏洞。</li>
+<li>越权漏洞的==成因==主要是因为开发人员在对数据进++行增、删、改、查询++时对客户端请求的数据过分相信而遗漏了<font color=green>权限的判定</font>。所以测试越权就是和开发人员拼细心的过程。</li>
+</ul>
 <hr>
-<p><strong>希望你能多多支持我！</strong></p>
+<h2 id="主要攻击场景"><a href="#主要攻击场景" class="headerlink" title="主要攻击场景"></a>主要攻击场景</h2><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://image.3001.net/images/20181031/1540965763_5bd945834fb0d.jpg!small" alt="image"></h2><h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-水平越权"><a href="#1-水平越权" class="headerlink" title="1. 水平越权"></a>1. 水平越权</h3><ul>
+<li>水平越权指的是攻击者尝试访问与他拥有==相同权限==的用户的资源</li>
+</ul>
+<blockquote>
+<p>比如某系统中有个人资料这个功能，A账号和B账号都可以访问这个功能，但是A账号的个人信息和B账号的个人信息不同，可以理解为A账号和B账号个人资料这个功能上具备水平权限的划分。此时，A账号通过攻击手段访问了B账号的个人资料，这就是水平越权漏洞。</p>
+</blockquote>
+<ul>
+<li>水平越权主要有三种攻击场景：</li>
+</ul>
+<ol>
+<li>基于用户身份的ID: </li>
+</ol>
+<p>在使用某个功能时通过用户提交的身份ID（用户ID、账号、手机号、证件号等用户唯一标识）来访问或操作对应的数据。</p>
+<ol start="2">
+<li>基于对象的ID:</li>
+</ol>
+<p>在使用某个功能时通过用户提交的对象ID（如订单号、记录号）来访问或操作对应的数据。</p>
+<ol start="3">
+<li>基于文件名</li>
+</ol>
+<p>在使用某个功能时通过文件名直接访问文件，最常见于用户==上传文件==的场景。</p>
+<hr>
+<h3 id="2-垂直越权"><a href="#2-垂直越权" class="headerlink" title="2.垂直越权"></a>2.垂直越权</h3><ul>
+<li>垂直越权指的是一个==低==级别攻击者尝试访问==高==级别用户的资源。</li>
+</ul>
+<blockquote>
+<p>比如说某个系统分为普通用户和管理员，管理员有系统管理功能，而普通用户没有，那我们就可以理解管理功能具备垂直权限划分，如果普通用户能利用某种攻击手段访问到管理功能，那我们就称之为垂直越权。</p>
+</blockquote>
+<ul>
+<li>垂直越权主要有两种攻击场景:</li>
+</ul>
+<ol>
+<li>未认账账户访问无需认证后能访问该功能</li>
+<li>不具备某个功能权限的账户认证后成功访问该功能</li>
+</ol>
+<hr>
+<h3 id="3-权限框架缺陷"><a href="#3-权限框架缺陷" class="headerlink" title="3. 权限框架缺陷"></a>3. 权限框架缺陷</h3><ul>
+<li>权限控制框架是实现权限控制功能的基础，如果权限控制框架本身存在缺陷容易被攻陷会导致权限控制功能完全失效。</li>
+</ul>
+<blockquote>
+<p>在cookie中使用简单的权限标识来标记用户的权限等级或使用用户请求参数中所带的简单用户ID来控制用户权限，是典型的权限框架缺陷。</p>
+</blockquote>
+<hr>
+<h2 id="具体案例："><a href="#具体案例：" class="headerlink" title="具体案例："></a>具体案例：</h2><ol>
+<li>在一个提交订单的页面，抓取提交的数据包</li>
+</ol>
+<p><img src="https://image.3001.net/images/20181031/1540966016_5bd94680f2295.jpg!small" alt="image"><br>发现有一个oid的参数很可疑，尝试进行测试发现，可遍历订单号，查看他人待付款订单信息。<br><img src="https://image.3001.net/images/20181031/1540966045_5bd9469d6ec63.jpg!small" alt="image"></p>
+<p>以上为水平越权。</p>
+<ol start="2">
+<li>站点后使用js跳转来限制未授权用户访问。<pre><code>&lt;script language=&quot;javascript&quot;&gt;
+//alert(&quot;非法操作&quot;);
+location=&#39;login.php&#39;;
+&lt;/script&gt;</code></pre>所以我们只要==去掉js==就能成功访问后台，且可操作<br><img src="https://image.3001.net/images/20181031/1540966271_5bd9477f50f9d.jpg!small" alt="image"></li>
+</ol>
+<p>以上为垂直越权</p>
+<hr>
+<h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><ul>
+<li>采用成熟的权限管理框架：如spring security</li>
+<li>用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）优先采用<font color =red>在服务端关联session或加密后放在session中的方式获取</font>。</li>
+<li>必须采用表单或其他参数提交用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）时，应尽可能采用++难以猜测的构造方式++（增加字母及随机数字等）或++采用复杂的加密算法加密++后提交，应对客户端提交的凭证与会话的权限进行严格的验证，如提交的产品号码是否为隶属于登录用户的产品号码。</li>
+<li>对管理功能模块进行严格的权限验证，如非必要建议不对互联网开放或进行网络层的访问控制。</li>
+</ul>
+<hr>
+<p><a href="https://www.freebuf.com/column/188068.html" target="_blank" rel="noopener">转自Freebuf</a></p>
 
             </div>
             <hr/>
@@ -504,7 +581,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://gostycw.github.io/2019/10/25/Hello/">https://gostycw.github.io/2019/10/25/Hello/</a>
+                    <a href="https://gostycw.github.io/2019/10/26/%E8%B6%8A%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/">https://gostycw.github.io/2019/10/26/%E8%B6%8A%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -541,7 +618,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                                    <span class="chip bg-color">WEB安全</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                                    <span class="chip bg-color">漏洞挖掘</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -711,26 +796,25 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">
+                <a href="/2019/10/26/Brainfuck&Ook%E5%8A%A0%E5%AF%86/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Brainfuck&amp;Ook!加密">
                         
-                        <span class="card-title">C语言学习笔记</span>
+                        <span class="card-title">Brainfuck&amp;Ook!加密</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            C语言学习笔记
-[TOC]
-数据类型1.基本类型
-整数型：int、short int、long int、long long int
-short int ≤ int ≤ long int≤ long long int
+                            [TOC]
+Brainfuck/Ook!编码加密
+Ook!加密语法规则OOK！只有三个不同的语法元素：Ook。OOK？OOK！
 
 
-浮点型：float、
+它们组合成两个组，各种组合组合指定命令。因此，节目必须包含偶数个“Ook”。换行符被忽略
+命令OOK。OOK
                         
                     </div>
                     <div class="publish-info">
@@ -748,8 +832,12 @@ short int ≤ int ≤ long int≤ long long int
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
-                        <span class="chip bg-color">编程</span>
+                    <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">
+                        <span class="chip bg-color">密码学</span>
+                    </a>
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
                     </a>
                     
                 </div>
@@ -760,33 +848,34 @@ short int ≤ int ≤ long int≤ long long int
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/25/Hello/">
+                <a href="/2019/10/26/CSRF%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Hello">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="CSRF漏洞学习">
                         
-                        <span class="card-title">Hello</span>
+                        <span class="card-title">CSRF漏洞学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Who am I你好，我是九九，ID：Doublenine。来自GDUT
+                            [TOC]
+CSRF学习概念
+CSRF（Cross-site request forgery）跨站请求伪造，通过伪装成受信任用户的请求来利用受信任的网站。
 
 
-想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。
 
-希望你能多多支持我！
 
+攻击者盗用了你的身份，以你的名义发送恶意请求，对服务器来说这个请求是完全合法
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
                             </span>
                         <span class="publish-author">
                             
@@ -796,7 +885,22 @@ short int ≤ int ≤ long int≤ long long int
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">WEB安全</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                        <span class="chip bg-color">漏洞挖掘</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

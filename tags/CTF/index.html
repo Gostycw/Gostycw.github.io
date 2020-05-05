@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="hack,CTF,Security">
+    <meta name="keywords" content="标签: CTF, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Doublenine&#39;s Blog</title>
+    <title>标签: CTF | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -304,56 +304,9 @@
 
 </header>
 
-    
-<style>
-    .carousel-control {
-        width: 45px;
-        height: 45px;
-        line-height: 55px;
-        border-radius: 45px;
-        background: transparent;
-        cursor: pointer;
-        z-index: 100;
-    }
-
-    #prev-cover {
-        position: absolute;
-        top: 48%;
-        left: 8px;
-    }
-
-    #next-cover {
-        position: absolute;
-        top: 48%;
-        right: 8px;;
-    }
-
-    #prev-cover i {
-        margin-right: 3px;
-    }
-
-    #next-cover i {
-        margin-left: 3px;
-    }
-
-    .carousel-control:hover {
-        background-color: rgba(0, 0, 0, .4);
-    }
-
-    .carousel-control i {
-        color: #fff;
-        font-size: 2.4rem;
-    }
-</style>
-
-
-
-<div class="carousel carousel-slider center index-cover" data-indicators="true" style="margin-top: -64px;">
-    
-
-    <div class="carousel-item red white-text bg-cover about-cover">
-        <div class="container">
-            <div class="row">
+    <div class="bg-cover pd-header about-cover">
+    <div class="container">
+    <div class="row">
     <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
         <div class="brand">
             <div class="title center-align">
@@ -389,254 +342,108 @@
 </script>
 
 
-
-            <div class="cover-btns">
-                <a href="#indexCard" class="waves-effect waves-light btn">
-                    <i class="fa fa-angle-double-down"></i>开始阅读
-                </a>
-
-                
-                    <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light btn" target="_blank">
-                        <i class="fab fa-github-alt"></i>Github
-                    </a>
-                
-            </div>
-            <div class="cover-social-link">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:3302013712@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3302013712" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3302013712" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-        </div>
     </div>
-
-    
 </div>
-
-<script>
-    $(function () {
-        let coverSlider = $('.carousel');
-
-        //用户触摸轮播自动 restartPlay 是否生效
-        let initUserPressedOrDraggedActive = false
-
-        //用户触摸轮播自动 restartPlay
-        function initUserPressedOrDragged(instance) {
-            setInterval(() => {
-                if (instance.pressed || instance.dragged) {
-                    // console.log('initUserPressedOrDragged: ',instance.pressed,instance.dragged)
-                    restartPlay()
-                }
-            }, 1000)
-        }
-
-        coverSlider.carousel({
-            duration: Number('120'),
-            fullWidth: true,
-            indicators: 'true' === 'true',
-            onCycleTo() {
-                if (!initUserPressedOrDraggedActive) {
-                    // console.log('initUserPressedOrDraggedActive')
-                    initUserPressedOrDragged(this)
-                    initUserPressedOrDraggedActive = true
-                }
-            },
-        })
-
-        let carouselIntervalId;
-        
-        // Loop to call the next cover article picture.
-        let autoCarousel = function () {
-            carouselIntervalId = setInterval(function () {
-                coverSlider.carousel('next');
-            }, 5000);
-        };
-        autoCarousel();
-        
-
-        function restartPlay() {
-            
-            clearInterval(carouselIntervalId);
-            autoCarousel();
-            
-        };
-
-        
-        // prev and next cover post.
-        $('#prev-cover').click(function () {
-            coverSlider.carousel('prev');
-            restartPlay();
-        });
-        $('#next-cover').click(function () {
-            coverSlider.carousel('next');
-            restartPlay();
-        });
-        
-    });
-</script>
-
-
 
 <main class="content">
 
     
-    <div id="indexCard" class="index-card">
-        <div class="container ">
-            <div class="card">
-                <div class="card-content">
-                    
-                        <div class="dream">
-    
-    <div class="title center-align">
-        <i class="far fa-lightbulb"></i>&nbsp;&nbsp;信条
-    </div>
-    
-    <div class="row">
-        <div class="col l8 offset-l2 m10 offset-m1 s10 offset-s1 center-align text">
-            吾所成之事，所谓躬耕于黑暗，服侍于光明。
+
+<div id="tags" class="container chip-container">
+    <div class="card">
+        <div class="card-content">
+            <div class="tag-title center-align">
+                <i class="fas fa-tags"></i>&nbsp;&nbsp;文章标签
+            </div>
+            <div class="tag-chips">
+                
+                
+                <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" title="密码学: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="密码学" style="background-color: #F9EBEA;">密码学
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/CTF/" title="CTF: 10">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-active "
+                            data-tagname="CTF" style="background-color: #F5EEF8;">CTF
+                        <span class="tag-length">10</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/WEB%E5%AE%89%E5%85%A8/" title="WEB安全: 8">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="WEB安全" style="background-color: #D5F5E3;">WEB安全
+                        <span class="tag-length">8</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/" title="漏洞挖掘: 5">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="漏洞挖掘" style="background-color: #E8F8F5;">漏洞挖掘
+                        <span class="tag-length">5</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E7%BC%96%E7%A8%8B/" title="编程: 3">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="编程" style="background-color: #FEF9E7;">编程
+                        <span class="tag-length">3</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E5%85%A8/" title="二进制安全: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="二进制安全" style="background-color: #F8F9F9;">二进制安全
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计: 2">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="代码审计" style="background-color: #82E0AA;">代码审计
+                        <span class="tag-length">2</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/tags/%E7%A1%AC%E4%BB%B6/" title="硬件: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="硬件" style="background-color: #D7BDE2;">硬件
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+            </div>
         </div>
     </div>
 </div>
 
-                    
-
-                    
-
-                    
-
-                    
-                    <div id="recommend-sections" class="recommend">
-                        
-
-
-
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
     
 
-    
-
-    <!-- 所有文章卡片 -->
     <article id="articles" class="container articles">
-        <div class="row article-row">
+        <div class="row tags-posts">
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/05/05/STM8%E5%8D%95%E7%89%87%E6%9C%BA/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="STM8单片机">
-                            
-                            <span class="card-title">STM8单片机</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                STM8单片机笔记[Toc]
-
-单片机的概念
-1.单片机是微型计算机的分支，是在一块芯片上集成了CPU、内存（RAM）、程序储存器（ROM）、输入输出接口的微型计算机。
-
-
-早期的单片机为8位或4位，随着工业控制的要求提高，出现了16位的单
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-05
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Doublenine
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/05/05/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
-                            
-                            <span class="card-title">C语言学习笔记</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                C语言学习笔记
-[TOC]
-数据类型1.基本类型
-整数型：int、short int、long int、long long int
-short int ≤ int ≤ long int≤ long long int
-
-
-浮点型：float、
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-05
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Doublenine
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全, 漏洞挖掘, 代码审计" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/11/03/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%8C%EF%BC%89/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="代码审计学习（二）">
@@ -644,20 +451,7 @@ short int ≤ int ≤ long int≤ long long int
                             <span class="card-title">代码审计学习（二）</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                代码审计学习（二）SQL注入
-由于开发者在编写数据库代码时，直接将外部可控的参数拼接到SQL语句中，没有经过任何过滤就直接放入数据库引擎执行
-
-
-
-
-普通注入
-在参数处利用select、union等构造sql注入语句。主要分为int型和st
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-11-03
@@ -670,35 +464,14 @@ short int ≤ int ≤ long int≤ long long int
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                        <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
-                            <span class="chip bg-color">漏洞挖掘</span>
-                        </a>
-                        
-                        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
-                            <span class="chip bg-color">代码审计</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全, 漏洞挖掘, 代码审计" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/11/02/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80)/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="代码审计学习（一）">
@@ -706,29 +479,7 @@ short int ≤ int ≤ long int≤ long long int
                             <span class="card-title">代码审计学习（一）</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                代码审计学习（一）PHP核心配置首先需了解 PHP_INI_* 常量的定义
-
-
-
-
-
-常量
-含义
-
-
-
-PHP_INI_USER
-可在用户的php脚本或者windows注册表中设置
-
-
-PHP_INI_PERDIR
-可在php.ini .h
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-11-02
@@ -741,35 +492,14 @@ PHP_INI_PERDIR
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                        <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
-                            <span class="chip bg-color">漏洞挖掘</span>
-                        </a>
-                        
-                        <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
-                            <span class="chip bg-color">代码审计</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/10/27/%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="变量覆盖漏洞学习">
@@ -777,23 +507,7 @@ PHP_INI_PERDIR
                             <span class="card-title">变量覆盖漏洞学习</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                变量覆盖定义
-可以用自定义的参数值替换原有变量值的情况称为变量覆盖漏洞
-
-
-
-主要情形
-$$使用不当
-extract()函数使用不当
-parse_str()函数使用不当
-import_request_variables()使用不当
-开启全局
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-10-27
@@ -806,27 +520,14 @@ import_request_variables()使用不当
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/10/27/PHP%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="PHP数组绕过">
@@ -834,21 +535,7 @@ import_request_variables()使用不当
                             <span class="card-title">PHP数组绕过</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                PHP数组绕过绕过strops()函数1. strops()定义：
-strpos() 函数查找字符串在另一字符串中第一次出现的位置。
-
-
-
-strpos() 函数对大小写敏感。
-
-2. strops()语法：
-strpos(string,f
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-10-27
@@ -861,27 +548,14 @@ strpos(string,f
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/10/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E4%B9%8BLFI%E5%AD%A6%E4%B9%A0/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="文件包含之LFI学习">
@@ -889,26 +563,7 @@ strpos(string,f
                             <span class="card-title">文件包含之LFI学习</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [TOC]
-LFI含义文件包含漏洞主要是由四种函数造成的：
-
-include()
-require()
-include_once()
-require_once()
-
-
-
-
-用这四类函数包含文件时，文件会被当做PHP代码来执行
-
-include
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
@@ -921,27 +576,14 @@ include
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="密码学, CTF" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/10/26/Brainfuck&Ook%E5%8A%A0%E5%AF%86/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Brainfuck&amp;Ook!加密">
@@ -949,19 +591,7 @@ include
                             <span class="card-title">Brainfuck&amp;Ook!加密</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [TOC]
-Brainfuck/Ook!编码加密
-Ook!加密语法规则OOK！只有三个不同的语法元素：Ook。OOK？OOK！
-
-
-它们组合成两个组，各种组合组合指定命令。因此，节目必须包含偶数个“Ook”。换行符被忽略
-命令OOK。OOK
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
@@ -974,140 +604,14 @@ Ook!加密语法规则OOK！只有三个不同的语法元素：Ook。OOK？OOK�
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/">
-                            <span class="chip bg-color">密码学</span>
-                        </a>
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2019/10/26/%E8%B6%8A%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="越权漏洞学习">
-                            
-                            <span class="card-title">越权漏洞学习</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [TOC]
-越权漏洞概念
-越权，顾名思义就是超出权限范围进行操作。
-
-
-
-
-多数WEB应用都具备权限划分和控制，但是如果权限控制功能设计存在缺陷，那么攻击者就可以通过这些缺陷来访问未经授权的功能或数据，这就是我们通常说的越权漏洞。
-越权漏洞
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Doublenine
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                        <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
-                            <span class="chip bg-color">漏洞挖掘</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2019/10/26/CSRF%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="CSRF漏洞学习">
-                            
-                            <span class="card-title">CSRF漏洞学习</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [TOC]
-CSRF学习概念
-CSRF（Cross-site request forgery）跨站请求伪造，通过伪装成受信任用户的请求来利用受信任的网站。
-
-
-
-
-攻击者盗用了你的身份，以你的名义发送恶意请求，对服务器来说这个请求是完全合法
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Doublenine
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                        <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
-                            <span class="chip bg-color">漏洞挖掘</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/10/26/GUETCTF_web3_wp/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="GUETCTF-WEB3-writeup">
@@ -1115,19 +619,7 @@ CSRF（Cross-site request forgery）跨站请求伪造，通过伪装成受信�
                             <span class="card-title">GUETCTF-WEB3-writeup</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [TOC]
-GUETCTF-web3-wp打开网页是一个登陆界面，f12查看源码：
-
-
-&lt;!--  
-$user = $_GET[&quot;username&quot;];  
-$file = $_GET[&quot;file&qu
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
@@ -1140,23 +632,42 @@ $file = $_GET[&quot;file&qu
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                    </div>
-                    
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全, 漏洞挖掘" data-aos="fade-up">
+                <div class="card">
+                    <a href="/2019/10/26/CSRF%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="CSRF漏洞学习">
+                            
+                            <span class="card-title">CSRF漏洞学习</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-user fa-fw"></i>
+                                Doublenine
+                                
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, WEB安全, 漏洞挖掘" data-aos="fade-up">
                 <div class="card">
                     <a href="/2019/10/26/SSRF%E6%BC%8F%E6%B4%9E%E6%B5%85%E6%9E%90/">
-                        <div class="card-image">
+                        <div class="card-image tag-image">
                             
                             
                             <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="SSRF漏洞浅析">
@@ -1164,20 +675,7 @@ $file = $_GET[&quot;file&qu
                             <span class="card-title">SSRF漏洞浅析</span>
                         </div>
                     </a>
-
                     <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                [TOC]
-SSRF漏洞学习概念
-SSRF(Server-Side Request Forgery)，服务器端请求伪造，利用漏洞伪造服务器端发起请求，从而突破客户端获取不到的数据限制。
-
-
-
-
-一般情况下，SSRF是要目标网站的内部系统。（
-                            
-                        </div>
                         <div class="publish-info">
                             <span class="publish-date">
                                 <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
@@ -1190,55 +688,40 @@ SSRF(Server-Side Request Forgery)，服务器端请求伪造，利用漏洞伪�
                             </span>
                         </div>
                     </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/CTF/">
-                            <span class="chip bg-color">CTF</span>
-                        </a>
-                        
-                        <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                            <span class="chip bg-color">WEB安全</span>
-                        </a>
-                        
-                        <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
-                            <span class="chip bg-color">漏洞挖掘</span>
-                        </a>
-                        
+                </div>
+            </div>
+            
+            
+            <div class="article tag-post col s12 m6 l4" data-tags="CTF, 二进制安全" data-aos="fade-up">
+                <div class="card">
+                    <a href="/2019/10/26/PWN%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="PWN笔记（一）">
+                            
+                            <span class="card-title">PWN笔记（一）</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-user fa-fw"></i>
+                                Doublenine
+                                
+                            </span>
+                        </div>
                     </div>
-                    
                 </div>
             </div>
             
         </div>
     </article>
-
 </main>
-
-
-<div class="container paging">
-    <div class="row">
-        <div class="col s6 m4 l4">
-            
-            <a class="left btn-floating btn-large disabled">
-                <i class="fas fa-angle-left"></i>
-            </a>
-            
-        </div>
-        <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">1 / 2</div>
-        </div>
-        <div class="col s6 m4 l4">
-            
-            <a href="/page/2/"
-               class="right btn-floating btn-large waves-effect waves-light bg-color">
-                <i class="fas fa-angle-right"></i>
-            </a>
-            
-        </div>
-    </div>
-</div>
 
 
 

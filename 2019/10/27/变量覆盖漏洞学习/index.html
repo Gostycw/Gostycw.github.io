@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello, hack,CTF,Security">
+    <meta name="keywords" content="变量覆盖漏洞学习, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello | Doublenine&#39;s Blog</title>
+    <title>变量覆盖漏洞学习 | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello</h1>
+                    <h1 class="description center-align post-title">变量覆盖漏洞学习</h1>
                 </div>
             </div>
         </div>
@@ -428,9 +428,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                                <span class="chip bg-color">WEB安全</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -442,7 +450,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-10-25
+                    2019-10-27
                 </div>
                 
 
@@ -451,14 +459,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    51
+                    908
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -473,13 +481,153 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p><font color = green>你好，我是九九，ID：Doublenine。来自GDUT<br></font></p>
+                <h2 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a><font color = green>定义</font></h3><ul>
+<li>可以用<strong>自定义的参数值</strong><font color = red>替换</font><strong>原有变量值</strong>的情况称为变量覆盖漏洞</li>
+</ul>
 <a id="more"></a>
 
-<p>想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。</p>
+<h3 id="主要情形"><a href="#主要情形" class="headerlink" title="主要情形"></a><font color = green>主要情形</font></h3><ul>
+<li><strong>$$使用不当</strong></li>
+<li><strong>extract()函数使用不当</strong></li>
+<li><strong>parse_str()函数使用不当</strong></li>
+<li>import_request_variables()使用不当</li>
+<li>开启全局变量注册</li>
+<li>……</li>
+</ul>
 <hr>
-<p><strong>希望你能多多支持我！</strong></p>
+<h4 id="使用不当"><a href="#使用不当" class="headerlink" title="$$使用不当"></a>$$使用不当</h4><p><strong>1. 定义</strong></p>
+<ul>
+<li>一个<strong>可变变量</strong>获取了一个普通变量的值作为这个可变变量的变量名。</li>
+</ul>
+<p><strong>2. 漏洞产生</strong></p>
+<ul>
+<li>使用<font color = red>foreach</font>来<strong>遍历数组中的值，然后再将获取到的数组键名作为变量，数组中的键值作为变量的值</strong>。因此就产生了变量覆盖漏洞。</li>
+</ul>
+<pre><code>&lt;?php
+foreach ($_GET as $key =&gt; $value) {
+${$key} = $value;
+}
+echo $a;
+?&gt;</code></pre><p>如上代码，把<strong>GET得到的$key</strong>作为<strong>新变量的变量名</strong>，<strong>把GET得到的$value</strong>赋值给它</p>
+<p>GET ?a=1 第3行回解析为$a=1。就造成了变量覆盖</p>
+<pre><code>//例题
+&lt;!--foreach($_GET as $key =&gt; $value){  
+        $$key = $value;  
+}  
+if($name == &quot;meizijiu233&quot;){
+    echo $flag;
+}--&gt;</code></pre><p>poc:<br><code>?name = meizijiu233</code></p>
+<hr>
+<h4 id="extract-使用不当"><a href="#extract-使用不当" class="headerlink" title="extract()使用不当"></a>extract()使用不当</h4><p><strong>1. 定义</strong></p>
+<ul>
+<li>extract() 函数从数组中将变量导入到当前的符号表。</li>
+</ul>
+<ul>
+<li>该函数使用<strong>数组键名</strong>作为<strong>变量名</strong>，使用<font color = green>数组键值</font>作为<font color = green>变量值</font>。针对数组中的每个元素，将在当前符号表中创建对应的一个变量。<strong>该函数返回成功设置的变量数目</strong>。</li>
+</ul>
+<p><strong>2. 语法</strong></p>
+<pre><code>extract(array,extract_rules,prefix)</code></pre><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>array</td>
+<td>必需。规定要使用的数组。</td>
+</tr>
+<tr>
+<td>extract_rules</td>
+<td>可选。extract() 函数将检查每个键名是否为合法的变量名，同时也检查和符号表中已存在的变量名是否冲突。对不合法和冲突的键名的处理将根据此参数决定。</td>
+</tr>
+<tr>
+<td>prefix</td>
+<td>可选。如果 extract_rules 参数的值是 EXTR_PREFIX_SAME、EXTR_PREFIX_ALL、 EXTR_PREFIX_INVALID 或 EXTR_PREFIX_IF_EXISTS，则 prefix 是必需的。</td>
+</tr>
+</tbody></table>
+<ul>
+<li>从以上说明我们可以看到第一个参数是必须的，<strong>会不会导致变量覆盖漏洞由第二个参数决定</strong></li>
+</ul>
+<p><strong>3. 例子</strong></p>
+<pre><code>    &lt;?php if ($_SERVER[&quot;REQUEST_METHOD&quot;] == &quot;POST&quot;) { ?&gt;
+        &lt;?php
+        extract($_POST);
+        if ($pass == $thepassword_123) { ?&gt;
+            &lt;div class=&quot;alert alert-success&quot;&gt;
+                &lt;code&gt;&lt;?php echo $theflag; ?&gt;&lt;/code&gt;
+            &lt;/div&gt;
+        &lt;?php } ?&gt;
+    &lt;?php } ?&gt;</code></pre><p>题目意思是要POST一个pass数据，<font color = red>extract($_POST)</font>会将POST的数据中的<strong>键名和键值</strong>转换为相应的<strong>变量名和变量值</strong>，利用这个覆盖$pass和$thepassword_123变量的值，从而满足$pass == $thepassword_123这个条件。</p>
+<p>POC:</p>
+<pre><code>pass=&amp;thepassword_123=   //用POST传入</code></pre><hr>
+<h4 id="parse-str-使用不当"><a href="#parse-str-使用不当" class="headerlink" title="parse_str()使用不当"></a>parse_str()使用不当</h4><p><strong>1. 定义</strong></p>
+<ul>
+<li>parse_str() 函数用于把查询字符串解析到变量中，如果没有array 参数，则由该函数设置的变量将覆盖已存在的同名变量。 </li>
+</ul>
+<p><strong>2. 语法</strong></p>
+<pre><code>parse_str(string,array)</code></pre><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>strings</td>
+<td>必需。规定要解析的字符串</td>
+</tr>
+<tr>
+<td>array</td>
+<td>可选。规定储存变量的数组名称。该参数指示变量将被存储到数组中。</td>
+</tr>
+</tbody></table>
+<p><strong>3. 例子</strong></p>
+<pre><code>&lt;?php
 
+error_reporting(0);
+
+if (empty($_GET[&#39;id&#39;])) {
+
+    show_source(__FILE__);
+
+    die();
+
+} else {
+
+    include (‘flag.php’);
+
+    $a = “www.OPENCTF.com”;
+
+    $id = $_GET[&#39;id&#39;];
+
+    @parse_str($id);
+
+    if ($a[0] != ‘QNKCDZO’ &amp;&amp; md5($a[0]) == md5(‘QNKCDZO’)) {
+
+        echo $flag;
+
+    } else {
+
+        exit(‘其实很简单其实并不难！’);
+
+    }
+
+}
+
+?&gt;</code></pre><p><strong>分析</strong>: </p>
+<ol>
+<li><p>首先要求使用GET提交id参数，然后<strong>parse_str($id)对id参数的数据进行处理</strong></p>
+</li>
+<li><p><strong>再使用判断$a[0] != ‘QNKCDZO’&amp;&amp;md5($a[0]) == md5(‘QNKCDZO’)的结果是否为真</strong>，为真就返回flag</p>
+</li>
+<li><p>md5(‘QNKCDZO’)的结果是0e830400451993494058024219903391由于此次要满足$a[0] != ‘QNKCDZO’ &amp;&amp; md5($a[0]) == md5(‘QNKCDZO’)</p>
+</li>
+<li><p>所以要<strong>利用php弱语言特性</strong>，0e123会被当做科学计数法，0*10x123。所以<font color = green>需要找到一个字符串md5后的结果是0e开头后面都是数字的</font>，如，240610708，s878926199a </p>
+</li>
+</ol>
+<p>POC:</p>
+<pre><code>?id=a[0]=s878926199a //?id=a[0]=240610708</code></pre>
             </div>
             <hr/>
 
@@ -504,7 +652,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://gostycw.github.io/2019/10/25/Hello/">https://gostycw.github.io/2019/10/25/Hello/</a>
+                    <a href="https://gostycw.github.io/2019/10/27/%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/">https://gostycw.github.io/2019/10/27/%E5%8F%98%E9%87%8F%E8%A6%86%E7%9B%96%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -541,7 +689,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                                    <span class="chip bg-color">WEB安全</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -711,31 +867,40 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">
+                <a href="/2019/11/02/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80)/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="代码审计学习（一）">
                         
-                        <span class="card-title">C语言学习笔记</span>
+                        <span class="card-title">代码审计学习（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            C语言学习笔记
-[TOC]
-数据类型1.基本类型
-整数型：int、short int、long int、long long int
-short int ≤ int ≤ long int≤ long long int
+                            代码审计学习（一）PHP核心配置首先需了解 PHP_INI_* 常量的定义
 
 
-浮点型：float、
+
+
+
+常量
+含义
+
+
+
+PHP_INI_USER
+可在用户的php脚本或者windows注册表中设置
+
+
+PHP_INI_PERDIR
+可在php.ini .h
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-11-02
                         </span>
                         <span class="publish-author">
                             
@@ -748,8 +913,20 @@ short int ≤ int ≤ long int≤ long long int
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
-                        <span class="chip bg-color">编程</span>
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">WEB安全</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                        <span class="chip bg-color">漏洞挖掘</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
+                        <span class="chip bg-color">代码审计</span>
                     </a>
                     
                 </div>
@@ -760,33 +937,35 @@ short int ≤ int ≤ long int≤ long long int
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/25/Hello/">
+                <a href="/2019/10/27/PHP%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Hello">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="PHP数组绕过">
                         
-                        <span class="card-title">Hello</span>
+                        <span class="card-title">PHP数组绕过</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Who am I你好，我是九九，ID：Doublenine。来自GDUT
+                            PHP数组绕过绕过strops()函数1. strops()定义：
+strpos() 函数查找字符串在另一字符串中第一次出现的位置。
 
 
-想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。
 
-希望你能多多支持我！
+strpos() 函数对大小写敏感。
 
+2. strops()语法：
+strpos(string,f
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-27
                             </span>
                         <span class="publish-author">
                             
@@ -796,7 +975,18 @@ short int ≤ int ≤ long int≤ long long int
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">WEB安全</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>

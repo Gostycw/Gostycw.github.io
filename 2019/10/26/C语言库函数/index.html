@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello, hack,CTF,Security">
+    <meta name="keywords" content="C语言库函数学习, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello | Doublenine&#39;s Blog</title>
+    <title>C语言库函数学习 | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello</h1>
+                    <h1 class="description center-align post-title">C语言库函数学习</h1>
                 </div>
             </div>
         </div>
@@ -428,9 +428,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                                <span class="chip bg-color">编程</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -442,7 +446,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-10-25
+                    2019-10-26
                 </div>
                 
 
@@ -451,14 +455,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    51
+                    2.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    11 分
                 </div>
                 
 
@@ -473,12 +477,574 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p><font color = green>你好，我是九九，ID：Doublenine。来自GDUT<br></font></p>
+                <h1 id="C语言库函数"><a href="#C语言库函数" class="headerlink" title="C语言库函数"></a>C语言库函数</h1><p>[Toc]</p>
+<h2 id="1-数学函数"><a href="#1-数学函数" class="headerlink" title="1.数学函数"></a><strong>1.数学函数</strong></h2><ul>
+<li>使用数学函数时，应在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;math.h></span> </span></code></pre>
+</li>
+</ul>
 <a id="more"></a>
 
-<p>想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。</p>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>acos</td>
+<td>double acos(double x)</td>
+<td>计算arccos x的值，其中-1&lt;=x&lt;=1</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>asin</td>
+<td>double asin(double x)</td>
+<td>计算arcsin x的值，其中-1&lt;=x&lt;=1</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>atan</td>
+<td>double atan(double x)</td>
+<td>计算arctan x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>atan2</td>
+<td>double atan2(double x,double y)</td>
+<td>计算arctan x/y的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>cos</td>
+<td>double cos(double x)</td>
+<td>计算cos x的值,其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>cosh</td>
+<td>double cosh(double x)</td>
+<td>计算x的双曲余弦cosh x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>exp</td>
+<td>double exp(double x)</td>
+<td>求e^x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>fabs</td>
+<td>double fabs(double x)</td>
+<td>求x的绝对值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>floor</td>
+<td>double floor(double x)</td>
+<td>求出不大于x的最大整数</td>
+<td>该整数的双精度实数</td>
+</tr>
+<tr>
+<td>fmod</td>
+<td>double fmod(double x,double y);</td>
+<td>求整除x/y的余数</td>
+<td>返回余数的双精度实数</td>
+</tr>
+<tr>
+<td>frexp</td>
+<td>double frexp(double val,int *eptr)</td>
+<td>把双精度数val分解成数字部分(尾数)和以2为底的指数，即val=x * 2^n,n存放在eptr指向的变量中</td>
+<td>数字部分x 0.5 &lt;= x &lt; 1</td>
+</tr>
+<tr>
+<td>log</td>
+<td>double log(double x)</td>
+<td>求ln x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>log10</td>
+<td>double log10(double x)</td>
+<td>求log10x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>modf</td>
+<td>double mof(double val,int * iptr)</td>
+<td>把双精度数val分解成数字部分和小数部分，把整数部分存放在ptr指向的变量中</td>
+<td>val的小数部分</td>
+</tr>
+<tr>
+<td>pow</td>
+<td>double pow(double x,double y)</td>
+<td>求x^y的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>sin</td>
+<td>double sin(double x)</td>
+<td>求sin x的值,其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>sinh</td>
+<td>double sinh(double x)</td>
+<td>计算x的双曲正弦函数sinh x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>sqrt</td>
+<td>double sqrt(double x)</td>
+<td>计算，其中x&gt;=0</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>tan</td>
+<td>double tan(double x)</td>
+<td>计算tan x的值,其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>tanh</td>
+<td>double tanh(double x)</td>
+<td>计算tanh x的值，其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+</tbody></table>
 <hr>
-<p><strong>希望你能多多支持我！</strong></p>
+<h2 id="2-字符函数"><a href="#2-字符函数" class="headerlink" title="2.字符函数"></a><strong>2.字符函数</strong></h2><ul>
+<li>在使用字符函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;ctype.h></span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>isalnum</td>
+<td>int isalnum(int ch)</td>
+<td>检查ch是否字母或数字</td>
+<td>是则返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isalpha</td>
+<td>int isalpha(int ch)</td>
+<td>检查ch是否为字母</td>
+<td>是字母返回1，否则返回0</td>
+</tr>
+<tr>
+<td>iscntrl</td>
+<td>int iscntrl(int ch)</td>
+<td>检查ch是否控制字符（其ASCII码在0和0xLF之间)</td>
+<td>是控制字符返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isdigit</td>
+<td>int isdigit(int ch)</td>
+<td>检查ch是否为数字</td>
+<td>是数字返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isgraph</td>
+<td>int isgraph(int ch)</td>
+<td>检查ch是否可打印字符（其ASCII码在0x21和0x7e之间），不包括空格</td>
+<td>可打印字符返回1，否则返回0</td>
+</tr>
+<tr>
+<td>islower</td>
+<td>int islower(int ch)</td>
+<td>检查ch是否是小写字母(a~z)</td>
+<td>是小写字母返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isprint</td>
+<td>int print(int ch)</td>
+<td>检查ch是否是可打印字符（其ASCII码在0x21和0x7e之间),不包括空格</td>
+<td>可打印字符返回1，否则返回0</td>
+</tr>
+<tr>
+<td>ispunct</td>
+<td>int ispunct(int ch)</td>
+<td>检查ch是否是标点字符（不包括空格）即除字母、数字和空格以外的所有可打印字符</td>
+<td>是标点返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isspace</td>
+<td>int isspace(int ch)</td>
+<td>检查ch是否空格、制表符或换行符</td>
+<td>是返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isupper</td>
+<td>int isupper(int ch)</td>
+<td>检查ch是否大写字母(A~Z)</td>
+<td>是返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isxdigit</td>
+<td>int isxdigit(int ch)</td>
+<td>检查ch是否一个16进制数字(即0<del>9，或A</del>F,a~f)</td>
+<td>是返回1，否则返回0</td>
+</tr>
+<tr>
+<td>tolower</td>
+<td>int tolower(int ch)</td>
+<td>将ch字符转换为小写字母</td>
+<td>返回ch对应的小写字母</td>
+</tr>
+<tr>
+<td>toupper</td>
+<td>int toupper(int ch)</td>
+<td>将ch字符转换为大写字母</td>
+<td>返回ch对应的大写字母</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h2 id="3-字符串函数"><a href="#3-字符串函数" class="headerlink" title="3.字符串函数"></a><strong>3.字符串函数</strong></h2><ul>
+<li>在使用字符串函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span></code></pre>
+<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538569387148&di=fa4604d28b80f7d5b8031101d952c7c7&imgtype=0&src=http%3A%2F%2Fwww.68idc.cn%2Fhelp%2Fuploads%2Fallimg%2F150116%2F151FMW7_0.jpg" alt=""></li>
+</ul>
+<hr>
+<h2 id="4-输入输出函数"><a href="#4-输入输出函数" class="headerlink" title="4.输入输出函数"></a><strong>4.输入输出函数</strong></h2><ul>
+<li>在使用输入输出函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span></code></pre>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>clearerr</td>
+<td>void clearerr(FILE *fp)</td>
+<td>清除文件指针错误提示器</td>
+<td>无</td>
+</tr>
+<tr>
+<td>close</td>
+<td>int close(int fp)</td>
+<td>关闭文件（非ANSI标准)</td>
+<td>关闭成功返回0，不成功返回-1</td>
+</tr>
+<tr>
+<td>creat</td>
+<td>int creat(char*filename,int mode)</td>
+<td>以mode所指定的方式建立文件（非ANSI标准）</td>
+<td>成功返回正数，否则返回-1</td>
+</tr>
+<tr>
+<td>eof</td>
+<td>int eof（int fp)</td>
+<td>判断fp所指的文件是否结束</td>
+<td>文件结束返回1，否则返回0</td>
+</tr>
+<tr>
+<td>fclose</td>
+<td>int fclose（FILE * fp)</td>
+<td>关闭fp所指的文件，释放文件缓冲区</td>
+<td>关闭成功返回0，不成功返回非0</td>
+</tr>
+<tr>
+<td>feof</td>
+<td>int feof(FILE * fp)</td>
+<td>检查文件是否结束</td>
+<td>结束返回非0，否则返回0</td>
+</tr>
+<tr>
+<td>ferror</td>
+<td>int ferror(FILE * fp)</td>
+<td>测试fp所指文件是否错误</td>
+<td>无错返回0，否则返沪非0</td>
+</tr>
+<tr>
+<td>fflush</td>
+<td>int fflush(FILE * fp)</td>
+<td>将fp所指的文件的全部控制信息和数据存盘</td>
+<td>存盘正确返回0，否则返回非0</td>
+</tr>
+<tr>
+<td>fgets</td>
+<td>char *fgets(char *buf,int n,FILE *fp)</td>
+<td>从fp所指的文件读取一个长度为(n-1)的字符串，存入起始地址为buf的空间</td>
+<td>返回地址buf。若遇文件结束或出错则返回E0F</td>
+</tr>
+<tr>
+<td>fopen</td>
+<td>FILE *fopen(char *filename, char *mode)</td>
+<td>以mode指定的方式打开名为filename的文件</td>
+<td>成功，则返回一个文件指针，否则返回0</td>
+</tr>
+<tr>
+<td>fprintf</td>
+<td>int fprintf(FILE * fp, char *format,args,…)</td>
+<td>把args的值以format指定的格式输出到fp所指的文件中</td>
+<td>实际输出的字符数</td>
+</tr>
+<tr>
+<td>fputc</td>
+<td>int putc(char ch,FILE * fp)</td>
+<td>将字符ch输出到fp所指的文件中</td>
+<td>成功返回该字符，出错返回E0F</td>
+</tr>
+<tr>
+<td>fputs</td>
+<td>int fputs(char str,FILE * fp)</td>
+<td>将str指定的字符串输出到fp所指的文件中</td>
+<td>成功则返回0，出错则返回E0F</td>
+</tr>
+<tr>
+<td>fread</td>
+<td>int fread(char *pt, unsigned size,unsigned n,FILE * fp)</td>
+<td>从fp所定文件中读取长度为size的n个数据项，存放到pt所指向的内存区</td>
+<td>返回所读的数据项个数，若文件结束或出错返回0</td>
+</tr>
+<tr>
+<td>fscanf</td>
+<td>int fscanf(FILE * fp,char *format,args,…)</td>
+<td>从fp指定的文件中按给定的format格式将读入的数据送到args所指向的内存变量中(args是指针)</td>
+<td>输入的数据个数</td>
+</tr>
+<tr>
+<td>fseek</td>
+<td>int fseek(FILE * fp,long offset,int base)</td>
+<td>将fp指定的文件的位置指针移到base所指出的位置为基准，以offset为位移量的位置</td>
+<td>返回当前位置，否则返回-1</td>
+</tr>
+<tr>
+<td>ftell</td>
+<td>long ftell(FILE * fp)</td>
+<td>返回fp所指定的文件中的读写位置</td>
+<td>返回文件中的读写位置，否则返回0</td>
+</tr>
+<tr>
+<td>fwrite</td>
+<td>int fwrite(char *ptr,unsigned size,unsigned n,FILE * fp)</td>
+<td>把ptr所指向的的n * size个字节输出到fp所指向的文件中</td>
+<td>写到fp文件中的数据项的个数</td>
+</tr>
+<tr>
+<td>getc</td>
+<td>int getc(FILE * fp)</td>
+<td>从fp所指向的文件中的独处下一个字符</td>
+<td>返回读出的字符，若文件出错或结束返回E0F</td>
+</tr>
+<tr>
+<td>getchar</td>
+<td>int getchar()</td>
+<td>从标准输入设备中读取下一个字符</td>
+<td>返回字符，若文件出错或结束返回-1</td>
+</tr>
+<tr>
+<td>gets</td>
+<td>char *gets(char *str)</td>
+<td>从标准输入设备中读取字符串存入str指向的数组</td>
+<td>成功返回str，否则返回NULL</td>
+</tr>
+<tr>
+<td>open</td>
+<td>int open(char *filename, int mode)</td>
+<td>以mode指定的方式打开已存在的名为filename的文件（非ANSI标准）</td>
+<td>返回文件号（正数），如打开失败返回-1</td>
+</tr>
+<tr>
+<td>printf</td>
+<td>int printf(char *format,args,…)</td>
+<td>在format指定的字符串的控制下，将输出列表args的指输出到标准设备</td>
+<td>输出字符的个数。若出错返回负数</td>
+</tr>
+<tr>
+<td>prtc</td>
+<td>int prtc(int ch,FILE *fp)</td>
+<td>把一个字符ch输入到fp所指的文件中</td>
+<td>输出字符ch，若出错返回E0F</td>
+</tr>
+<tr>
+<td>putchar</td>
+<td>int putchar(char ch)</td>
+<td>把字符ch输出到fp标准输出设备</td>
+<td>返回换行符，若失败返回E0F</td>
+</tr>
+<tr>
+<td>puts</td>
+<td>int puts(char *str)</td>
+<td>把str指向的字符串输出到标准输入设备，将”/0”转换为回车行</td>
+<td>返回换行符，若失败返回E0F</td>
+</tr>
+<tr>
+<td>putw</td>
+<td>int putw(int w,FILE *fp)</td>
+<td>将一个整数i（即一个字）写到fp所指文件中（非ANSI标准）</td>
+<td>返回读出的字符，若文件出错或结束返回E0F</td>
+</tr>
+<tr>
+<td>read</td>
+<td>int read(int fd,char *buf,unsigned count)</td>
+<td>从文件号fp所指定的文件中读count个字节到buf知识的缓冲区（非ANSI标准）</td>
+<td>返回真正读出的字节个数，如文件结束返回0，出错返回-1</td>
+</tr>
+<tr>
+<td>remove</td>
+<td>int remove(char *fname)</td>
+<td>删除以fname为文件名的文件</td>
+<td>成功返回0，出错返回-1</td>
+</tr>
+<tr>
+<td>rename</td>
+<td>int remove(char *oname,char *nname)</td>
+<td>把oname所指的文件名改为y由nname所指的文件名</td>
+<td>成功返回0，出错返回-1</td>
+</tr>
+<tr>
+<td>rewind</td>
+<td>void rewind（FILE *fp)</td>
+<td>将fp指定的文件指针置于文件头，并清除文件结束标志和错误标志</td>
+<td>无</td>
+</tr>
+<tr>
+<td>scanf</td>
+<td>int scanf(char *format,args,…)</td>
+<td>从标准输入设备按format指示的格式字符串规定的格式，输入数据给args所指示的单元，args为指针</td>
+<td>读入并附给args数据个数。如文件结束返回E0F，若出错返回0</td>
+</tr>
+<tr>
+<td>write</td>
+<td>int write(int fd,char *buf,unsigned count)</td>
+<td>从buf指示的缓冲区输出count个字符到fd所指的文件中（非ANSI标准）</td>
+<td>返回实际输入的字节数，如出错返回-1</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-动态储存分配函数"><a href="#5-动态储存分配函数" class="headerlink" title="5.动态储存分配函数"></a><strong>5.动态储存分配函数</strong></h2><ul>
+<li>在使用动态储存分配函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c">include <span class="token operator">&lt;</span>stdib<span class="token punctuation">.</span>h<span class="token operator">></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>calloc</td>
+<td>void *calloc(unsigned n,unsigned size)</td>
+<td>分配n个数据项的内存连续空间，每个数据项的大小为size</td>
+<td>分配内存单元的起始地址。如不成功返回0</td>
+</tr>
+<tr>
+<td>free</td>
+<td>void free(void *p)</td>
+<td>释放p所指的内存区</td>
+<td>无</td>
+</tr>
+<tr>
+<td>malloc</td>
+<td>void *malloc(unsigned size)</td>
+<td>分配size字节的内存区</td>
+<td>所分配的内存区地址如内存不够，返回0</td>
+</tr>
+<tr>
+<td>realloc</td>
+<td>void *realloc(void *p,unsigned size)</td>
+<td>将p所指的以分配的内存区的大小改为size。size可比原来的空间大或小</td>
+<td>返回指向该内存区的指针。若重新分配失败，则返回NULL</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h2 id="6-其他函数"><a href="#6-其他函数" class="headerlink" title="6.其他函数"></a><strong>6.其他函数</strong></h2><ul>
+<li>在使用这些函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>abs</td>
+<td>int abs(int num)</td>
+<td>计算整数num的绝对值</td>
+<td>返回计算结果</td>
+</tr>
+<tr>
+<td>atof</td>
+<td>double atof(char *str)</td>
+<td>将str指向的字符串转换为一个double型的指</td>
+<td>返回双精度计算结果</td>
+</tr>
+<tr>
+<td>atoi</td>
+<td>int atoi(char *str)</td>
+<td>将str指向的字符串转换为int型的值</td>
+<td>返回转换结果</td>
+</tr>
+<tr>
+<td>atol</td>
+<td>long atol(cahr *str)</td>
+<td>将str指向的字符串转换为一个long型的值</td>
+<td>返回转换结果</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>void exit(int status)</td>
+<td>中止程序运行。将status的值返回调用的过程</td>
+<td>无</td>
+</tr>
+<tr>
+<td>itoa</td>
+<td>char *itoa(int n,char *str,int radix)</td>
+<td>将整数n的值按照radix进制转换为等价的字符串，并将结果存入str指向的字符串中</td>
+<td>返回一个指向str的指针</td>
+</tr>
+<tr>
+<td>labs</td>
+<td>long labs（long num）</td>
+<td>计算long型的整数num的绝对值</td>
+<td>返回计算结果</td>
+</tr>
+<tr>
+<td>ltoa</td>
+<td>char *ltoa(long n,char *str,int radix)</td>
+<td>将长整数n的值按照radix进制转换为等价的字符串，并将结果存入str指向的字符串</td>
+<td>返回一个指向str的指针</td>
+</tr>
+<tr>
+<td>rand</td>
+<td>int rand()</td>
+<td>产生0到RAND_MAX之间的伪随机数。RAND_MAX在头文件中定义(头文件为time.h)</td>
+<td>返回一个伪随机（整）数</td>
+</tr>
+<tr>
+<td>random</td>
+<td>int random（int num）</td>
+<td>产生0到num之间的随机数(头文件为time.h)</td>
+<td>返回一个随机（整）数</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>void randomize()</td>
+<td>初始化随机函数，使用时包括头文件time.h</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
 
             </div>
             <hr/>
@@ -504,7 +1070,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://gostycw.github.io/2019/10/25/Hello/">https://gostycw.github.io/2019/10/25/Hello/</a>
+                    <a href="https://gostycw.github.io/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%BA%93%E5%87%BD%E6%95%B0/">https://gostycw.github.io/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%BA%93%E5%87%BD%E6%95%B0/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -541,7 +1107,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                                    <span class="chip bg-color">编程</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -711,26 +1281,26 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">
+                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="C语言位运算符学习">
                         
-                        <span class="card-title">C语言学习笔记</span>
+                        <span class="card-title">C语言位运算符学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            C语言学习笔记
-[TOC]
-数据类型1.基本类型
-整数型：int、short int、long int、long long int
-short int ≤ int ≤ long int≤ long long int
+                            C语言运算符[Toc]
+概念
+位运算是指按二进制进行的运算。
+C语言提供了6个位操作运算符。这些运算符只能用于整型操作数，即只能用于带符号或无符号的char,short,int与long类型。
 
 
-浮点型：float、
+
+====================
                         
                     </div>
                     <div class="publish-info">
@@ -760,33 +1330,34 @@ short int ≤ int ≤ long int≤ long long int
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/25/Hello/">
+                <a href="/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0(1)/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="Hello">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="C语言学习笔记">
                         
-                        <span class="card-title">Hello</span>
+                        <span class="card-title">C语言学习笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Who am I你好，我是九九，ID：Doublenine。来自GDUT
+                            C语言学习笔记
+[TOC]
+数据类型1.基本类型
+整数型：int、short int、long int、long long int
+short int ≤ int ≤ long int≤ long long int
 
 
-想开始写博客，为了记录一下自己的所学所见，也为了督促自己学习。
-
-希望你能多多支持我！
-
+浮点型：float、
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-25
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
                             </span>
                         <span class="publish-author">
                             
@@ -796,7 +1367,14 @@ short int ≤ int ≤ long int≤ long long int
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                        <span class="chip bg-color">编程</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
