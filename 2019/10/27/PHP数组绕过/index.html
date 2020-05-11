@@ -481,14 +481,14 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="PHP数组绕过"><a href="#PHP数组绕过" class="headerlink" title="PHP数组绕过"></a>PHP数组绕过</h2><h3 id="绕过strops-函数"><a href="#绕过strops-函数" class="headerlink" title="绕过strops()函数"></a>绕过strops()函数</h3><p><font color = green><strong>1. strops()定义：</strong></font></p>
+                <h2 id="PHP数组绕过"><a href="#PHP数组绕过" class="headerlink" title="PHP数组绕过"></a>PHP数组绕过</h2><h3 id="绕过strops-函数"><a href="#绕过strops-函数" class="headerlink" title="绕过strops()函数"></a>绕过strops()函数</h3><p><font color="green"><strong>1. strops()定义：</strong></font></p>
 <p>strpos() 函数查找字符串在另一字符串中<strong>第一次</strong>出现的<strong>位置</strong>。</p>
 <a id="more"></a>
 
 <blockquote>
 <p>strpos() 函数对大小写敏感。</p>
 </blockquote>
-<p><font color = green><strong>2. strops()语法：</strong></font></p>
+<p><font color="green"><strong>2. strops()语法：</strong></font></p>
 <pre><code>strpos(string,find,start)</code></pre><table>
 <thead>
 <tr>
@@ -536,11 +536,11 @@ $flag = &quot;flag&quot;;
  ?&gt;</code></pre><p>这里首先看到的是get传参nctf，然后必须是数字，最后需要绕过strpos()函数</p>
 <pre><code>payload: ?ctf[]=1</code></pre><p><a href="http://teamxlc.sinaapp.com/web4/f5a14f5e6e3453b78cd73899bad98d53/index.php?nctf[]=1" target="_blank" rel="noopener">即可得到flag</a></p>
 <hr>
-<h3 id="绕过md5-函数判断"><a href="#绕过md5-函数判断" class="headerlink" title="绕过md5()函数判断"></a>绕过md5()函数判断</h3><p><font color = green><strong>1. md5()定义：</strong></font></p>
+<h3 id="绕过md5-函数判断"><a href="#绕过md5-函数判断" class="headerlink" title="绕过md5()函数判断"></a>绕过md5()函数判断</h3><p><font color="green"><strong>1. md5()定义：</strong></font></p>
 <ul>
 <li>md5() 函数计算字符串的 MD5 散列。</li>
 </ul>
-<p><font color = green><strong>2. md5()语法：</strong></font></p>
+<p><font color="green"><strong>2. md5()语法：</strong></font></p>
 <pre><code>md5(string,raw)</code></pre><table>
 <thead>
 <tr>
@@ -568,24 +568,24 @@ if (md5($_GET[&#39;a&#39;]) === md5($_GET[&#39;b&#39;]))
 die(&#39;Flag: &#39;.$flag);
 else
 print &#39;Wrong.&#39;;
-}</code></pre><p><font color = red>要得到flag我们需满足三个if条件：</font></p>
+}</code></pre><p><font color="red">要得到flag我们需满足三个if条件：</font></p>
 <p><strong>1. 同时传入a和b</strong></p>
 <p><strong>2. a和b的值不能等</strong></p>
 <p><strong>3. a和b的md5值需相等</strong></p>
 <h4 id="漏洞原因-1"><a href="#漏洞原因-1" class="headerlink" title="漏洞原因"></a>漏洞原因</h4><ul>
-<li>md5()函数无法处理数组，<strong>如果传入的为数组，会返回NULL</strong>，<font color = green>所以两个数组经过加密后得到的都是NULL,也就是相等的。</font></li>
+<li>md5()函数无法处理数组，<strong>如果传入的为数组，会返回NULL</strong>，<font color="green">所以两个数组经过加密后得到的都是NULL,也就是相等的。</font></li>
 </ul>
 <p>所以构造poc:</p>
 <pre><code>?a[]=0&amp;b[]=1</code></pre><p><a href="http://chinalover.sinaapp.com/web17/index.php?a[]=0&b[]=1" target="_blank" rel="noopener">即可得到flag</a></p>
 <hr>
-<h3 id="绕过strcmp-函数"><a href="#绕过strcmp-函数" class="headerlink" title="绕过strcmp()函数"></a>绕过strcmp()函数</h3><p><font color = green><strong>1. strcmp()定义：</strong></font></p>
+<h3 id="绕过strcmp-函数"><a href="#绕过strcmp-函数" class="headerlink" title="绕过strcmp()函数"></a>绕过strcmp()函数</h3><p><font color="green"><strong>1. strcmp()定义：</strong></font></p>
 <ul>
 <li>strcmp() 函数比较两个字符串。</li>
 </ul>
 <blockquote>
 <p>strcmp() 函数是二进制安全的，且对大小写敏感。</p>
 </blockquote>
-<p><font color = green><strong>2. strcmp()语法：</strong></font></p>
+<p><font color="green"><strong>2. strcmp()语法：</strong></font></p>
 <pre><code>strcmp(string1,string2)</code></pre><table>
 <thead>
 <tr>
@@ -1185,7 +1185,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             

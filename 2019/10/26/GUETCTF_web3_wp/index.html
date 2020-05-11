@@ -496,7 +496,7 @@ if(isset($user)&amp;&amp;(file_get_contents($user,&#39;r&#39;)===&quot;i-am-admi
 <ol>
 <li>一开始直接让<strong>username=i-am-admin</strong>但登陆失败</li>
 </ol>
-<p>发现思路是<font color = green>让file_get_content($user,’r’)===”i-am-admin”，所以要用伪协议php://input传入参数</font>。</p>
+<p>发现思路是<font color="green">让file_get_content($user,’r’)===”i-am-admin”，所以要用伪协议php://input传入参数</font>。</p>
 <blockquote>
 <p>php：//input可以得到原始的post数据</p>
 </blockquote>
@@ -505,7 +505,7 @@ if(isset($user)&amp;&amp;(file_get_contents($user,&#39;r&#39;)===&quot;i-am-admi
 <li>接下来要想办法<strong>包含hint.php</strong></li>
 </ol>
 <ul>
-<li>这里用到php的另一个封装协议：php://filter<br>利用这个协议就可以读取任意文件<br><font color = green>利用方法：php://filter/convert.base64-encode/resource=hint.php</font></li>
+<li>这里用到php的另一个封装协议：php://filter<br>利用这个协议就可以读取任意文件<br><font color="green">利用方法：php://filter/convert.base64-encode/resource=hint.php</font></li>
 </ul>
 <p>这里把读取到的hint.php的内容转换为base64的格式，<br>于是构造payload:</p>
 <pre><code>?user=php://input&amp;file=php://filter/convert.base64-encode/resource=hint.php</code></pre><p>在线解码后得到hint.php</p>
@@ -1072,7 +1072,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             

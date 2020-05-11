@@ -489,7 +489,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="代码审计学习（二）"><a href="#代码审计学习（二）" class="headerlink" title="代码审计学习（二）"></a>代码审计学习（二）</h2><h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a><font color = green>SQL注入</font></h3><ul>
+                <h2 id="代码审计学习（二）"><a href="#代码审计学习（二）" class="headerlink" title="代码审计学习（二）"></a>代码审计学习（二）</h2><h3 id="SQL注入"><a href="#SQL注入" class="headerlink" title="SQL注入"></a><font color="green">SQL注入</font></h3><ul>
 <li><strong>由于开发者在编写数据库代码时，直接将外部可控的参数拼接到SQL语句中，没有经过任何过滤就直接放入数据库引擎执行</strong></li>
 </ul>
 <a id="more"></a>
@@ -503,7 +503,7 @@
 update 、insert、 delete等</code></pre></li>
 </ul>
 <hr>
-<h4 id="编码注入"><a href="#编码注入" class="headerlink" title="编码注入"></a>编码注入</h4><p><font color = purple><strong>1. 宽字节注入</strong></font></p>
+<h4 id="编码注入"><a href="#编码注入" class="headerlink" title="编码注入"></a>编码注入</h4><p><font color="purple"><strong>1. 宽字节注入</strong></font></p>
 <ul>
 <li>漏洞产生原因：<br>```</li>
 </ul>
@@ -526,9 +526,9 @@ character_set_clint=gbk
 mysql_set_charset(&#39;gbk&#39;)</code></pre></li>
 </ul>
 <hr>
-<p><font color = purple><strong>2. 二次urldecode注入</strong></font></p>
+<p><font color="purple"><strong>2. 二次urldecode注入</strong></font></p>
 <ul>
-<li><p>漏洞原因：当提交参数到web服务器时，<strong>会先自动解码一次</strong>。若<font color =red>程序里</font>使用了<strong>urldecode或者rawurldecode函数</strong>来解码参数，则会出现二次注入漏洞</p>
+<li><p>漏洞原因：当提交参数到web服务器时，<strong>会先自动解码一次</strong>。若<font color="red">程序里</font>使用了<strong>urldecode或者rawurldecode函数</strong>来解码参数，则会出现二次注入漏洞</p>
 </li>
 <li><p>漏洞利用：参数里带入%2527</p>
 </li>
@@ -547,7 +547,7 @@ rawurldecode</code></pre><hr>
 mysql_escape_string() / mysql_real_escape_string()
 intval()</code></pre><p><strong>3. PDO prepare 预编译</strong></p>
 <hr>
-<h3 id="XSS漏洞"><a href="#XSS漏洞" class="headerlink" title="XSS漏洞"></a><font color = green>XSS漏洞</font></h3><ul>
+<h3 id="XSS漏洞"><a href="#XSS漏洞" class="headerlink" title="XSS漏洞"></a><font color="green">XSS漏洞</font></h3><ul>
 <li><strong>通过巧妙的方法注入恶意指令代码到网页，使用户加载并执行攻击者恶意制造的网页程序</strong></li>
 </ul>
 <hr>
@@ -560,7 +560,7 @@ intval()</code></pre><p><strong>3. PDO prepare 预编译</strong></p>
 <li>定义：<strong>需要先把利用代码保存在比如数据库或者文件中，当WEB程序读取利用代码并输出在页面上时执行利用代码</strong></li>
 </ul>
 <pre><code>同样要寻找为过滤的输入与输出点</code></pre><hr>
-<h4 id="漏洞防范"><a href="#漏洞防范" class="headerlink" title="漏洞防范"></a>漏洞防范</h4><p><font color = purple><strong>1. 特殊字符HTML实体转码</strong></font></p>
+<h4 id="漏洞防范"><a href="#漏洞防范" class="headerlink" title="漏洞防范"></a>漏洞防范</h4><p><font color="purple"><strong>1. 特殊字符HTML实体转码</strong></font></p>
 <ul>
 <li>一般的XSS漏洞都是因为没过滤特殊字符，导致可以通过注入单引号以及尖括号等字符利用漏洞</li>
 </ul>
@@ -577,15 +577,15 @@ intval()</code></pre><p><strong>3. PDO prepare 预编译</strong></p>
 <li>#<pre><code>建议在输出和二次调用时进行如HTML实体一类的转码
 </code></pre></li>
 </ol>
-<p><font color = purple><strong>2. 标签事件属性黑名单</strong></font></p>
+<p><font color="purple"><strong>2. 标签事件属性黑名单</strong></font></p>
 <pre><code>用黑名单过滤
 用正则匹配白名单</code></pre><hr>
-<h3 id="CSRF漏洞"><a href="#CSRF漏洞" class="headerlink" title="CSRF漏洞"></a><font color = green>CSRF漏洞</font></h3><ul>
+<h3 id="CSRF漏洞"><a href="#CSRF漏洞" class="headerlink" title="CSRF漏洞"></a><font color="green">CSRF漏洞</font></h3><ul>
 <li>定义：<strong>跨站请求伪造。劫持其他用户去进行一些危险请求</strong></li>
 </ul>
 <pre><code>白盒审计中，看核心文件中有没有验证token和referer相关的代码</code></pre><hr>
-<h4 id="漏洞防范："><a href="#漏洞防范：" class="headerlink" title="漏洞防范："></a>漏洞防范：</h4><p><font color = purple><strong>1. token/referer验证</strong></font></p>
-<p><font color = purple><strong>2. 验证码验证</strong></font></p>
+<h4 id="漏洞防范："><a href="#漏洞防范：" class="headerlink" title="漏洞防范："></a>漏洞防范：</h4><p><font color="purple"><strong>1. token/referer验证</strong></font></p>
+<p><font color="purple"><strong>2. 验证码验证</strong></font></p>
 
             </div>
             <hr/>
@@ -1138,7 +1138,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             

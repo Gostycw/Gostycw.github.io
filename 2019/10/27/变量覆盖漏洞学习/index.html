@@ -481,12 +481,12 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a><font color = green>定义</font></h3><ul>
-<li>可以用<strong>自定义的参数值</strong><font color = red>替换</font><strong>原有变量值</strong>的情况称为变量覆盖漏洞</li>
+                <h2 id="变量覆盖"><a href="#变量覆盖" class="headerlink" title="变量覆盖"></a>变量覆盖</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a><font color="green">定义</font></h3><ul>
+<li>可以用<strong>自定义的参数值</strong><font color="red">替换</font><strong>原有变量值</strong>的情况称为变量覆盖漏洞</li>
 </ul>
 <a id="more"></a>
 
-<h3 id="主要情形"><a href="#主要情形" class="headerlink" title="主要情形"></a><font color = green>主要情形</font></h3><ul>
+<h3 id="主要情形"><a href="#主要情形" class="headerlink" title="主要情形"></a><font color="green">主要情形</font></h3><ul>
 <li><strong>$$使用不当</strong></li>
 <li><strong>extract()函数使用不当</strong></li>
 <li><strong>parse_str()函数使用不当</strong></li>
@@ -501,7 +501,7 @@
 </ul>
 <p><strong>2. 漏洞产生</strong></p>
 <ul>
-<li>使用<font color = red>foreach</font>来<strong>遍历数组中的值，然后再将获取到的数组键名作为变量，数组中的键值作为变量的值</strong>。因此就产生了变量覆盖漏洞。</li>
+<li>使用<font color="red">foreach</font>来<strong>遍历数组中的值，然后再将获取到的数组键名作为变量，数组中的键值作为变量的值</strong>。因此就产生了变量覆盖漏洞。</li>
 </ul>
 <pre><code>&lt;?php
 foreach ($_GET as $key =&gt; $value) {
@@ -523,7 +523,7 @@ if($name == &quot;meizijiu233&quot;){
 <li>extract() 函数从数组中将变量导入到当前的符号表。</li>
 </ul>
 <ul>
-<li>该函数使用<strong>数组键名</strong>作为<strong>变量名</strong>，使用<font color = green>数组键值</font>作为<font color = green>变量值</font>。针对数组中的每个元素，将在当前符号表中创建对应的一个变量。<strong>该函数返回成功设置的变量数目</strong>。</li>
+<li>该函数使用<strong>数组键名</strong>作为<strong>变量名</strong>，使用<font color="green">数组键值</font>作为<font color="green">变量值</font>。针对数组中的每个元素，将在当前符号表中创建对应的一个变量。<strong>该函数返回成功设置的变量数目</strong>。</li>
 </ul>
 <p><strong>2. 语法</strong></p>
 <pre><code>extract(array,extract_rules,prefix)</code></pre><table>
@@ -558,7 +558,7 @@ if($name == &quot;meizijiu233&quot;){
                 &lt;code&gt;&lt;?php echo $theflag; ?&gt;&lt;/code&gt;
             &lt;/div&gt;
         &lt;?php } ?&gt;
-    &lt;?php } ?&gt;</code></pre><p>题目意思是要POST一个pass数据，<font color = red>extract($_POST)</font>会将POST的数据中的<strong>键名和键值</strong>转换为相应的<strong>变量名和变量值</strong>，利用这个覆盖$pass和$thepassword_123变量的值，从而满足$pass == $thepassword_123这个条件。</p>
+    &lt;?php } ?&gt;</code></pre><p>题目意思是要POST一个pass数据，<font color="red">extract($_POST)</font>会将POST的数据中的<strong>键名和键值</strong>转换为相应的<strong>变量名和变量值</strong>，利用这个覆盖$pass和$thepassword_123变量的值，从而满足$pass == $thepassword_123这个条件。</p>
 <p>POC:</p>
 <pre><code>pass=&amp;thepassword_123=   //用POST传入</code></pre><hr>
 <h4 id="parse-str-使用不当"><a href="#parse-str-使用不当" class="headerlink" title="parse_str()使用不当"></a>parse_str()使用不当</h4><p><strong>1. 定义</strong></p>
@@ -623,7 +623,7 @@ if (empty($_GET[&#39;id&#39;])) {
 </li>
 <li><p>md5(‘QNKCDZO’)的结果是0e830400451993494058024219903391由于此次要满足$a[0] != ‘QNKCDZO’ &amp;&amp; md5($a[0]) == md5(‘QNKCDZO’)</p>
 </li>
-<li><p>所以要<strong>利用php弱语言特性</strong>，0e123会被当做科学计数法，0*10x123。所以<font color = green>需要找到一个字符串md5后的结果是0e开头后面都是数字的</font>，如，240610708，s878926199a </p>
+<li><p>所以要<strong>利用php弱语言特性</strong>，0e123会被当做科学计数法，0*10x123。所以<font color="green">需要找到一个字符串md5后的结果是0e开头后面都是数字的</font>，如，240610708，s878926199a </p>
 </li>
 </ol>
 <p>POC:</p>
@@ -1184,7 +1184,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             

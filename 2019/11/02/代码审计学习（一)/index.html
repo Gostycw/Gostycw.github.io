@@ -489,7 +489,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="代码审计学习（一）"><a href="#代码审计学习（一）" class="headerlink" title="代码审计学习（一）"></a>代码审计学习（一）</h2><h3 id="PHP核心配置"><a href="#PHP核心配置" class="headerlink" title="PHP核心配置"></a>PHP核心配置</h3><p><font color = green><strong>首先需了解 PHP_INI_* 常量的定义</strong></font></p>
+                <h2 id="代码审计学习（一）"><a href="#代码审计学习（一）" class="headerlink" title="代码审计学习（一）"></a>代码审计学习（一）</h2><h3 id="PHP核心配置"><a href="#PHP核心配置" class="headerlink" title="PHP核心配置"></a>PHP核心配置</h3><p><font color="green"><strong>首先需了解 PHP_INI_* 常量的定义</strong></font></p>
 <a id="more"></a>
 
 <table>
@@ -524,20 +524,20 @@
 <ul>
 <li><strong>常见影响安全的配置</strong></li>
 </ul>
-<p><font color = green><strong>1. register_globals(全局注册变量)：</strong></font><br>    <strong>若为on</strong>，会直接把用户通过GET、POST传进来的参数<strong>注册为全局变量并初始化参数对应的值</strong></p>
-<pre><code> 仅在php版本低于5.4.0时可用 </code></pre><p><font color = green><strong>2. allow_url_include(是否运行包含远程文件)：</strong></font><br>    <strong>若为on，可以直接包含远程文件</strong>。当变量可控时，可用来构造php代码。   </p>
-<pre><code>allow_url_include在 PHP 5.2.0后默认为off，配置范围是PHP_INI_ALL</code></pre><p><font color = green><strong>3. magic_quotes_gpc(魔术引号自动过滤)：</strong></font><br>    <strong>若为on</strong>，会自动在GET、POST、COOKIE到的变量中的<strong>单引号（’)、双引号(“)、反斜杠(\)及空白字符（NULL)前加上反斜杠(\)</strong>。但是在PHP5中的magic_quotes_gpc并<strong>不会过滤</strong><font color = red>$_SERVER变量</font>，导致很多漏洞</p>
-<pre><code>在PHP5.4之前可用。小于4.2.3时配置范围是PHP_INI_ALL;大于时是PHP_INI_PERDIR</code></pre><p><font color = green><strong>4. magic_quotes_runtime(魔术引号自动过滤)：</strong></font><br>    与magic_quotes_gpc概念差不多，但处理对象不同。<strong>只处理从数据库或者文件中获取的数据</strong>。</p>
-<pre><code>只有部分函数受影响，大多为读取数据库或文件的函数</code></pre><p><font color = green><strong>5. magic_quotes_sybase(魔术引号自动过滤)：</strong></font><br>    用于自动过滤字符。<strong>当为on，会覆盖掉magic_quotes_gpc=on的配置</strong>。处理对象与gpc一致，但处理方式仅仅为转义空字符与把 ‘ 变成 “</p>
-<pre><code>PHP 5.4.0前可用，配置范围为PHP_INI_ALL</code></pre><p><font color = green><strong>6. safe_mode(安全模式)：</strong></font><br>    PHP内嵌的安全机制。当为on时，可用的指令为 <strong>safe_mode_include_dir</strong>、<strong>safe_mode_exec_dir</strong>、<strong>safe_mode_allow_env_vars</strong>、<strong>safe_mode_protected_env_vars</strong></p>
+<p><font color="green"><strong>1. register_globals(全局注册变量)：</strong></font><br>    <strong>若为on</strong>，会直接把用户通过GET、POST传进来的参数<strong>注册为全局变量并初始化参数对应的值</strong></p>
+<pre><code> 仅在php版本低于5.4.0时可用 </code></pre><p><font color="green"><strong>2. allow_url_include(是否运行包含远程文件)：</strong></font><br>    <strong>若为on，可以直接包含远程文件</strong>。当变量可控时，可用来构造php代码。   </p>
+<pre><code>allow_url_include在 PHP 5.2.0后默认为off，配置范围是PHP_INI_ALL</code></pre><p><font color="green"><strong>3. magic_quotes_gpc(魔术引号自动过滤)：</strong></font><br>    <strong>若为on</strong>，会自动在GET、POST、COOKIE到的变量中的<strong>单引号（’)、双引号(“)、反斜杠(\)及空白字符（NULL)前加上反斜杠(\)</strong>。但是在PHP5中的magic_quotes_gpc并<strong>不会过滤</strong><font color="red">$_SERVER变量</font>，导致很多漏洞</p>
+<pre><code>在PHP5.4之前可用。小于4.2.3时配置范围是PHP_INI_ALL;大于时是PHP_INI_PERDIR</code></pre><p><font color="green"><strong>4. magic_quotes_runtime(魔术引号自动过滤)：</strong></font><br>    与magic_quotes_gpc概念差不多，但处理对象不同。<strong>只处理从数据库或者文件中获取的数据</strong>。</p>
+<pre><code>只有部分函数受影响，大多为读取数据库或文件的函数</code></pre><p><font color="green"><strong>5. magic_quotes_sybase(魔术引号自动过滤)：</strong></font><br>    用于自动过滤字符。<strong>当为on，会覆盖掉magic_quotes_gpc=on的配置</strong>。处理对象与gpc一致，但处理方式仅仅为转义空字符与把 ‘ 变成 “</p>
+<pre><code>PHP 5.4.0前可用，配置范围为PHP_INI_ALL</code></pre><p><font color="green"><strong>6. safe_mode(安全模式)：</strong></font><br>    PHP内嵌的安全机制。当为on时，可用的指令为 <strong>safe_mode_include_dir</strong>、<strong>safe_mode_exec_dir</strong>、<strong>safe_mode_allow_env_vars</strong>、<strong>safe_mode_protected_env_vars</strong></p>
 <pre><code>safe_mode指令的配置范围为PHP_INI_SYSTEM PHP5.4之后被取消
 
 所有文件操作函数会受限制（file()、include()..)
 
-通过函数popen()、system()、exec()执行命令或程序会报错</code></pre><p><font color = green><strong>7. open_basedir：</strong></font><br>    open_basedir指令用来<strong>限制PHP只能访问哪些目录</strong></p>
+通过函数popen()、system()、exec()执行命令或程序会报错</code></pre><p><font color="green"><strong>7. open_basedir：</strong></font><br>    open_basedir指令用来<strong>限制PHP只能访问哪些目录</strong></p>
 <pre><code>指定的限制是前缀不是文件名
 
-小于 PHP5.2.3时是PHP_INI_SYSTEM，大于时是PHP_INI_ALL</code></pre><p><font color = green><strong>8. disable_functions(禁用函数)：</strong></font><br>    <strong>禁止敏感函数的使用</strong></p>
+小于 PHP5.2.3时是PHP_INI_SYSTEM，大于时是PHP_INI_ALL</code></pre><p><font color="green"><strong>8. disable_functions(禁用函数)：</strong></font><br>    <strong>禁止敏感函数的使用</strong></p>
 <pre><code>记得把dl()禁掉 否则可利用dl()绕过
 
 配置范围为php.ini only</code></pre><hr>
@@ -548,9 +548,9 @@
 <li>辅助工具：编码转换工具、正则调试工具等</li>
 </ul>
 <hr>
-<h3 id="代码审计思路"><a href="#代码审计思路" class="headerlink" title="代码审计思路"></a>代码审计思路</h3><p><font color = red><strong>1. 根据敏感关键字回溯参数传递过程</strong></font></p>
-<p><font color = green><strong>2. 查看可控变量，正向追踪变量传递过程</strong></font></p>
-<p><font color = lightblue><strong>3. 寻找敏感功能点，通读功能点代码</strong></font></p>
+<h3 id="代码审计思路"><a href="#代码审计思路" class="headerlink" title="代码审计思路"></a>代码审计思路</h3><p><font color="red"><strong>1. 根据敏感关键字回溯参数传递过程</strong></font></p>
+<p><font color="green"><strong>2. 查看可控变量，正向追踪变量传递过程</strong></font></p>
+<p><font color="lightblue"><strong>3. 寻找敏感功能点，通读功能点代码</strong></font></p>
 <p><strong>4. 直接通读全文代码</strong></p>
 <hr>
 
@@ -1111,7 +1111,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             

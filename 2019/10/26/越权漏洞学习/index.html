@@ -489,10 +489,10 @@
 
 <ul>
 <li>多数WEB应用都具备权限划分和控制，但是如果权限控制功能设计存在缺陷，那么攻击者就可以通过这些缺陷来访问未经授权的功能或数据，这就是我们通常说的越权漏洞。</li>
-<li>越权漏洞的==成因==主要是因为开发人员在对数据进++行增、删、改、查询++时对客户端请求的数据过分相信而遗漏了<font color=green>权限的判定</font>。所以测试越权就是和开发人员拼细心的过程。</li>
+<li>越权漏洞的==成因==主要是因为开发人员在对数据进++行增、删、改、查询++时对客户端请求的数据过分相信而遗漏了<font color="green">权限的判定</font>。所以测试越权就是和开发人员拼细心的过程。</li>
 </ul>
 <hr>
-<h2 id="主要攻击场景"><a href="#主要攻击场景" class="headerlink" title="主要攻击场景"></a>主要攻击场景</h2><h2 id=""><a href="#" class="headerlink" title=""></a><img src="https://image.3001.net/images/20181031/1540965763_5bd945834fb0d.jpg!small" alt="image"></h2><h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-水平越权"><a href="#1-水平越权" class="headerlink" title="1. 水平越权"></a>1. 水平越权</h3><ul>
+<h2 id="主要攻击场景"><a href="#主要攻击场景" class="headerlink" title="主要攻击场景"></a>主要攻击场景</h2><h2 id><a href="#" class="headerlink" title></a><img src="https://image.3001.net/images/20181031/1540965763_5bd945834fb0d.jpg!small" alt="image"></h2><h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-水平越权"><a href="#1-水平越权" class="headerlink" title="1. 水平越权"></a>1. 水平越权</h3><ul>
 <li>水平越权指的是攻击者尝试访问与他拥有==相同权限==的用户的资源</li>
 </ul>
 <blockquote>
@@ -550,7 +550,7 @@ location=&#39;login.php&#39;;
 <hr>
 <h2 id="修复"><a href="#修复" class="headerlink" title="修复"></a>修复</h2><ul>
 <li>采用成熟的权限管理框架：如spring security</li>
-<li>用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）优先采用<font color =red>在服务端关联session或加密后放在session中的方式获取</font>。</li>
+<li>用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）优先采用<font color="red">在服务端关联session或加密后放在session中的方式获取</font>。</li>
 <li>必须采用表单或其他参数提交用户进行访问操作的凭证（如用户ID、产品号码、订单流水号等）时，应尽可能采用++难以猜测的构造方式++（增加字母及随机数字等）或++采用复杂的加密算法加密++后提交，应对客户端提交的凭证与会话的权限进行严格的验证，如提交的产品号码是否为隶属于登录用户的产品号码。</li>
 <li>对管理功能模块进行严格的权限验证，如非必要建议不对互联网开放或进行网络层的访问控制。</li>
 </ul>
@@ -1098,7 +1098,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.9k</span>&nbsp;字
+                class="white-color">27k</span>&nbsp;字
             
             
             
