@@ -612,15 +612,15 @@ __destruct</code></pre><h3 id="属性权限"><a href="#属性权限" class="head
 <p>这三种权限的属性经过序列化后的字符长度不一样，字符的变化不同</p>
 <ol>
 <li><p>public权限</p>
-<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/E:%5Cblog%5Csource_posts%5Cphp%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0%5Cpublic.jpg" alt></p>
+<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/public.jpg" alt></p>
 <p>可以看到字符串长度没变，字符前后也没有变化</p>
 </li>
 <li><p>private权限</p>
-<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/E:%5Cblog%5Csource_posts%5Cphp%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0%5Cprivate.jpg" alt></p>
+<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/private.jpg" alt></p>
 <p>发现字符串长度变成了10，而且字符串也变成<code>%00类名%00属性名</code>的形式</p>
 </li>
 <li><p>protected权限</p>
-<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/E:%5Cblog%5Csource_posts%5Cphp%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0%5Cprotected.jpg" alt></p>
+<p><img src="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/protected.jpg" alt></p>
 <p>发现字符串长度变成了7，而且字符串变成<code>%00*%00属性名</code>的形式</p>
 </li>
 </ol>
